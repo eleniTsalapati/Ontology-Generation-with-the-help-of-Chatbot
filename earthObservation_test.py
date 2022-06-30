@@ -1,6 +1,6 @@
 from owlready2 import *
 
-onto = get_ontology("file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/earhOvservation_test.owl").load()
+onto = get_ontology("file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/earhObservation_test.owl").load()
 
 with onto:
     # Q:What questions do you want your ontology to be able to answer
