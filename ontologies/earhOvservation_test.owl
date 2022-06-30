@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/earhOvservation_test.owl"
+         xmlns="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/earhOvservation_test.owl#">
+
+<owl:Ontology rdf:about="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/earhOvservation_test.owl"/>
+
+<owl:ObjectProperty rdf:about="#from_">
+  <rdfs:domain rdf:resource="#RemoteSensors"/>
+  <rdfs:range rdf:resource="#Satellites"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#Satellites">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#RemoteSensors">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X</rdfs:comment>
+</owl:Class>
+
+<owl:Class rdf:about="#Altimeter">
+  <rdfs:subClassOf rdf:resource="#RemoteSensors"/>
+</owl:Class>
+
+<owl:Class rdf:about="#OpticalSensor">
+  <rdfs:subClassOf rdf:resource="#RemoteSensors"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Radiometer">
+  <rdfs:subClassOf rdf:resource="#RemoteSensors"/>
+</owl:Class>
+
+
+</rdf:RDF>
