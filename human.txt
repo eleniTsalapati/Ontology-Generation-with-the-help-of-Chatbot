@@ -1,0 +1,2 @@
+enumerate all kinds of remote sensors used in satellites
+enumerate all satellites' remote sensors

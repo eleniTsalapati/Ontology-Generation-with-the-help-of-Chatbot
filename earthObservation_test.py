@@ -10,14 +10,14 @@ with onto:
         pass
     class RemoteSensors(Thing):
         pass
-    class from_(RemoteSensors>>Satellites):
+    class comeFrom(RemoteSensors>>Satellites):
         pass
     # Q:What is a remote sensor
     # A:Remote sensor is x
     # --------
-    RemoteSensors.comment = ["X"]
+    RemoteSensors.isDefinedBy = ["X"]
 
-    # Q:are theres different types of remote sensoers
+    # Q:are there different types of remote sensoers
     # A: yes
     # Q:Enumerate all different types of remote sensors
     # A: altimeter,optical sensor
