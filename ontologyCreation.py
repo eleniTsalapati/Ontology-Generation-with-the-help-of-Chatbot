@@ -8,12 +8,12 @@ def LoadOntology(file):
 def SaveOntology(ontology):
     ontology.save()
 
-def CreateObject(ontology,the_Class,parent):
+def CreateObject(ontology,word,parent):
     with ontology:
         if parent == None:
-            NewClass = types.new_class(the_Class, (Thing,))
+            NewClass = types.new_class(word, (Thing,))
         else:
-            NewClass = types.new_class(the_Class, (parent,))
+            NewClass = types.new_class(word, (parent,))
     return NewClass
 
 def ConnectObjects(ontology,connection,object1,object2):
@@ -21,9 +21,7 @@ def ConnectObjects(ontology,connection,object1,object2):
         NewClass = types.new_class(connection,(object1 >> object2,))
     return NewClass
 
-def Explaination(ontology,the_Class,explaination,defined_by):
+def Explaination(ontology,theClass,explaination,definedBy):
     with ontology:
-        the_Class.comment.append(explaination)
-        if defined_by==None:
-            defined_by="You"
-        the_Class.isDefinedBy = [defined_by]
+        theClass.comment.append(explaination)
+        theClass.isDefinedBy = [definedBy]
