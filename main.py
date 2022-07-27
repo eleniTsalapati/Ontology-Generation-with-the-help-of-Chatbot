@@ -2,10 +2,15 @@ import chatbotTalks as talk
 import ontologyCreation as creation
 import chatbotHears as hear
 
+# Welcome
+talk.Welcome()
 
 # Load the ontology
-ontology=creation.LoadOntology("file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot.owl")
+talk.askTheFile()
+file=hear.thePath()
+ontology=creation.LoadOntology(file)
 
+# See what the ontology should answer
 talk.FirstQuestion()
 (nouns,relationships)=hear.WhatOntologyToAnswer()
 print(nouns)

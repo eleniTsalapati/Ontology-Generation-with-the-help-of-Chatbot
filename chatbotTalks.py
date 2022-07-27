@@ -1,4 +1,12 @@
+def Welcome():
+    print("Welcome User. This Chatbot is made to create an Ontology.")
+    print("I will ask you questions about the ontology and you have to answer them.")
+    print("Lets start!!")
 
+def askTheFile():
+    print("In which file shall I save the ontology?")
+    print("IMPORTANT: if the file path is local then it has to begin with file://")
+    print("           or if the file path is degital it has to begin with http://")
 def GetOntology():
     print("From which file do you want the ontology to be saved?")
     

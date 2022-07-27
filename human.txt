@@ -1,3 +1,4 @@
+the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot.owl
 enumerate all kinds of remote sensors used in satellites
 The Definition is bla
 I would like to give a Definition

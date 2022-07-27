@@ -8,14 +8,14 @@ sia = SentimentIntensityAnalyzer()
 
 # A:Enumerate all remote sensors from satellites 
 def WhatOntologyToAnswer():
-    nouns={}
-    relationships={}
-    flagRelationships=False
     answer=input()
     print(answer)
     tokens=nltk.word_tokenize(answer.lower())
     tagged=nltk.pos_tag(tokens)
 
+    nouns={}
+    relationships={}
+    flagRelationships=False
     flag=False
     previous=None
     theWord=""
@@ -89,3 +89,13 @@ def GetDefinition():
     answer=input()
     print(answer)
     return answer
+
+def thePath():
+    answer=input()
+    print(answer)
+    tokens=answer.split()
+    for token in tokens:
+        if "file://" in token:
+            return token
+        elif "http://" in token:
+            return token
