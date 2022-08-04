@@ -10,44 +10,58 @@ sia = SentimentIntensityAnalyzer()
 def WhatOntologyToAnswer():
     answer=input()
     print(answer)
+    print()
+
+    # tokenize and take tags of the words
     tokens=nltk.word_tokenize(answer.lower())
     tagged=nltk.pos_tag(tokens)
 
+    # define
     nouns={}
     relationships={}
     flagRelationships=False
-    flag=False
+    flagPOS=False
     previous=None
     theWord=""
     verb=""
 
     for word in tagged:
-        
+
+        # if the word is adj just add it to the word 
         if 'JJ' == word[1] or 'JJR' == word[1] or 'JJS' == word[1]:
             if theWord!="":
-                theWord = theWord+" "+ word[0]
+                theWord = theWord+ word[0].capitalize() 
             else:
                 theWord = word[0]
         
+        # if the the word is noun
         elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+            # add it to the word
             if theWord!="":
-                theWord = theWord+" "+ word[0]
+                theWord = theWord+ word[0].capitalize() 
             else:
                 theWord = word[0]
 
+            # add the word with possessive argument if need be
             if flagPOS==False:
                 nouns[theWord]=None
             else:
                 nouns[theWord]=previous
+
+            # if a relation needs this word add it
             if flagRelationships==True:
                 relationships[theRelation].append(theWord)
                 flagRelationships=False
+
+            # re-initialize
             previous=theWord
             theWord=""
 
+        # create a relation
         elif 'IN' == word[1] or 'TO'==word[1]:
+            # check if there is a verb for TO
             if verb!="":
-                verb = verb+" "+ word[0]
+                verb = verb+ word[0].capitalize() 
             else:
                 verb = word[0]
 
@@ -60,7 +74,7 @@ def WhatOntologyToAnswer():
              'VBP' == word[1] or 'VBD' == word[1] or\
              'VBZ' == word[1] or 'VBN' == word[1] :
             if verb!="":
-                verb = verb+" "+ word[0]
+                verb = verb+ word[0].capitalize() 
             else:
                 verb = word[0]
         else:
@@ -72,11 +86,14 @@ def WhatOntologyToAnswer():
         else :
             flagPOS=False
 
+
     return (nouns,relationships)
 
 def GetTrueOrFalse():
     answer=input()
     print(answer)
+    print()
+    
     polarity=sia.polarity_scores(answer.lower())
     if polarity['neg']<polarity['pos']:
         return 1
@@ -88,11 +105,15 @@ def GetTrueOrFalse():
 def GetDefinition():
     answer=input()
     print(answer)
+    print()
+    
     return answer
 
 def thePath():
     answer=input()
     print(answer)
+    print()
+    
     tokens=answer.split()
     for token in tokens:
         if "file://" in token:
