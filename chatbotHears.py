@@ -1,3 +1,4 @@
+from threading import Thread
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 
@@ -8,7 +9,7 @@ sia = SentimentIntensityAnalyzer()
 
 # A:Enumerate all remote sensors from satellites 
 def WhatOntologyToAnswer():
-    answer=input()
+    answer=input("> ")
     print(answer)
     print()
 
@@ -90,7 +91,7 @@ def WhatOntologyToAnswer():
     return (nouns,relationships)
 
 def GetTrueOrFalse():
-    answer=input()
+    answer=input("> ")
     print(answer)
     print()
     
@@ -103,14 +104,14 @@ def GetTrueOrFalse():
         return 0
 
 def GetDefinition():
-    answer=input()
+    answer=input("> ")
     print(answer)
     print()
     
     return answer
 
 def thePath():
-    answer=input()
+    answer=input("> ")
     print(answer)
     print()
     
@@ -120,3 +121,38 @@ def thePath():
             return token
         elif "http://" in token:
             return token
+
+def GetTypes():
+    answer=input("> ")
+    print(answer)
+    print()
+
+    # tokenize and take tags of the words
+    tokens=nltk.word_tokenize(answer.lower())
+    tagged=nltk.pos_tag(tokens)
+
+    # define
+    nouns=[]
+    theWord=""
+
+    for word in tagged:
+
+        # if the word is adj just add it to the word 
+        if 'JJ' == word[1] or 'JJR' == word[1] or 'JJS' == word[1]:
+            if theWord!="":
+                theWord = theWord+ word[0].capitalize() 
+            else:
+                theWord = word[0]
+        
+        # if the the word is noun
+        elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+            # add it to the word
+            if theWord!="":
+                theWord = theWord+ word[0].capitalize() 
+            else:
+                theWord = word[0]
+
+            nouns.append(theWord)
+            theWord=""
+
+    return nouns

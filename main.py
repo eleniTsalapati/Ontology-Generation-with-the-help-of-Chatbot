@@ -2,22 +2,7 @@ import chatbotTalks as talk
 import ontologyCreation as creation
 import chatbotHears as hear
 
-# Welcome
-talk.Welcome()
-
-# Load the ontology
-talk.askTheFile()
-file=hear.thePath()
-ontology=creation.LoadOntology(file)
-
-# See what the ontology should answer
-talk.FirstQuestion()
-(nouns,relationships)=hear.WhatOntologyToAnswer()
-print(nouns)
-print(relationships)
-
-# For all the nouns that we have
-for noun in nouns.keys():
+def getNoun(noun):
     # See if the user wants to give the definition
     answer=0
     while answer==0 :
@@ -60,15 +45,128 @@ for noun in nouns.keys():
             # The user wants to keep without definition
             if answer==1:
                 definition=""
+                definedBy=""
             # The user doesnt want to keep the word
             else:
+                definition=None
+                definedBy=None
+    return (definition,definedBy)
+
+def AnswerOntology(ontology,classes):
+
+    previousNouns=classes[0].keys()
+    previousRelat=classes[1].keys()
+
+    # See what the ontology should answer
+    talk.WhatOntologyToAnswer()
+    (nouns,relationships)=hear.WhatOntologyToAnswer()
+
+    # For all the nouns that we have
+    for noun in nouns.keys():
+
+        # we have already seen this noun in a previous question
+        if noun in previousNouns:
+            continue
+        
+        (definition,definedBy)=getNoun(noun)
+
+        if  definition==None:
+            continue
+        
+        # Create into the ontology the word
+        classes[0][noun]=creation.CreateObject(ontology,noun,nouns[noun])
+        # and give the definition
+        if definition!="":
+            creation.Explaination(ontology,classes[0][noun],definition,definedBy)
+
+    # for all realationships
+    keptNouns=classes[0].keys()
+    for relation in relationships.keys():
+        # we have already seen this relation in a previous question
+        if relation in previousRelat:
+            continue
+
+        # if one object is not created then do not create the realationship
+        obj1=relationships[relation][0]
+        obj2=relationships[relation][1]
+        if obj1 not in keptNouns or obj2 not in keptNouns:
+            continue
+
+        # create the realationship
+        classes[1][relation]=creation.ConnectObjects(ontology,relation,classes[0][obj1],classes[0][obj2])
+
+def MoreTypes(ontology,classes,seen):
+    flag=False
+    if len(seen)!=0:
+        flag=True
+
+    nouns=list(classes[0].keys())
+    for noun in nouns:
+        if flag==True:
+            if noun in seen:
                 continue
-    
-    # Create into the ontology the word
-    theClass=creation.CreateObject(ontology,noun,nouns[noun])
-    # and give the definition
-    if definition!="":
-        creation.Explaination(ontology,theClass,definition,definedBy)
+
+        seen.append(noun)
+        answer=0
+        while answer==0 :
+            talk.AskDiffrentTypes(noun)
+            answer=hear.GetTrueOrFalse()
+            if answer==0:
+                talk.CouldNotUnderstand()
+        if answer==1:
+            talk.GetDiffrentTypes(noun)
+            types=hear.GetTypes()
+            for type in types:
+                (definition,definedBy)=getNoun(type)
+                if  definition==None:
+                    continue
+
+                # Create into the ontology the word
+                classes[0][type]=creation.CreateObject(ontology,type,classes[0][noun])
+                # and give the definition
+                if definition!="":
+                    creation.Explaination(ontology,classes[0][type],definition,definedBy)
+
+                
+# -------------------------------------------------------
+#                       main
+# -------------------------------------------------------
+
+# classes=[classesObj,classesRel]
+classes=[{},{}]
+seen=[]
+# Welcome
+talk.Welcome()
+
+# Load the ontology
+talk.askTheFile()
+file=hear.thePath()
+ontology=creation.LoadOntology(file)
+
+AnswerOntology(ontology,classes)
+
+while(True):
+    answer=0
+    while answer==0 :
+        talk.MoreOntology()
+        answer=hear.GetTrueOrFalse()
+        if answer==0:
+            talk.CouldNotUnderstand()
+    if answer == 1:
+        AnswerOntology(ontology,classes)
+        continue
+
+    answer=0
+    while answer==0 :
+        talk.EnumerateTheClasses()
+        answer=hear.GetTrueOrFalse() 
+        if answer==0:
+            talk.CouldNotUnderstand()
+    if answer == 1:
+        MoreTypes(ontology,classes,seen)
+        continue
+    break
 
 # Save the ontology
 creation.SaveOntology(ontology)
+talk.EndingStatement()

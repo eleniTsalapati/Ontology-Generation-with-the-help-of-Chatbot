@@ -1,0 +1,91 @@
+Welcome, User!
+This Chatbot is made to create an Ontology.
+I will ask you questions about the ontology and you have to answer them.
+Let's start!!
+
+In which file shall I save the ontology?
+IMPORTANT: If the file path is local then it has to begin with file://
+           If the file path is digital then it has to begin with http://
+> the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot.owl
+
+What questions do you want your ontology to be able to answer?
+> enumerate all kinds of remote sensors used in satellites
+
+Do you want to give your own definition for the word "kinds"?
+> No, I do not want to give a Definition.
+
+Shall I search for the definition of the word "kinds"?
+> I do not want to search.
+
+Shall I keep the word "kinds" without a definion?
+If the answer is negative then the ontology will not keep this word.
+> No
+
+Do you want to give your own definition for the word "remoteSensors"?
+> I would like to give a Definition
+
+What is your definition of the word "remoteSensors"?
+> The Definition is my Definition.
+
+Do you want to give your own definition for the word "satellites"?
+> No.
+
+Shall I search for the definition of the word "satellites"?
+> I want to search the Definition
+
+Do you want the ontology to be able to answer more questions?
+> Yes 
+
+What questions do you want your ontology to be able to answer?
+> enumerate all kinds of remote sensors used in satellites
+
+Do you want to give your own definition for the word "kinds"?
+> No
+
+Shall I search for the definition of the word "kinds"?
+> No
+
+Shall I keep the word "kinds" without a definion?
+If the answer is negative then the ontology will not keep this word.
+> No
+
+Do you want the ontology to be able to answer more questions?
+> No
+
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> Yes
+
+Are there different types of the word "remoteSensors"?
+> Yes
+
+Enumerate all different types of the word "remoteSensors".
+> altimeter, optical sensor
+
+Do you want to give your own definition for the word "altimeter"?
+> Yes
+
+What is your definition of the word "altimeter"?
+> Bla
+
+Do you want to give your own definition for the word "opticalSensor"?
+> No
+
+Shall I search for the definition of the word "opticalSensor"?
+> Search
+
+Sorry but I could not understand your answer.
+Shall I search for the definition of the word "opticalSensor"?
+> I would like you to search
+
+Are there different types of the word "satellites"?
+> No
+
+Do you want the ontology to be able to answer more questions?
+> No
+
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> No
+
+I would like to thank you for using this ChatBot to develop your ontology!
