@@ -36,7 +36,7 @@ def searchForTerm(term):
     searchAnswer=response.json()
     flag=True
     for count in range(5):
-        if count > searchAnswer['response']['numFound']:
+        if count == searchAnswer['response']['numFound']:
             break
 
         current=searchAnswer['response']['docs'][count]
