@@ -1,4 +1,3 @@
-from threading import Thread
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 

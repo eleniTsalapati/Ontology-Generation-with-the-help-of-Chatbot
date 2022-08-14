@@ -1,0 +1,127 @@
+* Owlready2 * Warning: optimized Cython parser module 'owlready2_optimized' is not available, defaulting to slower Python implementation
+Welcome, User!
+This Chatbot is made to create an Ontology.
+I will ask you questions about the ontology and you have to answer them.
+Let's start!!
+
+In which file shall I save the ontology?
+IMPORTANT: If the file path is local then it has to begin with file://
+           If the file path is digital then it has to begin with http://
+> the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl
+the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl
+
+What questions do you want your ontology to be able to answer?
+> will I pass my exams?            
+will I pass my exams?
+
+Do you want to give your own definition for  "pass"?
+> no
+no
+
+Shall I search for the definition of  "pass"?
+> no
+no
+
+Shall I keep  "pass" without a definion?
+If the answer is negative then the ontology will not keep this word.
+> no
+no
+
+Do you want to give your own definition for  "exams"?
+> no
+no
+
+Shall I search for the definition of  "exams"?
+> no
+no
+
+Shall I keep  "exams" without a definion?
+If the answer is negative then the ontology will not keep this word.
+> no
+no
+
+Do you want the ontology to be able to answer more questions?
+> yew
+yew
+
+Sorry but I could not understand your answer.
+Do you want the ontology to be able to answer more questions?
+> yes
+yes
+
+What questions do you want your ontology to be able to answer?
+> what is the definition of the word yes
+what is the definition of the word yes
+
+Do you want to give your own definition for  "definition"?
+> yes
+yes
+
+What is your definition of  "definition"?
+> no
+no
+
+Do you want to give your own definition for  "word"?
+> no
+no
+
+Shall I search for the definition of  "word"?
+> yes
+yes
+
+The Ontology "sio" has the following description for "word":
+A word is the smallest free form (an item that may be expressed in isolation with semantic or pragmatic content) in a language.
+Shall I keep this ontology with a description?
+If the answer is negative then this Ontology will be discarded and another Ontology will be searched.
+> yes
+yes
+
+Shall I keep the Kids of "word"?
+> no
+no
+
+Do you want to give your own definition for  "yes"?
+> the positive aggreement to a question
+the positive aggreement to a question
+
+What is your definition of  "yes"?
+> the positive aggrement to a question
+the positive aggrement to a question
+
+Do you want the ontology to be able to answer more questions?
+> no
+no
+
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> yew
+yew
+
+Sorry but I could not understand your answer.
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> yes
+yes
+
+Are there different types of  "definition"?
+> no
+no
+
+Are there different types of  "word"?
+> no
+no
+
+Are there different types of  "yes"?
+> no
+no
+
+Do you want the ontology to be able to answer more questions?
+> no 
+no
+
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> no
+no
+
+I would like to thank you for using this ChatBot to develop your ontology!

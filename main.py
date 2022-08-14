@@ -1,7 +1,8 @@
-import chatbotTalks as talk
-import ontologyCreation as creation
-import chatbotHears as hear
-import searchOntology as search
+import modules.chatbotTalks as talk
+import modules.ontologyCreation as creation
+import modules.chatbotHears as hear
+import modules.searchOntology as search
+
 def getNoun(noun):
     kids=None
     # See if the user wants to give the definition
@@ -30,6 +31,39 @@ def getNoun(noun):
         # The user wants to find the definition
         if answer==1:
             (definition,definedBy,kids)=search.searchForTerm(noun)
+            if definition==None:
+
+                answer=0
+                while answer==0 :
+                    talk.AskDeffinition(noun)
+                    answer=hear.GetTrueOrFalse()
+                    if answer==0:
+                        talk.CouldNotUnderstand()
+
+                # The user wants to give the definition
+                if answer == 1:
+                    talk.YourDefinition(noun)
+                    definition=hear.GetDefinition()
+                    definedBy="You"
+                # The user wants to do something else
+                else:
+                    # See if the user wants to keep without definition
+                    answer=0
+                    while answer==0 :
+                        talk.KeepWord(noun)
+                        answer=hear.GetTrueOrFalse()
+                        if answer==0:
+                            talk.CouldNotUnderstand()
+                    
+                    # The user wants to keep without definition
+                    if answer==1:
+                        definition=""
+                        definedBy=""
+                    # The user doesnt want to keep the word
+                    else:
+                        definition=None
+                        definedBy=None
+            
 
         # The user wants to do something else
         else:

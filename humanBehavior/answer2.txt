@@ -1,0 +1,52 @@
+Welcome, User!
+This Chatbot is made to create an Ontology.
+I will ask you questions about the ontology and you have to answer them.
+Let's start!!
+
+In which file shall I save the ontology?
+IMPORTANT: If the file path is local then it has to begin with file://
+           If the file path is digital then it has to begin with http://
+> the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl
+
+What questions do you want your ontology to be able to answer?
+> enumerate the horse in the town
+
+Do you want to give your own definition for  "horse"?
+> no
+
+Shall I search for the definition of  "horse"?
+> yes
+
+The Ontology "ncit" has the following description for "horse":
+The domestic horse, Equus caballus.
+Shall I keep this ontology with a description?
+If the answer is negative then this Ontology will be discarded and another Ontology will be searched.
+> no
+
+The Ontology "foodon" has no description for "horse".
+Should I keep this ontology without a description?
+If the answer is negative then this Ontology will be discarded and another Ontology will be searched.
+> yes
+
+Shall I keep the Kids of "horse"?
+> yes
+
+The Ontology "foodon" has "mule" as kid of "horse" with the descrpition:
+A mule is the offspring of a male donkey and a female horse. Horses and donkeys are different species, with different numbers of chromosomes. Of the two F1 hybrids between these two species, a mule is easier to obtain than a hinny (the offspring of a male horse and a female donkey). All male mules and most female mules are infertile.
+Shall I keep this kid?
+> yes
+
+Do you want to give your own definition for  "town"?
+> yes
+
+What is your definition of  "town"?
+> Athens
+
+Do you want the ontology to be able to answer more questions?
+> no
+
+Do you want to enumerate the different types of words in the ontology?
+IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
+> no
+
+I would like to thank you for using this ChatBot to develop your ontology!

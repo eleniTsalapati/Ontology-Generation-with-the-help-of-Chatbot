@@ -1,7 +1,7 @@
-from cProfile import label
+from curses import noecho
 import requests
-import chatbotTalks as talk
-import chatbotHears as hear
+import modules.chatbotTalks as talk
+import modules.chatbotHears as hear
 
 def Ontology_Children(term,current):
     child_url="https://www.ebi.ac.uk/ols/api/ontologies/"+current["ontology_name"]+"/children?id="+current["obo_id"]
@@ -82,3 +82,4 @@ def searchForTerm(term):
                         return (description,current["ontology_name"],None)
     if flag:
         print("I have not found an ontology with that label!")
+    return (None,None,None)
