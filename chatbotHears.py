@@ -31,7 +31,7 @@ def WhatOntologyToAnswer():
         # if the word is adj just add it to the word 
         if 'JJ' == word[1] or 'JJR' == word[1] or 'JJS' == word[1]:
             if theWord!="":
-                theWord = theWord+ word[0].capitalize() 
+                theWord = theWord+ " " +word[0]
             else:
                 theWord = word[0]
         
@@ -39,7 +39,7 @@ def WhatOntologyToAnswer():
         elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
             # add it to the word
             if theWord!="":
-                theWord = theWord+ word[0].capitalize() 
+                theWord = theWord+ " " +word[0]
             else:
                 theWord = word[0]
 
@@ -62,7 +62,7 @@ def WhatOntologyToAnswer():
         elif 'IN' == word[1] or 'TO'==word[1]:
             # check if there is a verb for TO
             if verb!="":
-                verb = verb+ word[0].capitalize() 
+                verb = verb+ " "+word[0]
             else:
                 verb = word[0]
 
@@ -75,7 +75,7 @@ def WhatOntologyToAnswer():
              'VBP' == word[1] or 'VBD' == word[1] or\
              'VBZ' == word[1] or 'VBN' == word[1] :
             if verb!="":
-                verb = verb+ word[0].capitalize() 
+                verb = verb+ " "+word[0]
             else:
                 verb = word[0]
         else:
@@ -140,7 +140,7 @@ def GetTypes():
         # if the word is adj just add it to the word 
         if 'JJ' == word[1] or 'JJR' == word[1] or 'JJS' == word[1]:
             if theWord!="":
-                theWord = theWord+ word[0].capitalize() 
+                theWord = theWord+ " "+word[0]
             else:
                 theWord = word[0]
         
@@ -148,7 +148,7 @@ def GetTypes():
         elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
             # add it to the word
             if theWord!="":
-                theWord = theWord+ word[0].capitalize() 
+                theWord = theWord+" "+word[0]
             else:
                 theWord = word[0]
 

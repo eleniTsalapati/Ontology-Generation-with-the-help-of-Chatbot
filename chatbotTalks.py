@@ -1,3 +1,8 @@
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        main talks
+#  -----------------------------------------------------------------------------------------------------------------
+
+
 def Welcome():
     print("Welcome, User!")
     print("This Chatbot is made to create an Ontology.")
@@ -47,3 +52,33 @@ def EnumerateTheClasses():
 
 def EndingStatement():
     print("I would like to thank you for using this ChatBot to develop your ontology!")
+
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        search Ontology talks
+#  -----------------------------------------------------------------------------------------------------------------
+
+def termFoundNoDescription(term,ontology):
+    print("The Ontology \""+ontology+"\" has no description for \""+term+"\".")
+    print("Should I keep this ontology without a description?")
+    print("If the answer is negative then this Ontology will be discarded and another Ontology will be searched.")
+
+def termKeepKids(term):
+    print("Shall I keep the Kids of \""+term+"\"?")
+
+def termKeepTheKidWithDescription(term,kid,description,ontology):
+    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" with the descrpition:")
+    print(description)
+    print("Shall I keep this kid?")
+
+def termNoKidFound(term,ontology):
+    print("The ontology \""+ontology+"\" has zero(0) kids for \""+term+"\".")
+
+def termKeepTheKidWithoutDescription(term,kid,ontology):
+    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" without a descrpition.")
+    print("Shall I keep this kid?")
+
+def termFoundDescription(term,description,ontology):
+    print("The Ontology \""+ontology+"\" has the following description for \""+term+"\":")
+    print(description)
+    print("Shall I keep this ontology with a description?")
+    print("If the answer is negative then this Ontology will be discarded and another Ontology will be searched.")

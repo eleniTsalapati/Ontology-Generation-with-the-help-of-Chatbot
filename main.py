@@ -1,8 +1,9 @@
 import chatbotTalks as talk
 import ontologyCreation as creation
 import chatbotHears as hear
-
+import searchOntology as search
 def getNoun(noun):
+    kids=None
     # See if the user wants to give the definition
     answer=0
     while answer==0 :
@@ -28,8 +29,7 @@ def getNoun(noun):
         
         # The user wants to find the definition
         if answer==1:
-            definition="I FOUND THE DEFINITION" 
-            definedBy="Search Engine"
+            (definition,definedBy,kids)=search.searchForTerm(noun)
 
         # The user wants to do something else
         else:
@@ -50,7 +50,7 @@ def getNoun(noun):
             else:
                 definition=None
                 definedBy=None
-    return (definition,definedBy)
+    return (definition,definedBy,kids)
 
 def AnswerOntology(ontology,classes):
 
@@ -68,7 +68,7 @@ def AnswerOntology(ontology,classes):
         if noun in previousNouns:
             continue
         
-        (definition,definedBy)=getNoun(noun)
+        (definition,definedBy,kids)=getNoun(noun)
 
         if  definition==None:
             continue
@@ -78,6 +78,12 @@ def AnswerOntology(ontology,classes):
         # and give the definition
         if definition!="":
             creation.Explaination(ontology,classes[0][noun],definition,definedBy)
+
+        if kids !=None:
+            for (kid,definition,definedBy) in kids:
+                classes[0][kid]=creation.CreateObject(ontology,kid,classes[0][noun])
+                if definition!="":
+                    creation.Explaination(ontology,classes[0][kid],definition,definedBy)
 
     # for all realationships
     keptNouns=classes[0].keys()
@@ -117,7 +123,7 @@ def MoreTypes(ontology,classes,seen):
             talk.GetDiffrentTypes(noun)
             types=hear.GetTypes()
             for type in types:
-                (definition,definedBy)=getNoun(type)
+                (definition,definedBy,kids)=getNoun(type)
                 if  definition==None:
                     continue
 
@@ -126,6 +132,12 @@ def MoreTypes(ontology,classes,seen):
                 # and give the definition
                 if definition!="":
                     creation.Explaination(ontology,classes[0][type],definition,definedBy)
+
+                if kids !=None:
+                    for (kid,definition,definedBy) in kids:
+                        classes[0][kid]=creation.CreateObject(ontology,kid,classes[0][noun])
+                        if definition!="":
+                            creation.Explaination(ontology,classes[0][kid],definition,definedBy)
 
                 
 # -------------------------------------------------------
