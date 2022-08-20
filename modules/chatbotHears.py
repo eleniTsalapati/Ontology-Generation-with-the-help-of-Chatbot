@@ -1,20 +1,18 @@
-import nltk
+from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
+from nltk.stem import WordNetLemmatizer
 
 sia = SentimentIntensityAnalyzer()
-    
-# TO DO: See the list that you have to download to work as nltk
-# What questions do you want your ontology to be able to answer
+lemmatizer = WordNetLemmatizer()
 
-# A:Enumerate all remote sensors from satellites 
 def WhatOntologyToAnswer():
     answer=input("> ")
     print(answer)
     print()
 
     # tokenize and take tags of the words
-    tokens=nltk.word_tokenize(answer.lower())
-    tagged=nltk.pos_tag(tokens)
+    tokens=word_tokenize(answer.lower())
+    tagged=pos_tag(tokens)
 
     # define
     nouns={}
@@ -35,7 +33,11 @@ def WhatOntologyToAnswer():
                 theWord = word[0]
         
         # if the the word is noun
-        elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+        elif 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+            if 'NNS' == word[1] or 'NNPS' == word[1]:
+                print("Singularize the \""+word[0]+"\" to \""+lemmatizer.lemmatize(word[0])+"\"")
+                word=(lemmatizer.lemmatize(word[0]),word[1])
+                
             # add it to the word
             if theWord!="":
                 theWord = theWord+ " " +word[0]
@@ -86,7 +88,7 @@ def WhatOntologyToAnswer():
         else :
             flagPOS=False
 
-
+    print()
     return (nouns,relationships)
 
 def GetTrueOrFalse():

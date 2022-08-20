@@ -24,7 +24,7 @@ def WhatOntologyToAnswer():
 def CouldNotUnderstand():
     print("Sorry but I could not understand your answer.")
 
-def AskDeffinition(word):
+def AskDefinition(word):
     print("Do you want to give your own definition for  \""+ word +"\"?")
 
 def YourDefinition(word):
@@ -34,13 +34,13 @@ def FindDefinition(word):
     print("Shall I search for the definition of  \""+ word +"\"?")
 
 def KeepWord(word):
-    print("Shall I keep  \"" + word + "\" without a definion?")
+    print("Shall I keep  \"" + word + "\" without a definition?")
     print("If the answer is negative then the ontology will not keep this word.")
 
-def AskDiffrentTypes(word):
+def AskDifferentTypes(word):
     print("Are there different types of  \""+ word +"\"?")
 
-def GetDiffrentTypes(word):
+def GetDifferentTypes(word):
     print("Enumerate all different types of  \""+ word +"\".")
 
 def MoreOntology():
@@ -66,7 +66,7 @@ def termKeepKids(term):
     print("Shall I keep the Kids of \""+term+"\"?")
 
 def termKeepTheKidWithDescription(term,kid,description,ontology):
-    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" with the descrpition:")
+    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" with the description:")
     print(description)
     print("Shall I keep this kid?")
 
@@ -74,7 +74,7 @@ def termNoKidFound(term,ontology):
     print("The ontology \""+ontology+"\" has zero(0) kids for \""+term+"\".")
 
 def termKeepTheKidWithoutDescription(term,kid,ontology):
-    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" without a descrpition.")
+    print("The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" without a description.")
     print("Shall I keep this kid?")
 
 def termFoundDescription(term,description,ontology):
@@ -82,3 +82,4 @@ def termFoundDescription(term,description,ontology):
     print(description)
     print("Shall I keep this ontology with a description?")
     print("If the answer is negative then this Ontology will be discarded and another Ontology will be searched.")
+

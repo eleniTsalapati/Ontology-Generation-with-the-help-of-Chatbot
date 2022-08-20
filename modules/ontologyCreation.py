@@ -21,7 +21,9 @@ def ConnectObjects(ontology,connection,object1,object2):
         NewClass = types.new_class(connection,(object1 >> object2,))
     return NewClass
 
-def Explaination(ontology,theClass,explaination,definedBy):
+def Explanation(ontology,theClass,explanation,definedBy):
     with ontology:
-        theClass.comment.append(explaination)
+        class description(AnnotationProperty):
+            pass
+        theClass.description.append(explanation)
         theClass.isDefinedBy = [definedBy]
