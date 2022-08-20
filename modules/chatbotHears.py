@@ -1,3 +1,4 @@
+from pickle import NONE
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
@@ -20,6 +21,7 @@ def WhatOntologyToAnswer():
     flagRelationships=False
     flagPOS=False
     previous=None
+    flagPrint= False
     theWord=""
     verb=""
 
@@ -34,10 +36,16 @@ def WhatOntologyToAnswer():
         
         # if the the word is noun
         elif 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+
+            # Singularize or lemmatize the word to be singular
             if 'NNS' == word[1] or 'NNPS' == word[1]:
-                print("Singularize the \""+word[0]+"\" to \""+lemmatizer.lemmatize(word[0])+"\"")
-                word=(lemmatizer.lemmatize(word[0]),word[1])
-                
+                if lemmatizer.lemmatize(word[0])!= []:
+                    print("Lemmatize the \""+word[0]+"\" to \""+lemmatizer.lemmatize(word[0])+"\"")
+                    word=(lemmatizer.lemmatize(word[0]),word[1])
+                    flagPrint=True
+                else:
+                    print("I cannot lemmatize the \""+word[0]+"\"") 
+
             # add it to the word
             if theWord!="":
                 theWord = theWord+ " " +word[0]
@@ -88,7 +96,9 @@ def WhatOntologyToAnswer():
         else :
             flagPOS=False
 
-    print()
+    if flagPrint:
+        print()
+
     return (nouns,relationships)
 
 def GetTrueOrFalse():
@@ -122,6 +132,7 @@ def thePath():
             return token
         elif "http://" in token:
             return token
+    return None
 
 def GetTypes():
     answer=input("> ")
@@ -129,8 +140,8 @@ def GetTypes():
     print()
 
     # tokenize and take tags of the words
-    tokens=nltk.word_tokenize(answer.lower())
-    tagged=nltk.pos_tag(tokens)
+    tokens=word_tokenize(answer.lower())
+    tagged=pos_tag(tokens)
 
     # define
     nouns=[]
@@ -147,6 +158,16 @@ def GetTypes():
         
         # if the the word is noun
         elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+            
+            # Singularize or lemmatize the word to be singular
+            if 'NNS' == word[1] or 'NNPS' == word[1]:
+                if lemmatizer.lemmatize(word[0])!= []:
+                    print("Lemmatize the \""+word[0]+"\" to \""+lemmatizer.lemmatize(word[0])+"\"")
+                    word=(lemmatizer.lemmatize(word[0]),word[1])
+                    flagPrint=True
+                else:
+                    print("I cannot lemmatize the \""+word[0]+"\"") 
+
             # add it to the word
             if theWord!="":
                 theWord = theWord+" "+word[0]

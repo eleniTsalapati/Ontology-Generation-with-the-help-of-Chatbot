@@ -6,55 +6,31 @@ import modules.utility as utility
 
 def find_definition_of_Noun(noun):
     kids=None
+    definition=None
     
-    # See if the user wants to give the definition
-    answer= utility.question_Noun_with_yes_or_No(talk.AskDefinition,noun)
-
-    # The user wants to give the definition
-    if answer == 1:
-        talk.YourDefinition(noun)
-        definition=hear.GetDefinition()
-        definedBy="You"
-    # The user wants to do something else
-    else:
-        answer= utility.question_Noun_with_yes_or_No(talk.FindDefinition,noun)
+    answer= utility.question_Noun_with_yes_or_No(talk.FindDefinition,noun)
         
-        # The user wants to find the definition
-        if answer==1:
-            # search the definition
-            (definition,definedBy,kids)=search.searchForTerm(noun)
-            
-            # if the search definition was not selected
-            if definition==None:
+    # The user wants to find the definition
+    if answer==1:
+        # search the definition
+        (definition,definedBy,kids)=search.searchForTerm(noun)
+        
+    # if the search definition was not selected
+    if  definition==None:
 
-                # ask if the user want to give definition
-                answer= utility.question_Noun_with_yes_or_No(talk.AskDefinition,noun)
+        # ask if the user want to give definition
+        answer= utility.question_Noun_with_yes_or_No(talk.AskDefinition,noun)
 
-                # The user wants to give the definition
-                if answer == 1:
-                    talk.YourDefinition(noun)
-                    definition=hear.GetDefinition()
-                    definedBy="You"
-                # The user wants to do something else
-                else:
-                    # See if the user wants to keep without definition
-                    answer= utility.question_Noun_with_yes_or_No(talk.KeepWord,noun)
-                    
-                    # The user wants to keep without definition
-                    if answer==1:
-                        definition=""
-                        definedBy=""
-                    # The user does not want to keep the word
-                    else:
-                        definition=None
-                        definedBy=None
-
+        # The user wants to give the definition
+        if answer == 1:
+            talk.YourDefinition(noun)
+            definition=hear.GetDefinition()
+            definedBy="You"
         # The user wants to do something else
         else:
-
             # See if the user wants to keep without definition
             answer= utility.question_Noun_with_yes_or_No(talk.KeepWord,noun)
-
+            
             # The user wants to keep without definition
             if answer==1:
                 definition=""
@@ -173,9 +149,14 @@ seen=[]
 talk.Welcome()
 
 # Load the ontology
-talk.askTheFile()
-file=hear.thePath()
-ontology=creation.LoadOntology(file)
+answer = None
+while answer == None:
+    talk.askTheFile()
+    answer=hear.thePath()
+    if answer==None:
+        talk.CouldNotUnderstand()
+
+ontology=creation.LoadOntology(answer)
 
 
 what_the_ontology_should_answer(ontology,classes)

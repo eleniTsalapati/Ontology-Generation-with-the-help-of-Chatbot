@@ -11,41 +11,68 @@ IMPORTANT: If the file path is local then it has to begin with file://
 What questions do you want your ontology to be able to answer?
 > enumerate all kinds of remote sensors used in satellites
 
-Do you want to give your own definition for the word "kinds"?
-> No, I do not want to give a Definition.
+Lemmatize the "kinds" to "kind"
+Lemmatize the "sensors" to "sensor"
+Lemmatize the "satellites" to "satellite"
 
-Shall I search for the definition of the word "kinds"?
+Shall I search for the definition of  "kind"?
 > I do not want to search.
 
-Shall I keep the word "kinds" without a definion?
+Do you want to give your own definition for  "kind"?
+> No, I do not want to give a Definition.
+
+Shall I keep  "kind" without a definition?
 If the answer is negative then the ontology will not keep this word.
 > No
 
-Do you want to give your own definition for the word "remoteSensors"?
+Shall I search for the definition of  "remote sensor"?
+> yes
+
+I have not found an ontology with that label!
+Do you want to give your own definition for  "remote sensor"?
 > I would like to give a Definition
 
-What is your definition of the word "remoteSensors"?
-> The Definition is my Definition.
+What is your definition of  "remote sensor"?
+> the scanning of the earth by satellite or high-flying aircraft in order to obtain information about it
 
-Do you want to give your own definition for the word "satellites"?
-> No.
-
-Shall I search for the definition of the word "satellites"?
+Shall I search for the definition of  "satellite"?
 > I want to search the Definition
 
-Do you want the ontology to be able to answer more questions?
+The Ontology "ncit" has the following description for "satellite":
+Situated near; accompanying.
+Shall I keep this ontology with a description?
+If the answer is negative then this Ontology will be discarded and another Ontology will be searched.
+> No
+
+I have not found an ontology with that label!
+I remember the previous ontology that I found.
+The Ontology "ncit" has the following description for "satellite":
+Situated near; accompanying.
+Shall I keep this ontology with a description?
+If the answer is negative then this Ontology will be discarded and another Ontology will be searched.
 > Yes 
+
+Shall I keep the Kids of "satellite"?
+> Yes
+
+The ontology "ncit" has zero(0) kids for "satellite".
+Do you want the ontology to be able to answer more questions?
+> Yes
 
 What questions do you want your ontology to be able to answer?
 > enumerate all kinds of remote sensors used in satellites
 
-Do you want to give your own definition for the word "kinds"?
+Lemmatize the "kinds" to "kind"
+Lemmatize the "sensors" to "sensor"
+Lemmatize the "satellites" to "satellite"
+
+Shall I search for the definition of  "kind"?
 > No
 
-Shall I search for the definition of the word "kinds"?
+Do you want to give your own definition for  "kind"?
 > No
 
-Shall I keep the word "kinds" without a definion?
+Shall I keep  "kind" without a definition?
 If the answer is negative then the ontology will not keep this word.
 > No
 
@@ -56,29 +83,34 @@ Do you want to enumerate the different types of words in the ontology?
 IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!
 > Yes
 
-Are there different types of the word "remoteSensors"?
+Are there different types of  "remote sensor"?
 > Yes
 
-Enumerate all different types of the word "remoteSensors".
+Enumerate all different types of  "remote sensor".
 > altimeter, optical sensor
 
-Do you want to give your own definition for the word "altimeter"?
+Shall I search for the definition of  "altimeter"?
 > Yes
 
-What is your definition of the word "altimeter"?
+I have not found an ontology with that label!
+Do you want to give your own definition for  "altimeter"?
+> yes
+
+What is your definition of  "altimeter"?
 > Bla
 
-Do you want to give your own definition for the word "opticalSensor"?
-> No
+Shall I search for the definition of  "optical sensor"?
+> yes
 
-Shall I search for the definition of the word "opticalSensor"?
-> Search
+I have not found an ontology with that label!
+Do you want to give your own definition for  "optical sensor"?
+> no
 
-Sorry but I could not understand your answer.
-Shall I search for the definition of the word "opticalSensor"?
-> I would like you to search
+Shall I keep  "optical sensor" without a definition?
+If the answer is negative then the ontology will not keep this word.
+> yes
 
-Are there different types of the word "satellites"?
+Are there different types of  "satellite"?
 > No
 
 Do you want the ontology to be able to answer more questions?

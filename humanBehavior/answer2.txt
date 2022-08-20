@@ -9,10 +9,7 @@ IMPORTANT: If the file path is local then it has to begin with file://
 > the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl
 
 What questions do you want your ontology to be able to answer?
-> enumerate the horse in the town
-
-Do you want to give your own definition for  "horse"?
-> no
+> enumerate the horse of the town
 
 Shall I search for the definition of  "horse"?
 > yes
@@ -31,11 +28,15 @@ If the answer is negative then this Ontology will be discarded and another Ontol
 Shall I keep the Kids of "horse"?
 > yes
 
-The Ontology "foodon" has "mule" as kid of "horse" with the descrpition:
+The Ontology "foodon" has "mule" as kid of "horse" with the description:
 A mule is the offspring of a male donkey and a female horse. Horses and donkeys are different species, with different numbers of chromosomes. Of the two F1 hybrids between these two species, a mule is easier to obtain than a hinny (the offspring of a male horse and a female donkey). All male mules and most female mules are infertile.
 Shall I keep this kid?
 > yes
 
+Shall I search for the definition of  "town"?
+> yes
+
+I have not found an ontology with that label!
 Do you want to give your own definition for  "town"?
 > yes
 

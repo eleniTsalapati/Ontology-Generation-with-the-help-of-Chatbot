@@ -24,14 +24,14 @@ def WhatOntologyToAnswer():
 def CouldNotUnderstand():
     print("Sorry but I could not understand your answer.")
 
+def FindDefinition(word):
+    print("Shall I search for the definition of  \""+ word +"\"?")
+
 def AskDefinition(word):
     print("Do you want to give your own definition for  \""+ word +"\"?")
 
 def YourDefinition(word):
     print("What is your definition of  \""+ word +"\"?")
-
-def FindDefinition(word):
-    print("Shall I search for the definition of  \""+ word +"\"?")
 
 def KeepWord(word):
     print("Shall I keep  \"" + word + "\" without a definition?")
