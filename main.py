@@ -3,33 +3,35 @@ import modules.ontologyCreation as creation
 import modules.chatbotHears as hear
 import modules.searchOntology as search
 import modules.utility as utility
+from modules.UI import UI
 
-def find_definition_of_Noun(noun):
+def find_definition_of_Noun(noun,ui):
     kids=None
     definition=None
-    
-    answer= utility.question_Noun_with_yes_or_No(talk.FindDefinition,noun)
+
+    answer= utility.question_arg1_with_yes_or_No(ui,talk.FindDefinition,noun)
         
     # The user wants to find the definition
     if answer==1:
         # search the definition
-        (definition,definedBy,kids)=search.searchForTerm(noun)
+        (definition,definedBy,kids)=search.searchForTerm(noun,ui)
         
     # if the search definition was not selected
     if  definition==None:
 
         # ask if the user want to give definition
-        answer= utility.question_Noun_with_yes_or_No(talk.AskDefinition,noun)
+        answer= utility.question_arg1_with_yes_or_No(ui,talk.AskDefinition,noun)
 
         # The user wants to give the definition
         if answer == 1:
-            talk.YourDefinition(noun)
-            definition=hear.GetDefinition()
+            ui.changeMessage(talk.YourDefinition(noun))
+            answerUI=ui.hear()
+            definition=hear.GetDefinition(answerUI)
             definedBy="You"
         # The user wants to do something else
         else:
             # See if the user wants to keep without definition
-            answer= utility.question_Noun_with_yes_or_No(talk.KeepWord,noun)
+            answer= utility.question_arg1_with_yes_or_No(ui,talk.KeepWord,noun)
             
             # The user wants to keep without definition
             if answer==1:
@@ -42,14 +44,15 @@ def find_definition_of_Noun(noun):
 
     return (definition,definedBy,kids)
 
-def what_the_ontology_should_answer(ontology,classes):
+def what_the_ontology_should_answer(ontology,classes,ui):
 
     previousNouns=classes[0].keys()
     previousRelated=classes[1].keys()
 
     # See what the ontology should answer
-    talk.WhatOntologyToAnswer()
-    (nouns,relationships)=hear.WhatOntologyToAnswer()
+    ui.changeMessage(talk.WhatOntologyToAnswer())
+    answerUI=ui.hear()
+    (nouns,relationships)=hear.WhatOntologyToAnswer(answerUI)
 
     # For all the nouns that we have
     for noun in nouns.keys():
@@ -59,7 +62,7 @@ def what_the_ontology_should_answer(ontology,classes):
             continue
         
         # find the definition of the noun
-        (definition,definedBy,kids)=find_definition_of_Noun(noun)
+        (definition,definedBy,kids)=find_definition_of_Noun(noun,ui)
 
         # if the user do not want to keep the noun 
         if  definition==None:
@@ -97,7 +100,7 @@ def what_the_ontology_should_answer(ontology,classes):
         # create the relationship
         classes[1][relation]=creation.ConnectObjects(ontology,relation,classes[0][obj1],classes[0][obj2])
 
-def more_types(ontology,classes,seen):
+def more_types(ontology,classes,seen,ui):
     
     nouns=list(classes[0].keys())
     for noun in nouns:
@@ -110,17 +113,18 @@ def more_types(ontology,classes,seen):
         seen.append(noun)
         
         # ask if you want to get the different types
-        answer= utility.question_Noun_with_yes_or_No(talk.AskDifferentTypes,noun)
+        answer= utility.question_arg1_with_yes_or_No(ui,talk.AskDifferentTypes,noun)
         if answer==1:
 
             # ask the types
-            talk.GetDifferentTypes(noun)
-            types=hear.GetTypes()
+            ui.changeMessage(talk.GetDifferentTypes(noun))
+            answerUI=ui.hear()
+            types=hear.GetTypes(answerUI)
 
             # for each type from the different types 
             for type in types:
             
-                (definition,definedBy,kids)=find_definition_of_Noun(type)
+                (definition,definedBy,kids)=find_definition_of_Noun(type,ui)
             
                 if  definition==None:
                     continue
@@ -143,38 +147,42 @@ def more_types(ontology,classes,seen):
 # -------------------------------------------------------
 
 # classes=[classesObj,classesRel]
+ui= UI()
 classes=[{},{}]
 seen=[]
 # Welcome
-talk.Welcome()
-
+ui.create()
 # Load the ontology
 answer = None
 while answer == None:
-    talk.askTheFile()
-    answer=hear.thePath()
+    ui.changeMessage(talk.Welcome())
+    answerUI=ui.hear()
+    answer=hear.thePath(answerUI)
+    
     if answer==None:
         talk.CouldNotUnderstand()
 
 ontology=creation.LoadOntology(answer)
 
 
-what_the_ontology_should_answer(ontology,classes)
+what_the_ontology_should_answer(ontology,classes,ui)
 
 while(True):
-    answer= utility.question_with_yes_or_No(talk.MoreOntology)
+    answer= utility.question_with_yes_or_No(ui,talk.MoreOntology)
 
     if answer == 1:
-        what_the_ontology_should_answer(ontology,classes)
+        what_the_ontology_should_answer(ontology,classes,ui)
         continue
 
-    answer= utility.question_with_yes_or_No(talk.EnumerateTheClasses)
+    answer= utility.question_with_yes_or_No(ui,talk.EnumerateTheClasses)
 
     if answer == 1:
-        more_types(ontology,classes,seen)
+        more_types(ontology,classes,seen,ui)
         continue
     break
 
 # Save the ontology
 creation.SaveOntology(ontology)
-talk.EndingStatement()
+
+ui.changeMessage(talk.EndingStatement())
+

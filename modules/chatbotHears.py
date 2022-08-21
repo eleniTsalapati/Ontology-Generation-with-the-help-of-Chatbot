@@ -1,4 +1,3 @@
-from pickle import NONE
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
@@ -6,8 +5,7 @@ from nltk.stem import WordNetLemmatizer
 sia = SentimentIntensityAnalyzer()
 lemmatizer = WordNetLemmatizer()
 
-def WhatOntologyToAnswer():
-    answer=input("> ")
+def WhatOntologyToAnswer(answer):
     print(answer)
     print()
 
@@ -101,8 +99,7 @@ def WhatOntologyToAnswer():
 
     return (nouns,relationships)
 
-def GetTrueOrFalse():
-    answer=input("> ")
+def GetTrueOrFalse(answer):
     print(answer)
     print()
     
@@ -114,15 +111,13 @@ def GetTrueOrFalse():
     else:
         return 0
 
-def GetDefinition():
-    answer=input("> ")
+def GetDefinition(answer):
     print(answer)
     print()
     
     return answer
 
-def thePath():
-    answer=input("> ")
+def thePath(answer):
     print(answer)
     print()
     
@@ -134,8 +129,7 @@ def thePath():
             return token
     return None
 
-def GetTypes():
-    answer=input("> ")
+def GetTypes(answer):
     print(answer)
     print()
 
