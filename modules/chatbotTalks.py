@@ -9,8 +9,10 @@ def Welcome():
     txt+="I will ask you questions about the ontology and you have to answer them.\n"
     txt+="Let's start!!\n\n"
     txt+="In which file shall I save the ontology?\n"
-    txt+="IMPORTANT: If the file path is local then it has to begin with file://\n"
-    txt+="           If the file path is digital then it has to begin with http://\n"
+    txt+="IMPORTANT!!\n"
+    txt+="If the file path is local then it has to begin with \"file://\" "
+    txt+="or you can search the local file from the button \"Find File\"\n"
+    txt+="If the file path is digital then it has to begin with \"http://\"\n"
     print(txt)
     return txt
     
@@ -65,12 +67,7 @@ def EnumerateTheClasses():
     txt+="IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!\n"
     print(txt)
     return txt
-
-def EndingStatement():
-    txt="I would like to thank you for using this ChatBot to develop your ontology!\n"
-    print(txt)
-    return txt
-
+    
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        search Ontology talks
 #  -----------------------------------------------------------------------------------------------------------------

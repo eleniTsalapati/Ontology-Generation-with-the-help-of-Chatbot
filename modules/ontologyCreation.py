@@ -1,5 +1,5 @@
 from owlready2 import *
-import types
+# import types
 
 def LoadOntology(file):
     ontology = get_ontology(file).load()

@@ -3,3 +3,8 @@ __pycache__
 test.py
 ontologies
 UI
+dist
+build
+main.spec
+main.build
+main.dist

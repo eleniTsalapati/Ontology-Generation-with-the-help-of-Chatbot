@@ -162,6 +162,7 @@ while answer == None:
     if answer==None:
         talk.CouldNotUnderstand()
 
+ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
 ontology=creation.LoadOntology(answer)
 
 
@@ -184,5 +185,4 @@ while(True):
 # Save the ontology
 creation.SaveOntology(ontology)
 
-ui.changeMessage(talk.EndingStatement())
-
+ui.close()
