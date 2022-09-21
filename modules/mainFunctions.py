@@ -318,7 +318,5 @@ def hyperClass(ontology,classes,ui):
 
         for word in words:
             checkInheritanceAndChange(ontology,word,subject,classes,ui)
-            # creation.changeParent(ontology,classes[0][word][0],classes[0][subject][0])
-            # ui.changeParent(word,subject)
         ui.checkChange(classes)
     
