@@ -3,6 +3,9 @@
 #  -----------------------------------------------------------------------------------------------------------------
 
 
+from cgitb import text
+
+
 def Welcome():
     txt="Welcome, User!\n"
     txt+="This Chatbot is made to create an Ontology.\n"
@@ -17,14 +20,15 @@ def Welcome():
     return txt
     
 def WhatOntologyToAnswer():
-    txt="What questions do you want your ontology to be able to answer?\n"
+    txt="What questions do you want your ontology to be able to answer?\n\n"
+    txt+="Please be careful with the grammar, syntax of the answer as it will affect it."
     print(txt)
     return txt
 
-def CouldNotUnderstand(txt):
-    txt2="Sorry but I could not understand your answer.\n\n"
-    print(txt2)
-    return txt2+txt
+def CouldNotUnderstand():
+    txt="\n\n Sorry but I could not understand your answer.\n\n"
+    print(txt)
+    return txt
 
 def FindDefinition(word):
     txt="Shall I search for the definition of  \""+ word +"\"?\n"
@@ -48,14 +52,16 @@ def KeepWord(word):
     return txt
 
 def AskDifferentTypes(word):
-    txt="Are there different types of  \""+ word +"\"?\n"
+    txt="Are there different substitutes of  \""+ word +"\"?\n"
     print(txt)
     return txt
 
 def GetDifferentTypes(word):
-    txt="Enumerate all different types of  \""+ word +"\".\n"
+    txt="Enumerate all different substitutes of  \""+ word +"\".\n"
     print(txt)
     return txt
+
+# TO DO ADD THE WORDS THAT YOU HAVE NOT PLAYED YET
 
 def MoreOntology():
     txt="Do you want the ontology to be able to answer more questions?\n"
@@ -63,7 +69,7 @@ def MoreOntology():
     return txt
     
 def EnumerateTheClasses():
-    txt="Do you want to enumerate the different types of words in the ontology?\n"
+    txt="Do you want to enumerate the different substitutes of words in the ontology?\n"
     txt+="IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!\n"
     print(txt)
     return txt
@@ -79,26 +85,26 @@ def termFoundNoDescription(term,ontology):
     print(txt)
     return txt
 
-def termKeepKids(term):
-    txt="Shall I keep the Kids of \""+term+"\"?\n"
+def termKeepSubcategories(term):
+    txt="Shall I keep the subcategories of \""+term+"\"?\n"
     print(txt)
     return txt
 
-def termKeepTheKidWithDescription(term,kid,description,ontology):
-    txt="The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" with the description:\n"
+def termKeepTheSubcategoryWithDescription(term,subcategory,description,ontology):
+    txt="The Ontology \""+ontology+"\" has \""+subcategory+"\" as subcategories of \""+term+"\" with the description:\n"
     txt+=description+"\n"
-    txt+="Shall I keep this kid?\n"
+    txt+="Shall I keep this subcategories?\n"
     print(txt)
     return txt
 
-def termNoKidFound(term,ontology):
-    txt="The ontology \""+ontology+"\" has no kids for \""+term+"\".\n\n"
+def termNoSubcategoryFound(term,ontology):
+    txt="The ontology \""+ontology+"\" has no subcategories for \""+term+"\".\n\n"
     print(txt)
     return txt
 
-def termKeepTheKidWithoutDescription(term,kid,ontology):
-    txt="The Ontology \""+ontology+"\" has \""+kid+"\" as kid of \""+term+"\" without a description.\n"
-    txt+="Shall I keep this kid?\n"
+def termKeepTheSubcategoryWithoutDescription(term,subcategory,ontology):
+    txt="The Ontology \""+ontology+"\" has \""+subcategory+"\" as subcategories of \""+term+"\" without a description.\n"
+    txt+="Shall I keep this subcategories?\n"
     print(txt)
     return txt
 
@@ -110,4 +116,24 @@ def termFoundDescription(term,description,ontology):
     print(txt)
     return txt
 
+def seen5Sub(term):
+    txt="You have seen 5 subcategories of \""+term+"\"\n Do you want to see more?\n"
+    return txt
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        Onto Clean
+#  -----------------------------------------------------------------------------------------------------------------
 
+def ontoCheck(parent,child):
+    txt="Is \""+child+"\" a kind of \"" + parent +"\"?\n"
+    txt+="For example: Is every \"" + child + "\" also \""+parent+"\".\n"
+    return txt
+
+def identityComponentOf(first,second):
+    txt="Is the \""+first+"\" component of \"" + second +"\"?\n"
+    txt+="For example: Is every \"" + first + "\" component of \""+second+"\".\n"
+    return txt
+
+def unityComposedOf(first,second):
+    txt="Is the \""+first+"\" composed of \"" + second +"\"?\n"
+    txt+="For example: Is every \"" + first + "\" composed of \""+second+"\".\n"
+    return txt

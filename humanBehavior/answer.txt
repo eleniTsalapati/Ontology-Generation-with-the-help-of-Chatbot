@@ -89,6 +89,10 @@ Are there different types of  "remote sensor"?
 Enumerate all different types of  "remote sensor".
 > altimeter, optical sensor
 
+// TO DO 
+QUESTIONS HERE
+
+
 Shall I search for the definition of  "altimeter"?
 > Yes
 

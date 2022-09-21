@@ -4,96 +4,95 @@ import modules.chatbotHears as hear
 
 def question_with_yes_or_No(ui,question):
     answer=0
-    flag=False
+    # do the question here
+    ui.changeMessage(question())
+
     while answer==0 :
-        # do the question here
-        if flag==True:
-            ui.changeMessage(talk.CouldNotUnderstand(question()))
-        else:
-            ui.changeMessage(question())
-            flag=True
 
         # get answer
         answerUI=ui.hearTrueOrFalse()
         answer=hear.GetTrueOrFalse(answerUI)
+
+        # not correct answer
+        if answer==0:
+            ui.rememberOneTime(question())
+            ui.changeMessage(talk.CouldNotUnderstand())
 
     return answer
 
 
 def question_arg1_with_yes_or_No(ui,question,arg1):
     answer=0
-    flag=True
+
+    # do the question here
+    ui.changeMessage(question(arg1))
+
     while answer==0 :
-        # do the question here
-        if flag==False:
-            ui.changeMessage(talk.CouldNotUnderstand(question(arg1)))
-        else:
-            ui.changeMessage(question(arg1))
-            flag=True
 
         # get answer
         answerUI=ui.hearTrueOrFalse()
         answer=hear.GetTrueOrFalse(answerUI)
+
+        if answer==0:
+            ui.rememberOneTime(question(arg1))
+            ui.changeMessage(talk.CouldNotUnderstand())
 
     return answer
 
 def question_arg2_with_yes_or_No(ui,question,arg1,arg2):
     answer=0
-    flag=False
+    # do the question here
+    ui.changeMessage(question(arg1,arg2))
 
     while answer==0 :
         
         
-        # do the question here
-        if flag==True:
-            ui.changeMessage(talk.CouldNotUnderstand(question(arg1,arg2)))
-        else:
-            ui.changeMessage(question(arg1,arg2))
-            flag=True
 
         # get answer
         answerUI=ui.hearTrueOrFalse()
         answer=hear.GetTrueOrFalse(answerUI)
+    
+        # not correct answer
+        if answer==0:
+            ui.rememberOneTime(question(arg1,arg2))
+            ui.changeMessage(talk.CouldNotUnderstand())
 
     return answer
 
 def question_arg3_with_yes_or_No(ui,question,arg1,arg2,arg3):
     answer=0
-    flag=False
+    
+    # do the question here
+    ui.changeMessage(question(arg1,arg2,arg3))
 
     while answer==0 :
         
-        
-        # do the question here
-        if flag==True:
-            ui.changeMessage(talk.CouldNotUnderstand(question(arg1,arg2,arg3)))
-        else:
-            ui.changeMessage(question(arg1,arg2,arg3))
-            flag=True
-
         # get answer
         answerUI=ui.hearTrueOrFalse()
         answer=hear.GetTrueOrFalse(answerUI)
+        
+        # not correct answer
+        if answer==0:
+            ui.rememberOneTime(question(arg1,arg2,arg3))
+            ui.changeMessage(talk.CouldNotUnderstand())
 
     return answer
 
 
-def question_arg4_with_yes_or_No(question,arg1,arg2,arg3,arg4,ui):
+def question_arg4_with_yes_or_No(ui,question,arg1,arg2,arg3,arg4):
     answer=0
-    flag=False
 
+    # do the question here
+    ui.changeMessage(question(arg1,arg2,arg3,arg4))
     while answer==0 :
-        
-        
-        # do the question here
-        if flag==True:
-            ui.changeMessage(talk.CouldNotUnderstand(question(arg1,arg2,arg3,arg4)))
-        else:
-            ui.changeMessage(question(arg1,arg2,arg3,arg4))
-            flag=True
-
+                
         # get answer
         answerUI=ui.hearTrueOrFalse()
         answer=hear.GetTrueOrFalse(answerUI)
 
+        # not correct answer
+        if answer==0:
+            ui.rememberOneTime(question(arg1,arg2,arg3,arg4))
+            ui.changeMessage(talk.CouldNotUnderstand())
+        
     return answer

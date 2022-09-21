@@ -1,7 +1,11 @@
-from time import sleep
+from cgitb import text
+from pickle import FRAME
 from tkinter import *
+from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
+from turtle import left, right
+
 
 class UI:
     def __init__(self):
@@ -15,6 +19,9 @@ class UI:
         self.entryPack=False
         self.frame1=None
         self.frame2=None
+        self.frame3=None
+        self.frame4=None
+        self.frame5=None
         self.flag=False
         self.answer=""
         self.rememberTxt=""
@@ -23,6 +30,11 @@ class UI:
         self.folderPath=None
         self.flagFile=True
         self.filePack=False
+
+        self.subjectTable=None 
+        self.relationsTable=None
+        self.flagTable=True 
+        self.rememberTable=False
 
     def rememberOneTime(self,txt):
         self.rememberTxt+=txt
@@ -47,34 +59,31 @@ class UI:
 
     def gotText(self,event):
         self.answer=self.entry.get()
-        print(self.answer)
         self.entry.config(state= "readonly")
         self.flag=False
         
     def gotTrue(self):
         self.answer="Yes"
-        print(self.answer)
         self.butTrue.config(state= "disabled")
         self.butFalse.config(state= "disabled")
         self.flag=False
     
     def gotFalse(self):
         self.answer="No"
-        print(self.answer)
         self.butTrue.config(state= "disabled")
         self.butFalse.config(state= "disabled")
         self.flag=False
     
     def create(self):
         self.win = Tk() 
-        self.win.geometry("500x500") 
+        self.win.geometry("1000x500") 
 
         self.frame1 = LabelFrame(self.win,text="ChatBot Messages:")
         self.frame1.pack()
         self.msg = Message(self.frame1, text = self.txt,anchor=CENTER,width=450) 
         self.msg.pack() 
 
-        self.frame2 = LabelFrame(self.win,text="Your Answers:")
+        self.frame2 = LabelFrame(self.win,text="Your Answer:")
         self.frame2.pack()
         self.entry=Entry(self.frame2,width=500)
 
@@ -85,7 +94,141 @@ class UI:
         self.butFalse=Button(self.frame2,text="No",bg='red',fg="white",command=self.gotFalse)        
         self.butFile=Button(self.frame2,text="Find file",command=self.browse_button)
 
+        self.frame3= LabelFrame(self.win,text="Your Data")
+        self.frame3.pack()
+
+        self.frame6= Frame(self.frame3)
+        self.frame6.pack()
+        # One TABLE
+        self.frame4=Frame(self.frame6)
+        self.frame4.pack(side=LEFT)
+        self.subjectTable= ttk.Treeview(self.frame4)
+
+
+        # Scrollbar
+        self.scroll1= Scrollbar(self.frame4,command = self.subjectTable.yview)
+        self.scroll1.pack(side=RIGHT,fill=Y)
+        self.subjectTable.configure(yscrollcommand = self.scroll1.set)
+        
+        # Definition of Columns
+        self.subjectTable['columns']=("id","name","parent")
+        self.subjectTable.column("#0",width=0,stretch=NO)
+        self.subjectTable.column("id",anchor=CENTER,width=80,stretch=YES,)
+        self.subjectTable.column("name",anchor=CENTER,width=120,stretch=YES)
+        self.subjectTable.column("parent",anchor=CENTER,width=120,stretch=YES)
+
+        # Definition of Headings
+        self.subjectTable.heading("#0",text="",anchor=CENTER)
+        self.subjectTable.heading("id",text="ID",anchor=CENTER)
+        self.subjectTable.heading("name",text="Name",anchor=CENTER)
+        self.subjectTable.heading("parent",text="Parent",anchor=CENTER)
+
+        self.subjectTable.tag_configure('used', background='white')
+        self.subjectTable.tag_configure('notInserted', background='red')
+        self.subjectTable.tag_configure('notUsed', background='orange')
+
+        self.subjectTable.pack()
+
+        # THE OTHER TABLE
+        #  -------------
+
+        self.frame5=Frame(self.frame6)
+        self.frame5.pack(side=RIGHT)
+        self.relationsTable= ttk.Treeview(self.frame5)
+
+        # Scrollbar
+        self.scroll2= Scrollbar(self.frame5,command = self.relationsTable.yview)
+        self.scroll2.pack(side=RIGHT,fill=Y)
+        self.relationsTable.configure(yscrollcommand = self.scroll2.set)
+
+        # Definition of Columns
+        self.relationsTable['columns']=("id","object1","relation","object2")
+        self.relationsTable.column("#0",width=0,stretch=NO)
+        self.relationsTable.column("id",anchor=CENTER,width=80)
+        self.relationsTable.column("object1",anchor=CENTER,width=80)
+        self.relationsTable.column("relation",anchor=CENTER,width=80)
+        self.relationsTable.column("object2",anchor=CENTER,width=80)
+
+        # Definition of Headings
+        self.relationsTable.heading("#0",text="",anchor=CENTER)
+        self.relationsTable.heading("id",text="ID",anchor=CENTER)
+        self.relationsTable.heading("object1",text="Object 1",anchor=CENTER)
+        self.relationsTable.heading("relation",text="Relation",anchor=CENTER)
+        self.relationsTable.heading("object2",text="Object 2",anchor=CENTER)
+
+        self.relationsTable.pack()    
+
+        txt="The red rows have not yet been INSERTED\n"
+        txt+="The orange rows have not yet been USED to make a relation with another object"
+        self.msg2 = Message(self.frame3, text = txt,anchor=CENTER,width=450) 
+        self.msg2.pack()
+
+    def insertSubjectTable(self,name,parent): 
+        last=len(list(self.subjectTable.get_children()))
+        self.subjectTable.insert(parent="",index="end",iid=last,text="",
+        values=(last,name,str(parent)),tags="notInserted")
+
+    def changeParent(self,name,parent):
+        for i in range(len(self.subjectTable.get_children())):
+            item=self.subjectTable.item(i)
+            if item["values"][1]==name:
+                self.subjectTable.item(i,values=(item["value"][0],name,str(parent)))
+
+    def makeTablesClass(self,classes):
+        # Add Data in subjectTable
+        theList=list(self.subjectTable.get_children())
+        last=len(theList)
+        for key in classes[0].keys():
+            i=0
+            for i in range(len(theList)):
+                item=self.subjectTable.item(i)
+                
+                # change color
+                if item["values"][1] == key:
+                    if classes[0][key][4]==1:
+                        self.subjectTable.item(i,tags="used")
+                    else:
+                        self.subjectTable.item(i,tags="notUsed")
+                    break
+            if i == len(theList):   
+                # insert them inside
+                self.subjectTable.insert(parent="",index="end",iid=i,text="",
+                values=(i,classes[0][key][1],classes[0][key][2]),tags="used")
+                if classes[0][key][4]==0:
+                    self.subjectTable.item(i,tags="notUsed")
+                last+=1
+
+
+        # Add Data in relation
+        theList=self.relationsTable.get_children()
+        if  theList== ():
+            start=0
+        else:
+            # find the last id number
+            start=int(theList[-1])+1
+        # for the keys from the start to the end
+        keys=list(classes[1].keys())
+        for i in range(start,len(keys)):
+            # insert them inside
+            self.relationsTable.insert(parent="",index="end",iid=i,text="",
+            values=(i+1,classes[1][keys[i]][1],classes[1][keys[i]][2],classes[1][keys[i]][3]))
+        self.rememberTable=True
+        self.frame3.pack()
+
+    def rememberTableOnce(self):
+        self.rememberTable=True
+        self.frame3.pack()
+
     def hearTrueOrFalse(self):
+        if self.flagTable==True:
+            self.frame3.pack_forget()
+            self.flagTable=False
+        
+        if self.rememberTable==True:
+            self.frame3.pack()
+            self.rememberTable=False
+            self.flagTable=True
+
         if self.entryPack==True:
             self.entry.pack_forget()
             self.entryPack=False
@@ -104,6 +247,15 @@ class UI:
         return self.answer
 
     def hear(self):
+        if self.flagTable==True:
+            self.frame3.pack_forget()
+            self.flagTable=False
+        
+        if self.rememberTable==True:
+            self.frame3.pack()
+            self.rememberTable=False
+            self.flagTable=True
+
         if self.butPack==True:
             self.butFalse.pack_forget()
             self.butTrue.pack_forget()
@@ -128,3 +280,5 @@ class UI:
 
     def close(self):
         messagebox.showinfo("Clossing...",  "I would like to thank you for using this ChatBot to develop your ontology!")
+
+    

@@ -1,12 +1,12 @@
 the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot.owl
 enumerate all kinds of remote sensors used in satellites
-I do not want to search.
+No
 No, I do not want to give a Definition.
 No
 yes
-I would like to give a Definition
+yes
 the scanning of the earth by satellite or high-flying aircraft in order to obtain information about it
-I want to search the Definition
+Yes 
 No
 Yes 
 Yes
@@ -23,7 +23,10 @@ Yes
 yes
 Bla
 yes
+
+yes
 no
+yes
 yes
 No
 No

@@ -1,5 +1,5 @@
 the file is file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl
-enumerate the horse of the town
+enumerate the horses of the town
 yes
 no
 yes
@@ -7,6 +7,7 @@ yes
 yes
 yes
 yes
-Athens
+Yes
+A place many people live
 no
 no

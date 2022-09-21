@@ -1,10 +1,4 @@
-__pycache__
-.vscode
-test.py
-ontologies
-UI
-dist
-build
-main.spec
-main.build
-main.dist
+*
+!modules
+!main.py
+!humanBehaviour
