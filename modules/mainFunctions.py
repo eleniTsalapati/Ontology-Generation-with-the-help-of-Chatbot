@@ -1,9 +1,58 @@
+from re import sub
 import modules.chatbotTalks as talk
 import modules.ontologyCreation as creation
 import modules.chatbotHears as hear
 import modules.searchOntology as search
 import modules.utility as utility
 
+def checkInheritanceAndChange(ontology,word,parent,theClass,ui):
+    answer=utility.question_arg2_with_yes_or_No(ui,talk.ontoCheck,parent,word)
+    if answer==1:
+        theClass[0][word][3]=parent
+        creation.changeParent(ontology,theClass[0][word][0],theClass[0][parent][0])
+        ui.changeParent(word,parent)
+    else:
+        answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,parent,word)
+        if answer==1:
+            # mark as used
+            theClass[0][parent][4]=1
+            theClass[0][word][4]=1
+            # create relation
+            relation="componentOf"+word.title()
+            theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]  
+        else:
+            ui.rememberOneTime("Ok now something new.\n")
+            answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,word,parent)
+            if answer==1:
+                # mark as used
+                theClass[0][parent][4]=1
+                theClass[0][word][4]=1
+                # create relation
+                relation="componentOf"+parent.title()
+                theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]       
+            else:
+                # check UNITY
+                answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,parent,word)
+                if answer==1:
+                    # mark as used
+                    theClass[0][parent][4]=1
+                    theClass[0][word][4]=1
+                    # create relation
+                    relation="composedOf"+word.title()
+                    theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]       
+                else:
+                    ui.rememberOneTime("Ok now something new.\n")
+                    answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,word,parent)
+                    if answer==1:
+                        # mark as used
+                        theClass[0][parent][4]=1
+                        theClass[0][word][4]=1
+                        # create relation
+                        relation="composedOf"+parent.title()
+                        theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]
+                    else:    
+                        ui.rememberOneTime("I cannot understand how the connection goes so I will not use this connection.\n")
+                        ui.rememberOneTime("Please fix the connection between \""+parent+"\" - \""+word+"\"")
 
 def checkInheritanceAndCreate(ontology,word,parent,theClass,ui):
     # check if there is a parent to check for the inheritance
@@ -60,14 +109,16 @@ def checkInheritanceAndCreate(ontology,word,parent,theClass,ui):
                     else:    
                         ui.rememberOneTime("I cannot understand how the connection goes so I will not use this connection.\n")
                         ui.rememberOneTime("Please fix the connection between \""+parent+"\" - \""+word+"\"")
+        return "None"
     else:
         if parent==None:
             # there was no parent 
             theClass[0][word]=[creation.CreateObject(ontology,word,parent),word,"None",0,0]
+            return "None"
         else:
             # the parent was correct
             theClass[0][word]=[creation.CreateObject(ontology,word,theClass[0][parent][0]),word,parent,0,0]
-
+            return parent
 
 def find_definition_of_Noun(noun,parent,classes,ui):
     kids=None
@@ -220,3 +271,54 @@ def more_types(ontology,classes,seen,ui):
                         classes[0][kid]=[creation.CreateObject(ontology,kid,classes[0][noun][0]),kid,noun,1,0]
                         if definition!="":
                             creation.Explanation(ontology,classes[0][kid][0],definition,definedBy)
+
+def hyperClass(ontology,classes,ui):
+    # get the subject
+    ui.rememberTableOnce()
+    ui.changeMessage(talk.AskForHyper())
+    answerUI=ui.hear()
+    subjects=hear.WhatOntologyToAnswer(answerUI,ui)[0]
+
+    for subject in subjects:
+
+        parent=None
+        # find parent
+        ui.rememberTableOnce()
+        answer=utility.question_arg1_with_yes_or_No(ui,talk.AskHyperOfHyper,subject)
+
+        if answer==1:
+            ui.rememberTableOnce()
+
+            ui.changeMessage(talk.FindHyperOfHyper(subject))
+            answerUI=ui.hear()
+            parent=hear.FindNounInDataBase(answerUI,classes)
+            if parent==None:
+                ui.rememberOneTime("No word in the DataBase was found\n")
+            parent=checkInheritanceAndCreate(ontology,subject,parent,classes,ui)
+        else:
+            classes[0][subject]=[creation.CreateObject(ontology,subject,None),subject,"None",0,0]
+
+        (definition,definedBy,kids)=find_definition_of_Noun(subject,parent,classes,ui)
+
+        # and give the definition
+        creation.Explanation(ontology,classes[0][subject][0],definition,definedBy)
+
+        # create kids from the search that we did 
+        if kids !=None:
+            for (kid,definition,definedBy) in kids:
+                classes[0][kid]=[creation.CreateObject(ontology,kid,classes[0][subject][0]),kid,subject,1,0]
+                if definition!="":
+                    creation.Explanation(ontology,classes[0][kid][0],definition,definedBy)
+        
+        # find kids
+        ui.rememberTableOnce()
+        ui.changeMessage(talk.BecomeHyper(subject))
+        answerUI=ui.hear()
+        words=hear.FindNounsInDataBase(answerUI,classes,ui)
+
+        for word in words:
+            checkInheritanceAndChange(ontology,word,subject,classes,ui)
+            # creation.changeParent(ontology,classes[0][word][0],classes[0][subject][0])
+            # ui.changeParent(word,subject)
+        ui.checkChange(classes)
+    

@@ -52,7 +52,16 @@ while(True):
         ui.rememberTableOnce()
         more_types(ontology,classes,seen,ui)
         continue
+
+    ui.rememberTableOnce()
+    answer= utility.question_with_yes_or_No(ui,talk.AddHyperClass)
+
+    if answer == 1:
+        ui.rememberTableOnce()
+        hyperClass(ontology,classes,ui)
+        continue
     break
+
 
 # Save the ontology
 creation.SaveOntology(ontology)

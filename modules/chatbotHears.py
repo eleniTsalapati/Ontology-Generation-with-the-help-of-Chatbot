@@ -1,7 +1,8 @@
-from tkinter.tix import Tree
+from pickle import NONE
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
+# from nltk.corpus import stopwords
 
 sia = SentimentIntensityAnalyzer()
 lemmatizer = WordNetLemmatizer()
@@ -172,3 +173,27 @@ def GetTypes(answer,uo):
         ui.rememberOneTime("\n")
 
     return nouns
+
+def FindNounsInDataBase(answer,classes,ui):
+    print(">"+answer)
+    print()
+    theList=[]
+
+    wordTokens = word_tokenize(answer)
+    
+    keys=classes[0].keys()
+
+    for word in wordTokens:
+        if word in keys:
+            if ui!=None:
+                ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
+            theList.append(word)
+        elif word=="None":
+            return None
+    return theList
+
+def FindNounInDataBase(answer,classes):
+    theList=FindNounsInDataBase(answer,classes,None)
+    if theList==None or theList==[]:
+        return None
+    return theList[0]

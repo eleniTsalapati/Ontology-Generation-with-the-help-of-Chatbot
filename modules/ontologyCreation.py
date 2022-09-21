@@ -1,6 +1,4 @@
-from owlready2 import get_ontology,Thing,AnnotationProperty,types
-import modules.utility as utility
-import modules.chatbotTalks as talk
+from owlready2 import *
 
 def LoadOntology(file):
     ontology = get_ontology(file).load()
@@ -24,7 +22,7 @@ def addData(ontology,classes):
         if parent==name:
             parent="None"
         print(name,parent)
-        classes[0][name]=[object,name,parent,0]
+        classes[0][name]=[object,name,parent,0,0]
 
     for relation in list(ontology.object_properties()):
         for domain in list(relation.domain):
@@ -32,6 +30,8 @@ def addData(ontology,classes):
                 name=str(relation).split(".")[1]
                 obj1=str(domain).split(".")[1]
                 obj2=str(range).split(".")[1]
+                classes[0][obj1][4]=1
+                classes[0][obj2][4]=1
                 classes[1][name]=[relation,obj1,name,obj2]
 
 
@@ -46,3 +46,7 @@ def Explanation(ontology,theClass,explanation,definedBy):
             pass
         theClass.description.append(explanation)
         theClass.isDefinedBy = [definedBy]
+
+def changeParent(ontology,subject,parent):
+    with ontology: 
+        subject.is_a=[parent]

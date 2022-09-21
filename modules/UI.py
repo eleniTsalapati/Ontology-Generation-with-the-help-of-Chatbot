@@ -172,7 +172,22 @@ class UI:
         for i in range(len(self.subjectTable.get_children())):
             item=self.subjectTable.item(i)
             if item["values"][1]==name:
-                self.subjectTable.item(i,values=(item["value"][0],name,str(parent)))
+                self.subjectTable.item(i,values=(item["values"][0],name,str(parent)))
+
+    def checkChange(self,classes):
+        # Add Data in subjectTable
+        theList=list(self.subjectTable.get_children())
+        for key in classes[0].keys():
+            for i in range(len(theList)):
+                item=self.subjectTable.item(i)
+                
+                # change color
+                if item["values"][1] == key:
+                    if classes[0][key][4]==1:
+                        self.subjectTable.item(i,tags="used")
+                    else:
+                        self.subjectTable.item(i,tags="notUsed")
+                    break
 
     def makeTablesClass(self,classes):
         # Add Data in subjectTable
@@ -192,10 +207,10 @@ class UI:
                     break
             if i == len(theList):   
                 # insert them inside
-                self.subjectTable.insert(parent="",index="end",iid=i,text="",
-                values=(i,classes[0][key][1],classes[0][key][2]),tags="used")
-                if classes[0][key][4]==0:
-                    self.subjectTable.item(i,tags="notUsed")
+                self.subjectTable.insert(parent="",index="end",iid=last,text="",
+                values=(last,classes[0][key][1],classes[0][key][2]),tags="notUsed")
+                if classes[0][key][4]==1:
+                    self.subjectTable.item(i,tags="used")
                 last+=1
 
 
