@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl"
+         xmlns="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl#">
+
+<owl:Ontology rdf:about="file:////media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl"/>
+
+<owl:ObjectProperty rdf:about="#of">
+  <rdfs:domain rdf:resource="#definition"/>
+  <rdfs:range rdf:resource="#word"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#definition">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">no</rdfs:comment>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#word">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A word is the smallest free form (an item that may be expressed in isolation with semantic or pragmatic content) in a language.</rdfs:comment>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sio</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#yes">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">the positive aggrement to a question</rdfs:comment>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
+</owl:Class>
+
+
+</rdf:RDF>

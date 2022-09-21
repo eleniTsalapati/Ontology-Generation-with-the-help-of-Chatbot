@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot4.owl"
+         xmlns="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot4.owl#">
+
+<owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot4.owl"/>
+
+<owl:AnnotationProperty rdf:about="#description"/>
+
+<owl:Class rdf:about="#people">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Human beings in general.</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#ice">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#cream">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+<!-- Enumerate people who eat ice cream -->
+</rdf:RDF>

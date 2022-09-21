@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot5.owl"
+         xmlns="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot5.owl#">
+
+<owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot5.owl"/>
+
+<owl:ObjectProperty rdf:about="#of">
+  <rdfs:domain rdf:resource="#color"/>
+  <rdfs:range rdf:resource="#apple"/>
+</owl:ObjectProperty>
+
+<owl:AnnotationProperty rdf:about="#description"/>
+
+<owl:Class rdf:about="#color">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#apple">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#orange">
+  <rdfs:subClassOf rdf:resource="#color"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The hue of that portion of the visible spectrum lying between red and yellow, evoked in the human observer by radiant energy with wavelengths of approximately 590 to 630 nanometers; any of a group of colors between red and yellow in hue, of medium lightness and moderate saturation.</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#blue">
+  <rdfs:subClassOf rdf:resource="#color"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The hue of that portion of the visible spectrum lying between green and indigo, evoked in the human observer by radiant energy with wavelengths of approximately 420 to 490 nanometers; any of a group of colors that may vary in lightness and saturation, whose hue is that of a clear daytime sky.</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#wind">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">a breaz</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
+</owl:Class>
+
+
+</rdf:RDF>

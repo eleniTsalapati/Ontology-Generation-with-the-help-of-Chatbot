@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl"
+         xmlns="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl#">
+
+<owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/ChatBot2.owl"/>
+
+<owl:ObjectProperty rdf:about="#of">
+  <rdfs:domain rdf:resource="#horse"/>
+  <rdfs:range rdf:resource="#town"/>
+</owl:ObjectProperty>
+
+<owl:AnnotationProperty rdf:about="#description"/>
+
+<owl:Class rdf:about="#horse">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#mule">
+  <rdfs:subClassOf rdf:resource="#horse"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A mule is the offspring of a male donkey and a female horse. Horses and donkeys are different species, with different numbers of chromosomes. Of the two F1 hybrids between these two species, a mule is easier to obtain than a hinny (the offspring of a male horse and a female donkey). All male mules and most female mules are infertile.</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#town">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A place many people live</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
+</owl:Class>
+
+
+</rdf:RDF>
