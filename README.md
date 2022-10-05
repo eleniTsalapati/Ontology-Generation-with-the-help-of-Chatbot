@@ -12,7 +12,7 @@ For example the program will understand: *a cat eats the fish* or *cats eat fish
 
 ## Implementation of this repository :
 ### Hardware requirements: 
-OS : Windows (Used for process), MscOS, Linux (any OS in this would work) Minimum RAM : 4GB Minimum Storage : As the NTLK data Set is not big a minimum of 100MB - 500MB should be suitable.
+OS : Windows (Used for process), MscOS, Linux (any OS in this would work) Minimum RAM : 4GB Minimum Storage : As the NTLK data Set is not big a minimum of 1MB - 50MB should be suitable.
 
 ### Software requirements: 
 For running the python files it is used Visual Studio Code. Any suitable IDE that can run python files, should also be suitable. (Python 3.9.6)
@@ -30,13 +30,14 @@ Also some libraries where used:
 
 - Requests
 
-  The Library "Requests" is used for using outside ontologies. 
+  The Library "Requests" is used for API. 
 
 - Tkinter
 
   The Library "Tkinter" is used for the UI.
 
-To download every Library together in Linux Environment use the following commands:
+### Install and Unistall in Linux Enviroment:
+To download every Library together in **Linux** Environment use the following commands:
 The python file *ntlk_data.py* will download the nessesary data set from NLTK.
 
 ```
@@ -48,7 +49,7 @@ pip3 install requests
 sudo apt-get install python-tk
 ```
 
-To unistall in linux it is an easy task. Just use the following commands:
+To unistall in **linux** it is an easy task. Just use the following commands:
 
 ```
 pip3 uninstall nltk
