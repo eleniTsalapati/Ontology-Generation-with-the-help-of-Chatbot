@@ -124,7 +124,6 @@ class UI:
         self.subjectTable.heading("parent",text="Parent",anchor=CENTER)
 
         self.subjectTable.tag_configure('used', background='white')
-        self.subjectTable.tag_configure('notInserted', background='red')
         self.subjectTable.tag_configure('notUsed', background='orange')
 
         self.subjectTable.pack()
@@ -163,53 +162,30 @@ class UI:
         self.msg2 = Message(self.frame3, text = txt,anchor=CENTER,width=450) 
         self.msg2.pack()
 
-    def insertSubjectTable(self,name,parent): 
-        last=len(list(self.subjectTable.get_children()))
-        self.subjectTable.insert(parent="",index="end",iid=last,text="",
-        values=(last,name,str(parent)),tags="notInserted")
-
-    def changeParent(self,name,parent):
-        for i in range(len(self.subjectTable.get_children())):
-            item=self.subjectTable.item(i)
-            if item["values"][1]==name:
-                self.subjectTable.item(i,values=(item["values"][0],name,str(parent)))
-
-    def checkChange(self,classes):
-        # Add Data in subjectTable
-        theList=list(self.subjectTable.get_children())
-        for key in classes[0].keys():
-            for i in range(len(theList)):
-                item=self.subjectTable.item(i)
-                
-                # change color
-                if item["values"][1] == key:
-                    if classes[0][key][4]==1:
-                        self.subjectTable.item(i,tags="used")
-                    else:
-                        self.subjectTable.item(i,tags="notUsed")
-                    break
-
-    def makeTablesClass(self,classes):
+    def makeTables(self,data):
         # Add Data in subjectTable
         theList=list(self.subjectTable.get_children())
         last=len(theList)
-        for key in classes[0].keys():
+        for key in data[0].keys():
             i=0
             for i in range(len(theList)):
                 item=self.subjectTable.item(i)
                 
                 # change color
                 if item["values"][1] == key:
-                    if classes[0][key][4]==1:
+                    if data[0][key][3]==1:
                         self.subjectTable.item(i,tags="used")
                     else:
                         self.subjectTable.item(i,tags="notUsed")
                     break
             if i == len(theList):   
+                parent=""
+                for item in  data[0][key][2]:
+                    parent+=item+" "
                 # insert them inside
                 self.subjectTable.insert(parent="",index="end",iid=last,text="",
-                values=(last,classes[0][key][1],classes[0][key][2]),tags="notUsed")
-                if classes[0][key][4]==1:
+                values=(last,data[0][key][1],parent),tags="notUsed")
+                if data[0][key][3]==1:
                     self.subjectTable.item(i,tags="used")
                 last+=1
 
@@ -222,11 +198,14 @@ class UI:
             # find the last id number
             start=int(theList[-1])+1
         # for the keys from the start to the end
-        keys=list(classes[1].keys())
+        keys=list(data[1].keys())
+        last=len(keys)
         for i in range(start,len(keys)):
-            # insert them inside
-            self.relationsTable.insert(parent="",index="end",iid=i,text="",
-            values=(i+1,classes[1][keys[i]][1],classes[1][keys[i]][2],classes[1][keys[i]][3]))
+            for obj1 in data[1][keys[i]][1]:
+                # insert them inside
+                self.relationsTable.insert(parent="",index="end",iid=last,text="",
+                values=(i+1,obj1,data[1][keys[i]][2],data[1][keys[i]][3]))
+                last+=1
         self.rememberTable=True
         self.frame3.pack()
 

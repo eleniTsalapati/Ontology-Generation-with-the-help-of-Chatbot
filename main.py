@@ -1,8 +1,7 @@
 from modules.UI import UI
 import modules.chatbotTalks as talk
-import modules.ontologyCreation as creation
+import modules.ontologyManager as manager
 import modules.chatbotHears as hear
-import modules.searchOntology as search
 import modules.utility as utility
 from modules.mainFunctions import *
 
@@ -10,11 +9,11 @@ from modules.mainFunctions import *
 #                       main
 # -------------------------------------------------------
 
-# classes=[classesObj,classesRel]
-# classesObj=[class,name,parent,foundOnline]
-classes=[{},{}]
+# data=[dataObj,dataRel,ontology]
+# dataObj=[class,name,parent,used/notUsed]
+# dataRel=[class,obj1name,obj2name]
+data=[{},{}]
 ui= UI()
-seen=[]
 # Welcome
 ui.create()
 # Load the ontology
@@ -29,41 +28,36 @@ while answer == None:
         ui.changeMessage(talk.CouldNotUnderstand())
 
 ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
-ontology=creation.LoadOntology(answer)
-
-creation.addData(ontology,classes)
-
-ui.makeTablesClass(classes)
-what_the_ontology_should_answer(ontology,classes,ui)
+data.append(manager.LoadOntology(answer))
+manager.addData(data[2],data)
 
 while(True):
-    ui.makeTablesClass(classes)
-    answer= utility.question_with_yes_or_No(ui,talk.MoreOntology)
+    ui.makeTables(data)
+    answer= utility.questionWithYesOrNo(ui,talk.MoreOntology())
 
     if answer == 1:
         ui.rememberTableOnce()
-        what_the_ontology_should_answer(ontology,classes,ui)
+        Sentence(data,ui)
         continue
 
     ui.rememberTableOnce()
-    answer= utility.question_with_yes_or_No(ui,talk.EnumerateTheClasses)
-
+    answer= utility.questionWithYesOrNo(ui,talk.EnumerateSpecialization())
     if answer == 1:
         ui.rememberTableOnce()
-        more_types(ontology,classes,seen,ui)
+        specialize(data,ui)
         continue
 
     ui.rememberTableOnce()
-    answer= utility.question_with_yes_or_No(ui,talk.AddHyperClass)
-
+    answer= utility.questionWithYesOrNo(ui,talk.EnumerateGeneralization())
     if answer == 1:
         ui.rememberTableOnce()
-        hyperClass(ontology,classes,ui)
+        generalized(data,ui)
         continue
+
     break
 
 
 # Save the ontology
-creation.SaveOntology(ontology)
+manager.SaveOntology(data[2])
 
 ui.close()

@@ -1,174 +1,157 @@
+from cgitb import reset
 from re import sub
 import modules.chatbotTalks as talk
-import modules.ontologyCreation as creation
+import modules.ontologyManager as manager
 import modules.chatbotHears as hear
 import modules.searchOntology as search
 import modules.utility as utility
 
-def checkInheritanceAndChange(ontology,word,parent,theClass,ui):
-    answer=utility.question_arg2_with_yes_or_No(ui,talk.ontoCheck,parent,word)
-    if answer==1:
-        theClass[0][word][3]=parent
-        creation.changeParent(ontology,theClass[0][word][0],theClass[0][parent][0])
-        ui.changeParent(word,parent)
-    else:
-        answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,parent,word)
-        if answer==1:
-            # mark as used
-            theClass[0][parent][4]=1
-            theClass[0][word][4]=1
-            # create relation
-            relation="componentOf"+word.title()
-            theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]  
-        else:
-            ui.rememberOneTime("Ok now something new.\n")
-            answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,word,parent)
-            if answer==1:
-                # mark as used
-                theClass[0][parent][4]=1
-                theClass[0][word][4]=1
-                # create relation
-                relation="componentOf"+parent.title()
-                theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]       
-            else:
-                # check UNITY
-                answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,parent,word)
-                if answer==1:
-                    # mark as used
-                    theClass[0][parent][4]=1
-                    theClass[0][word][4]=1
-                    # create relation
-                    relation="composedOf"+word.title()
-                    theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]       
-                else:
-                    ui.rememberOneTime("Ok now something new.\n")
-                    answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,word,parent)
-                    if answer==1:
-                        # mark as used
-                        theClass[0][parent][4]=1
-                        theClass[0][word][4]=1
-                        # create relation
-                        relation="composedOf"+parent.title()
-                        theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]
-                    else:    
-                        ui.rememberOneTime("I cannot understand how the connection goes so I will not use this connection.\n")
-                        ui.rememberOneTime("Please fix the connection between \""+parent+"\" - \""+word+"\"")
-
-def checkInheritanceAndCreate(ontology,word,parent,theClass,ui):
+def checkInheritance(word,parent,ui):
     # check if there is a parent to check for the inheritance
-    if parent!=None:
-        # check if the inheritance is correct
-        answer=utility.question_arg2_with_yes_or_No(ui,talk.ontoCheck,parent,word)
-    else:
-        answer=1
+    if parent == None:
+        return -1
+
+    # check if the inheritance is correct
+    answer=utility.questionWithYesOrNo(ui,talk.ontoCheck(parent,word))
     
     # there is a parent and there is wrong with the inheritance
-    if answer==-1:
-        # create the word
-        theClass[0][word]=[creation.CreateObject(ontology,word,None),word,"None",0,0]
-        
+    if answer==-1:        
         # check IDENTITY
-        answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,parent,word)
+        answer=utility.questionWithYesOrNo(ui,talk.identityComponentOf(parent,word))
         if answer==1:
-            # mark as used
-            theClass[0][parent][4]=1
-            theClass[0][word][4]=1
-            # create relation
-            relation="componentOf"+word.title()
-            theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]  
+            return 1
         else:
             ui.rememberOneTime("Ok now something new.\n")
-            answer=utility.question_arg2_with_yes_or_No(ui,talk.identityComponentOf,word,parent)
+            answer=utility.questionWithYesOrNo(ui,talk.identityComponentOf(word,parent))
             if answer==1:
-                # mark as used
-                theClass[0][parent][4]=1
-                theClass[0][word][4]=1
-                # create relation
-                relation="componentOf"+parent.title()
-                theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]       
+                return 2
             else:
                 # check UNITY
-                answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,parent,word)
+                answer=utility.questionWithYesOrNo(ui,talk.unityComposedOf(parent,word))
                 if answer==1:
-                    # mark as used
-                    theClass[0][parent][4]=1
-                    theClass[0][word][4]=1
-                    # create relation
-                    relation="composedOf"+word.title()
-                    theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][parent][0],theClass[0][word][0]),parent,relation,word]       
+                    return 3
                 else:
                     ui.rememberOneTime("Ok now something new.\n")
-                    answer=utility.question_arg2_with_yes_or_No(ui,talk.unityComposedOf,word,parent)
+                    answer=utility.questionWithYesOrNo(ui,talk.unityComposedOf(word,parent))
                     if answer==1:
-                        # mark as used
-                        theClass[0][parent][4]=1
-                        theClass[0][word][4]=1
-                        # create relation
-                        relation="composedOf"+parent.title()
-                        theClass[1][relation]=[creation.ConnectObjects(ontology,relation,theClass[0][word][0],theClass[0][parent][0]),word,relation,parent]
+                        return 4
                     else:    
                         ui.rememberOneTime("I cannot understand how the connection goes so I will not use this connection.\n")
                         ui.rememberOneTime("Please fix the connection between \""+parent+"\" - \""+word+"\"")
-        return "None"
+                        return 5
     else:
-        if parent==None:
-            # there was no parent 
-            theClass[0][word]=[creation.CreateObject(ontology,word,parent),word,"None",0,0]
-            return "None"
-        else:
-            # the parent was correct
-            theClass[0][word]=[creation.CreateObject(ontology,word,theClass[0][parent][0]),word,parent,0,0]
-            return parent
+        return 0
 
-def find_definition_of_Noun(noun,parent,classes,ui):
-    kids=None
-    definition=None
+def createNoun(noun,parent,data,ui,moreGeneralized=True):
+    # check if the word is in data base
+    for word in data[0].keys():
+        if noun==word.lower():
+            ui.rememberOneTime("The word \""+noun+"\" is already in the dataBase\n")
+            return
 
-    if noun in classes[0].keys() and classes[0][noun][3]==1:
-            answer=-1
-    else:
-        answer= utility.question_arg1_with_yes_or_No(ui,talk.FindDefinition,noun)
-        
+    ui.rememberTableOnce()
+    answer= utility.questionWithYesOrNo(ui,"Shall I keep \""+noun+"\"\n")
+    if answer==-1:
+        return
+
+    # so check for the inheritance
+    keepParent=[]
+    keepRelation=[]
+    if parent!=None:
+        for theParent in parent:
+            result=checkInheritance(noun,theParent,ui)
+            if result==0:
+                keepParent.append(theParent)
+            elif result==1:
+                relation="componentOf"+noun.title()
+                keepRelation.append(relation,theParent,noun)
+            elif result==2:
+                relation="componentOf"+noun.title()
+                keepRelation.append(relation,noun,theParent)
+            elif result==3:
+                relation="composedOf"+noun.title()
+                keepRelation.append(relation,theParent,noun)                
+            elif result==4:
+                relation="composedOf"+noun.title()
+                keepRelation.append(relation,noun,theParent)
+
+
+    answer= utility.questionWithYesOrNo(ui,talk.FindDefinition(noun))
+    found=False
     # The user wants to find the definition
     if answer==1:
         try:
             # search the definition
-            (definition,definedBy,kids)=search.searchForTerm(noun,parent,ui)
+            found=search.searchForTerm(data,noun,parent,ui,moreGeneralized)            
         except:
             ui.rememberOneTime("There is an error with the code either because there is a bug or you do not have access to Internet\n")
 
     # if the search definition was not selected
-    if  definition==None:
+    if  found!=True:
+        # you have given a definition
+        (definition,definedBy)=findYourDefinition(noun,ui)
+        if definition==None:
+            return 
 
-        # ask if the user want to give definition
-        answer= utility.question_arg1_with_yes_or_No(ui,talk.AskDefinition,noun)
+        # create the object
+        data[0][noun]=[manager.CreateObject(data[2],noun),noun,[],0]
+         # add definition
+        manager.Explanation(data[2],data[0][noun][0],definition,definedBy)
+    
+    # add parents
+    for theParent in keepParent:        
+        manager.addParent(data[2],data[0][noun][0],data[0][theParent][0])
+        data[0][noun][2].append(theParent)
+   
+    # add relations
+    for relation,object1,object2 in keepRelation:
 
-        # The user wants to give the definition
-        if answer == 1:
-            ui.changeMessage(talk.YourDefinition(noun))
-            answerUI=ui.hear()
-            definition=hear.GetDefinition(answerUI)
-            definedBy="You"
-        # The user wants to do something else
+        # one object was not kept
+        if object1 not in data[0].keys() or object2 not in data[0].keys():
+            ui.rememberOneTime("One object does not exist so \""+relation+"\" is not created\n")
+            continue
+
+        # mark as seen
+        data[0][object1][3]=1
+        data[0][object2][3]=1
+        
+        # create relation
+        if relation not in data[1].keys():
+            # create the relationship
+            data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][object1][0],data[0][object2][0]),[object1],relation,object2]
         else:
-            # See if the user wants to keep without definition
-            answer= utility.question_arg1_with_yes_or_No(ui,talk.KeepWord,noun)
-            
-            # The user wants to keep without definition
-            if answer==1:
-                definition=""
-                definedBy=""
-            # The user does not want to keep the word
-            else:
-                definition=None
-                definedBy=None
+            manager.AddConnection(data[2],data[1][relation][0],data[0][object1][0])
+            data[1][relation][2].append(object1)
 
-    return (definition,definedBy,kids)
 
-def what_the_ontology_should_answer(ontology,classes,ui):
+def findYourDefinition(noun,ui):
 
-    previousNouns=classes[0].keys()
-    previousRelated=classes[1].keys()
+    # ask if the user want to give definition
+    answer= utility.questionWithYesOrNo(ui,talk.AskDefinition(noun))
+
+    # The user wants to give the definition
+    if answer == 1:
+        ui.changeMessage(talk.YourDefinition(noun))
+        answerUI=ui.hear()
+        definition=hear.GetDefinition(answerUI)
+        definedBy="You"
+    # The user wants to do something else
+    else:
+        # See if the user wants to keep without definition
+        answer= utility.questionWithYesOrNo(ui,talk.KeepWord(noun))
+        
+        # The user wants to keep without definition
+        if answer==1:
+            definition=""
+            definedBy=""
+        # The user does not want to keep the word
+        else:
+            definition=None
+            definedBy=None
+
+    return (definition,definedBy)
+
+def Sentence(data,ui):
 
     # See what the ontology should answer
     ui.changeMessage(talk.WhatOntologyToAnswer())
@@ -179,144 +162,56 @@ def what_the_ontology_should_answer(ontology,classes,ui):
     for noun in nouns.keys():
         parent=nouns[noun]
 
-        # we have already seen this noun in a previous question
-        if noun in previousNouns:
-            continue
-        
         # find the definition of the noun
-        (definition,definedBy,kids)=find_definition_of_Noun(noun,parent,classes,ui)
+        createNoun(noun,[parent],data,ui)
 
-        # if the user do not want to keep the noun 
-        if  definition==None:
-            continue
-        
-        # Create into the ontology the word
-        checkInheritanceAndCreate(ontology,noun,parent,classes,ui)
-        # and give the definition
-        creation.Explanation(ontology,classes[0][noun][0],definition,definedBy)
-            
-
-        # check if there were any kids
-        if kids !=None:
-            # for all the kids
-            for (kid,definition,definedBy) in kids:
-                # Create the kid 
-                classes[0][kid]=[creation.CreateObject(ontology,kid,classes[0][noun][0]),kid,noun,1,0]
-                # add the definition
-                if definition!="":
-                    creation.Explanation(ontology,classes[0][kid][0],definition,definedBy)
 
     # for all relationships
-    keptNouns=classes[0].keys()
     for relation in relationships.keys():
-        # we have already seen this relation in a previous question
-        if relation in previousRelated:
-            continue
 
         # if one object is not created then do not create the relationship
         obj1=relationships[relation][0]
         obj2=relationships[relation][1]
-        if obj1 not in keptNouns or obj2 not in keptNouns:
+
+        # one object was not kept
+        if obj1 not in data[0].keys() or obj2 not in data[0].keys():
             continue
+
+        relation=relation+obj2.title()
 
         # mark as used
-        classes[0][obj1][4]=1
-        classes[0][obj2][4]=1
-        # create the relationship
-        classes[1][relation]=[creation.ConnectObjects(ontology,relation,classes[0][obj1][0],classes[0][obj2][0]),obj1,relation,obj2]
+        data[0][obj1][3]=1
+        data[0][obj2][3]=1
 
-def more_types(ontology,classes,seen,ui):
-    
-    nouns=list(classes[0].keys())
-    for noun in nouns:
-
-        # if the noun has already been seen 
-        # do not ask for more types
-        if noun in seen:
-            ui.rememberOneTime("I have already asked for \""+noun+"\", so I will not ask again.")
-            continue
-        if classes[0][noun][3]==1:
-            ui.rememberOneTime("The \""+noun+"\" is taken from the web so I will not ask for subcategories.")
-            continue
-
-
-        seen.append(noun)
-        
-        # ask if you want to get the different types
-        ui.rememberTableOnce()
-        answer= utility.question_arg1_with_yes_or_No(ui,talk.AskDifferentTypes,noun)
-        if answer==1:
-
-            # ask the types
-            ui.rememberTableOnce()
-            ui.changeMessage(talk.GetDifferentTypes(noun))
-            answerUI=ui.hear()
-            types=hear.GetTypes(answerUI,ui)
-
-            # for each type from the different types 
-            for type in types:
-            
-                (definition,definedBy,kids)=find_definition_of_Noun(type,noun,classes,ui)
-            
-                if  definition==None:
-                    continue
-
-                # Create into the ontology the word
-                checkInheritanceAndCreate(ontology,type,noun,classes,ui)
-                # and give the definition
-                creation.Explanation(ontology,classes[0][type][0],definition,definedBy)
-                    
-                if kids !=None:
-                    for (kid,definition,definedBy) in kids:
-                        classes[0][kid]=[creation.CreateObject(ontology,kid,classes[0][noun][0]),kid,noun,1,0]
-                        if definition!="":
-                            creation.Explanation(ontology,classes[0][kid][0],definition,definedBy)
-
-def hyperClass(ontology,classes,ui):
-    # get the subject
-    ui.rememberTableOnce()
-    ui.changeMessage(talk.AskForHyper())
-    answerUI=ui.hear()
-    subjects=hear.WhatOntologyToAnswer(answerUI,ui)[0]
-
-    for subject in subjects:
-
-        parent=None
-        # find parent
-        ui.rememberTableOnce()
-        answer=utility.question_arg1_with_yes_or_No(ui,talk.AskHyperOfHyper,subject)
-
-        if answer==1:
-            ui.rememberTableOnce()
-
-            ui.changeMessage(talk.FindHyperOfHyper(subject))
-            answerUI=ui.hear()
-            parent=hear.FindNounInDataBase(answerUI,classes)
-            if parent==None:
-                ui.rememberOneTime("No word in the DataBase was found\n")
-            parent=checkInheritanceAndCreate(ontology,subject,parent,classes,ui)
+        if relation not in data[1].keys():
+            # create the relationship
+            data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0]),[obj1],relation,obj2]
         else:
-            classes[0][subject]=[creation.CreateObject(ontology,subject,None),subject,"None",0,0]
+            manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0])
+            data[1][relation][1].append(obj1)
 
-        (definition,definedBy,kids)=find_definition_of_Noun(subject,parent,classes,ui)
 
-        # and give the definition
-        creation.Explanation(ontology,classes[0][subject][0],definition,definedBy)
-
-        # create kids from the search that we did 
-        if kids !=None:
-            for (kid,definition,definedBy) in kids:
-                classes[0][kid]=[creation.CreateObject(ontology,kid,classes[0][subject][0]),kid,subject,1,0]
-                if definition!="":
-                    creation.Explanation(ontology,classes[0][kid][0],definition,definedBy)
-        
-        # find kids
+def specialize(data,ui):
+    ui.changeMessage("Which words from the dataBase do you want to specialize?")
+    answerUI=ui.hear()
+    nouns=hear.FindNounsInDataBase(answerUI,data,ui)
+    for noun in nouns:        
         ui.rememberTableOnce()
-        ui.changeMessage(talk.BecomeHyper(subject))
+        ui.changeMessage(talk.GetDifferentTypes(noun))
         answerUI=ui.hear()
-        words=hear.FindNounsInDataBase(answerUI,classes,ui)
+        types=hear.GetNouns(answerUI,ui)
 
-        for word in words:
-            checkInheritanceAndChange(ontology,word,subject,classes,ui)
-        ui.checkChange(classes)
-    
+        # for each type from the different types 
+        for type in types:            
+            createNoun(type,[noun],data,ui,False)
+
+def generalized(data,ui):
+    ui.changeMessage("Which word do you want to add?")
+    answerUI=ui.hear()
+    nouns=hear.GetNouns(answerUI,data,ui)
+    for noun in nouns:        
+        ui.rememberTableOnce()
+        ui.changeMessage("Which words from DataBase do you want to be categorized as generalized with the word\""+noun+"\"\n")
+        answerUI=ui.hear()
+        parents=hear.FindNounsInDataBase(answerUI,ui)
+        createNoun(noun,parents,data,ui,False)

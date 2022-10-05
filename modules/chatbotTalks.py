@@ -16,8 +16,10 @@ def Welcome():
     return txt
     
 def WhatOntologyToAnswer():
-    txt="What questions do you want your ontology to be able to answer?\n\n"
-    txt+="Please be careful with the grammar, syntax of the answer as it will affect it."
+    txt="Give a sentence to add in the ontology?\n\n"
+    txt+="Please be careful with the grammar, syntax of the answer as it will affect it.\n"
+    txt+="Recognize: A cat eats fishes, Cats eat the fish\n"
+    txt+="Not Recognize: Cat eat fish\n"
     print(txt)
     return txt
 
@@ -27,28 +29,28 @@ def CouldNotUnderstand():
     return txt
 
 def AskDifferentTypes(word):
-    txt="Are there different subcategories of  \""+ word +"\"?\n"
+    txt="Are there different specialization of  \""+ word +"\" you want to add?\n"
     print(txt)
     return txt
 
 def GetDifferentTypes(word):
-    txt="Enumerate all different subcategories of  \""+ word +"\".\n"
+    txt="Enumerate all different specialization of  \""+ word +"\".\n"
     print(txt)
     return txt
 
 def MoreOntology():
-    txt="Do you want the ontology to be able to answer more questions?\n"
+    txt="Do you want to add a sentence for your ontology?\n"
     print(txt)
     return txt
     
-def EnumerateTheClasses():
-    txt="Do you want to enumerate the different subcategories of words in the ontology?\n"
+def EnumerateSpecialization():
+    txt="Do you want to enumerate the different specialization of words in the ontology?\n"
     print(txt)
     return txt
 
-def AddHyperClass():
-    txt="Do you want to add a hyper class into your ontology?\n"
-    txt+="Meaning that the subjects that you have to be made subcategories\n\n"
+def EnumerateGeneralization():
+    txt="Do you want to add a generalization into your ontology?\n"
+    txt+="Meaning that the all ready made subjects will be the specialization of the new word\n\n"
     txt+="IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!\n"
     print(txt)
     return txt
@@ -114,28 +116,30 @@ def termFoundNoDescription(term,ontology):
     print(txt)
     return txt
 
-def termKeepSubcategories(term):
-    txt="Shall I keep the subcategories of \""+term+"\"?\n"
+def termKeepCategories(term,find):
+    txt="Shall I keep the "+find+" of \""+term+"\"?\n"
     print(txt)
     return txt
 
-def termKeepTheSubcategoryWithDescription(term,subcategory,description,ontology):
-    txt="The Ontology \""+ontology+"\" has \""+subcategory+"\" as subcategories of \""+term+"\" with the description:\n"
+def termKeepTheCategoryWithDescription(term,category,description,ontology,find):
+    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" with the description:\n"
     txt+=description+"\n"
-    txt+="Shall I keep this subcategories?\n"
+    txt+="Shall I keep this?\n"
     print(txt)
     return txt
 
-def termNoSubcategoryFound(term,ontology):
-    txt="The ontology \""+ontology+"\" has no subcategories for \""+term+"\".\n\n"
+def termKeepTheCategoryWithoutDescription(term,category,ontology,find):
+    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" without a description.\n"
+    txt+="Shall I keep this?\n"
     print(txt)
     return txt
 
-def termKeepTheSubcategoryWithoutDescription(term,subcategory,ontology):
-    txt="The Ontology \""+ontology+"\" has \""+subcategory+"\" as subcategories of \""+term+"\" without a description.\n"
-    txt+="Shall I keep this subcategories?\n"
+
+def termNoCategoryFound(term,ontology,find):
+    txt="The ontology \""+ontology+"\" has no "+find+" for \""+term+"\".\n\n"
     print(txt)
     return txt
+
 
 def termFoundDescription(term,description,ontology):
     txt="The Ontology \""+ontology+"\" has the following description for \""+term+"\":\n"
@@ -145,8 +149,8 @@ def termFoundDescription(term,description,ontology):
     print(txt)
     return txt
 
-def seen5Sub(term):
-    txt="You have seen 5 subcategories of \""+term+"\"\n Do you want to see more?\n"
+def seen5(term,find):
+    txt="You have seen 5 "+ find +" of \""+term+"\"\n Do you want to see more?\n"
     return txt
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        Onto Clean

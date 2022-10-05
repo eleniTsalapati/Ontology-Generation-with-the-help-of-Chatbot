@@ -2,10 +2,10 @@ from tkinter.tix import Tree
 import modules.chatbotTalks as talk
 import modules.chatbotHears as hear
 
-def question_with_yes_or_No(ui,question):
+def questionWithYesOrNo(ui,txt):
     answer=0
     # do the question here
-    ui.changeMessage(question())
+    ui.changeMessage(txt)
 
     while answer==0 :
 
@@ -15,84 +15,21 @@ def question_with_yes_or_No(ui,question):
 
         # not correct answer
         if answer==0:
-            ui.rememberOneTime(question())
+            ui.rememberOneTime(txt)
             ui.changeMessage(talk.CouldNotUnderstand())
 
     return answer
 
-
-def question_arg1_with_yes_or_No(ui,question,arg1):
-    answer=0
-
-    # do the question here
-    ui.changeMessage(question(arg1))
-
-    while answer==0 :
-
-        # get answer
-        answerUI=ui.hearTrueOrFalse()
-        answer=hear.GetTrueOrFalse(answerUI)
-
-        if answer==0:
-            ui.rememberOneTime(question(arg1))
-            ui.changeMessage(talk.CouldNotUnderstand())
-
-    return answer
-
-def question_arg2_with_yes_or_No(ui,question,arg1,arg2):
-    answer=0
-    # do the question here
-    ui.changeMessage(question(arg1,arg2))
-
-    while answer==0 :
-        
-        
-
-        # get answer
-        answerUI=ui.hearTrueOrFalse()
-        answer=hear.GetTrueOrFalse(answerUI)
+def convertStringToLowerTittle(txt):
+    # convert the name to lower with capital case
+    labels=txt.split()
+    flag=False
+    theLabel=""
+    for label in labels:
+        if flag==True:
+            theLabel+=label.title()
+        else:
+            theLabel+=label.lower()
+            flag=True
+    return theLabel
     
-        # not correct answer
-        if answer==0:
-            ui.rememberOneTime(question(arg1,arg2))
-            ui.changeMessage(talk.CouldNotUnderstand())
-
-    return answer
-
-def question_arg3_with_yes_or_No(ui,question,arg1,arg2,arg3):
-    answer=0
-    
-    # do the question here
-    ui.changeMessage(question(arg1,arg2,arg3))
-
-    while answer==0 :
-        
-        # get answer
-        answerUI=ui.hearTrueOrFalse()
-        answer=hear.GetTrueOrFalse(answerUI)
-        
-        # not correct answer
-        if answer==0:
-            ui.rememberOneTime(question(arg1,arg2,arg3))
-            ui.changeMessage(talk.CouldNotUnderstand())
-
-    return answer
-
-
-def question_arg4_with_yes_or_No(ui,question,arg1,arg2,arg3,arg4):
-    answer=0
-
-    # do the question here
-    ui.changeMessage(question(arg1,arg2,arg3,arg4))
-    while answer==0 :
-                
-        # get answer
-        answerUI=ui.hearTrueOrFalse()
-        answer=hear.GetTrueOrFalse(answerUI)
-
-        # not correct answer
-        if answer==0:
-            ui.rememberOneTime(question(arg1,arg2,arg3,arg4))
-            ui.changeMessage(talk.CouldNotUnderstand())
-        
-    return answer

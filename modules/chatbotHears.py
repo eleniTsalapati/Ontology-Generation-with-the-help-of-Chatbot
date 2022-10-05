@@ -126,7 +126,7 @@ def thePath(answer):
             return token
     return None
 
-def GetTypes(answer,uo):
+def GetNouns(answer,ui):
     print(">"+answer)
     print()
 
@@ -173,26 +173,27 @@ def GetTypes(answer,uo):
 
     return nouns
 
-def FindNounsInDataBase(answer,classes,ui):
+def FindNounsInDataBase(answer,data,ui):
     print(">"+answer)
     print()
     theList=[]
 
-    wordTokens = word_tokenize(answer)
+    wordTokens = word_tokenize(answer.lower())
     
-    keys=classes[0].keys()
+    keys=data[0].keys()
 
     for word in wordTokens:
-        if word in keys:
-            if ui!=None:
-                ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
-            theList.append(word)
-        elif word=="None":
-            return None
+        for key in keys:
+            if word == key.lower():
+                if ui!=None:
+                    ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
+                theList.append(word)
+            elif word=="None":
+                return None
     return theList
 
-def FindNounInDataBase(answer,classes):
-    theList=FindNounsInDataBase(answer,classes,None)
+def FindNounInDataBase(answer,data):
+    theList=FindNounsInDataBase(answer,data,None)
     if theList==None or theList==[]:
         return None
     return theList[0]

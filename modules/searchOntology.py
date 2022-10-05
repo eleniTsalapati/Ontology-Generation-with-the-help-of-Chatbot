@@ -1,95 +1,131 @@
+from tkinter.messagebox import YES
 import requests
+import modules.ontologyManager as manager
 import modules.chatbotTalks as talk
 import modules.utility as utility
+import urllib.parse
 
-def Ontology_Children(term,current,ui):
-    
-    if "obo_id" not in current.keys():
-        ui.rememberOneTime(talk.termNoSubcategoryFound(term,current["ontology_name"]))
-        return []
 
-    child_url="https://www.ebi.ac.uk/ols/api/ontologies/"+current["ontology_name"]+"/children?id="+current["obo_id"]
-    print(child_url)
-    response = requests.get(child_url)
-    if response.status_code%100 ==4 or response.status_code%100 ==5:
-        ui.rememberOneTime(talk.termNoSubcategoryFound(term,current["ontology_name"]))
-        return []
-
-    children=response.json()
-    keepChildren=[]
-    if children["page"]["totalElements"]==0:
-        ui.rememberOneTime(talk.termNoSubcategoryFound(term,current["ontology_name"]))
-        return []
-    count=0
+def acceptSearch(term,ontology,obo_id,find,data,ui):
+    # get api answer
+    url="https://www.ebi.ac.uk/ols/api/ontologies/"+ontology+"/"+find+"?id="+obo_id
+    print(url)
+    response = requests.get(url)
+    dataBase=response.json()
+    keep=[]
     mark=6
-    for child in children['_embedded']['terms']:
+    count=0
+
+    label=""
+
+    if find=="children":
+        text="specialization"
+    else:
+        text="generalization"
+    # for each data
+    for word in dataBase['_embedded']['terms']:
         count+=1
-        ui.rememberTableOnce()
+        # check if we have seen 5 subjects so to not see more
         if count==mark:
-            answer=utility.question_arg1_with_yes_or_No(ui,talk.seen5Sub,term)
+            answer=utility.questionWithYesOrNo(ui,talk.seen5(term,text))
             if answer==1:
                 mark+=5
             else:
                 break
+        # check to see if you want the word
         answer=0
-        while answer==0 :
-            if "description" in child.keys() and child["description"]!=[]:
-                answer=utility.question_arg4_with_yes_or_No(ui,talk.termKeepTheSubcategoryWithDescription,term,child["label"],child["description"][0],current["ontology_name"])
-            else:
-                answer=utility.question_arg3_with_yes_or_No(ui,talk.termKeepTheSubcategoryWithoutDescription,term,child["label"],current["ontology_name"])
+        if "description" in word.keys() and word["description"]!=[]:
+            answer=utility.questionWithYesOrNo(ui,talk.termKeepTheCategoryWithDescription(term,word["label"],word["description"][0],ontology,find))
+        else:
+            answer=utility.questionWithYesOrNo(ui,talk.termKeepTheCategoryWithoutDescription(term,word["label"],ontology,find))
         
+        # we want to keep word
         if answer==1:
-            labels=child["label"].split()
-            flag=False
-            theLabel=""
-            for label in labels:
-                if flag==True:
-                    theLabel+=label.title()
-                else:
-                    theLabel+=label.lower()
-                    flag=True
-            if "description" in child.keys() and child["description"]!=[]:
-                keepChildren.append((theLabel,child["description"][0],current["ontology_name"]))
+            label=utility.convertStringToLowerTittle(word["label"])
+
+            # crete object
+            data[0][label]=[manager.CreateObject(data[2],label),label,[],0]
+            ui.makeTables(data)
+
+            data[0][label][0].iri=word["iri"]
+
+            # add description
+            if "description" in word.keys() and word["description"]!=[]:
+                manager.Explanation(data[2],data[0][term][0],word["description"][0],ontology)
             else:
-                keepChildren.append((theLabel,"",current["ontology_name"]))
-            ui.insertSubjectTable(theLabel,term)
-    return keepChildren
-
-def handleOntology(term,current,parent,ui):
-    if "description" not in  current.keys()  or current['description']==[]:
-        ui.rememberTableOnce()
-        answer=utility.question_arg2_with_yes_or_No(ui,talk.termFoundNoDescription,term,current["ontology_name"])        
-
-        if answer==1:
-            print(current.keys())
-            ui.rememberTableOnce()
-
-            ui.insertSubjectTable(term,parent)
-            answer=utility.question_arg1_with_yes_or_No(ui,talk.termKeepSubcategories,term)
-            if answer==1:
-                children=Ontology_Children(term,current,ui)
-                return ('',current["ontology_name"],children)
+                manager.Explanation(data[2],data[0][term][0],"",ontology)
+            
+            
+            # add the necessary data
+            if find=="parents":
+                manager.addParent(data[2],data[0][term][0],data[0][label][0])
+                data[0][term][2].append(label)                            
             else:
-                return ('',current["ontology_name"],None)
-    else:
+                manager.addParent(data[2],data[0][label][0],data[0][term][0])
+                data[0][label][2].append(term)
+
+            # do recursive action
+            if find=="children" and word["has_children"]==True:
+                acceptSearch(label,ontology,word["obo_id"],find,data,ui)
+            elif find=="parents" and word["is_root"]==False:
+                acceptSearch(label,ontology,word["obo_id"],find,data,ui)
+
+def handleOntology(data,term,parent,current,ui,moreGeneralize):
+    # check if there is a description
+    description=""
+    if "description" in  current.keys()  and current['description']!=[]:
         description=current["description"][0]
-        ui.rememberTableOnce()
-        answer=utility.question_arg3_with_yes_or_No(ui,talk.termFoundDescription,term,description,current["ontology_name"])        
-    
-        if answer==1:
-            ui.rememberTableOnce()
-            ui.insertSubjectTable(term,parent)
-            answer=utility.question_arg1_with_yes_or_No(ui,talk.termKeepSubcategories,term)
-            if answer==1:
-                children=Ontology_Children(term,current,ui)
-                return (description,current["ontology_name"],children)
-            else:
-                return (description,current["ontology_name"],None)
-    return (None,None,None)
 
-def searchForTerm(term,parent,ui):
+    # ask if you want to keep it
+    ui.rememberTableOnce()
+    answer=utility.questionWithYesOrNo(ui,talk.termFoundNoDescription(term,current["ontology_name"]))        
+
+    if answer==1:
+        # you want to keep it
+        print(current.keys())
+        
+        # search the term to check for children and parents 
+        text=urllib.parse.quote(current["iri"],safe='')
+        text=urllib.parse.quote(text)
+        search_url="http://www.ebi.ac.uk/ols/api/ontologies/"+current["ontology_name"]+"/terms/"+text
+        response = requests.get(search_url)
+        theResponse=response.json()
+
+        # create data
+        data[0][term]=[manager.CreateObject(data[2],term),term,[],0]
+        data[0][term][0].iri=current["iri"]
+
+        manager.Explanation(data[2],data[0][term][0],description,current["ontology_name"])
+        # ui.rememberTableOnce()
+
+        # check if it can be generalized
+        if (parent==None and theResponse["is_root"]==False and moreGeneralize==True):
+            answer=utility.questionWithYesOrNo(ui,talk.termKeepCategories(term,"parents"))
+            if answer==1:
+                acceptSearch(term,current["ontology_name"],current["obo_id"],"parents",data,ui)
+        elif(parent!=None):
+            ui.rememberOneTime("It is the root of your given ontology\n")
+        else:
+            ui.rememberOneTime("It is the root of the \""+current["ontology_name"]+"\"\n")
+
+        ui.makeTables(data)
+
+        # check for children
+        if (theResponse["has_children"]==True):
+            answer=utility.questionWithYesOrNo(ui,talk.termKeepCategories(term,"children"))
+            if answer==1:
+                acceptSearch(term,current["ontology_name"],current["obo_id"],"children",data,ui)
+                return True
+        else:
+            ui.rememberOneTime(talk.termNoCategoryFound(term,current["ontology_name"],"children"))
+        return True
+    return False
+
+    
+def searchForTerm(data,term,parent,ui,moreGeneralized):
     search_url="http://www.ebi.ac.uk/ols/api/search?q="+term
     response = requests.get(search_url)
+    # check if there is ontology 
     if response.status_code%100 ==4 or response.status_code%100 ==5:
         ui.rememberOneTime("No ontology found\n")
         return (None,None,None)
@@ -97,17 +133,22 @@ def searchForTerm(term,parent,ui):
     searchAnswer=response.json()
     flag=True
     previous=None
+    # look only the first 5 ontologies
     for count in range(5):
         if count == searchAnswer['response']['numFound']:
             break
 
         current=searchAnswer['response']['docs'][count]
+        # check if it is the term you want
         if current["label"].lower() == term :
             previous=searchAnswer['response']['docs'][count]
-            (description,name,subcategories) =handleOntology(term,current,parent,ui)
-            if description !=None:
-                return (description,name,subcategories)
+            # check if you want the this ontology
+            used =handleOntology(data,term,parent,current,ui,moreGeneralized)
+            if used == True:
+                # you wanted the ontology so go back
+                return True
 
+    # checked the first 5 
     if flag:
         if count == 0 :
             ui.rememberOneTime("I have not found an ontology with that label!\n")
@@ -117,6 +158,6 @@ def searchForTerm(term,parent,ui):
             ui.rememberOneTime("I have shown you 5 ontologies. Due to that I will not show any more\n")
         if previous!=None:
             ui.rememberOneTime("I remember the previous ontology that I found.\n\n")
-            return handleOntology(term,previous,parent,ui)
+            return handleOntology(data,term,parent,previous,ui,moreGeneralized)
+    return False
 
-    return (None,None,None)
