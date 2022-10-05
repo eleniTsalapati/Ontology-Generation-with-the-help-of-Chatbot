@@ -3,7 +3,7 @@ import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
 import modules.chatbotHears as hear
 import modules.utility as utility
-from modules.mainFunctions import *
+from modules.mainFunction import *
 
 # -------------------------------------------------------
 #                       main

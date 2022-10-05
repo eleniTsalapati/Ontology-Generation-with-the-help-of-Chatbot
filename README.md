@@ -1,28 +1,28 @@
 # Chatbot for Ontology Generation
 
 ## Summary of the Project
-The perpose of this project is to use a ChatBot to create a new ontology by either using allready existing classes from outside ontologies or new of your own and to link them with respect of OntoClean rules and inheritance rules.
+The purpose of this project is to use a ChatBot to create a new ontology by either taking already existing classes from external ontologies or creating new classes and linking them concerning OntoClean rules and inheritance rules.
 
 ## How to use
-After installing everyting (check how to download down bellow) you just run `python3 main.py` and a UI will apprear. You will have to use the UI. The UI will ask questions and you will have to answer either by yes or no (with clicking the button) or to write an answer. To search the ontology file you can use the button to find it faster.
+After installing everything (check how to download it below), you just run `python3 main.py` and a UI will appear. The user will have to use the UI. The UI will ask questions and the user will have to answer either by yes or no (by clicking the button) or write an answer. To search the ontology file, the user can use the button to find it faster.
 
-***IMPORTANT: When writing a text be cearful with the grammar and syntax.***
+***IMPORTANT: When writing a text, be careful with the grammar and syntax.***
 
-For example the program will understand: *a cat eats the fish* or *cats eat fishes* but will **NOT** understand *cat eat fish*.
+For example, the program will understand: *a cat eats the fish* or *cats eat fishes* but will **NOT** understand *cat eat fish*.
 
 ## Implementation of this repository :
 ### Hardware requirements: 
-OS : Windows (Used for process), MscOS, Linux (any OS in this would work) Minimum RAM : 4GB Minimum Storage : As the NTLK data Set is not big a minimum of 1MB - 50MB should be suitable.
+OS : Windows, MscOS, Linux (any OS in this would work). Minimum RAM : 4GB. Minimum Storage : As the NTLK Data Set size is insignificant, a minimum of 1MB - 50MB should be suitable.
 
 ### Software requirements: 
-For running the python files it is used Visual Studio Code. Any suitable IDE that can run python files, should also be suitable. (Python 3.9.6)
+Any suitable IDE that can run python files should also be suitable. (Python 3.9.6)
 
-Also, if you want to connect your ontology with outside ontologies, you need a connection with a network so you can access the EMBL-EBI site that gives more information about each ontology through their API.
+Also, suppose the user wants to connect the ontology with external ontologies. In that case, a network connection is needed to access the EMBL-EBI site that gives more information about each ontology through their API.
 
-Also some libraries where used:
+Also, the following libraries are used:
 - Owalready2
 
-  The Library "Owlready2" is used for the ontology creation-managment.
+  The Library "Owlready2" is used for the ontology creation-management.
 
 - NLTK 
 
@@ -36,9 +36,9 @@ Also some libraries where used:
 
   The Library "Tkinter" is used for the UI.
 
-### Install and Unistall in Linux Enviroment:
-To download every Library together in **Linux** Environment use the following commands:
-The python file *ntlk_data.py* will download the nessesary data set from NLTK.
+### Install and Uninstall in Linux Environment:
+To download every Library together in **Linux** Environment, use the following commands:
+The python file *ntlk_data.py* will download the necessary data set from NLTK.
 
 ```
 pip3 install --upgrade pip
@@ -49,7 +49,7 @@ pip3 install requests
 sudo apt-get install python-tk
 ```
 
-To unistall in **linux** it is an easy task. Just use the following commands:
+To uninstall in **Linux** is an easy task. Just use the following commands:
 
 ```
 pip3 uninstall nltk
@@ -58,7 +58,7 @@ pip3 uninstall requests
 sudo apt-get remove python-tk
 ```
 
-The above commands do not remove the NTLK data set. To remove the data set use the following commands: 
+The above commands do not remove the NTLK data set. To remove the data set, use the following commands: 
 ```
 python3 ./commands/path_ntlk.py
 rm -r OutputPath

@@ -13,7 +13,6 @@ def WhatOntologyToAnswer(answer,ui):
     # tokenize and take tags of the words
     tokens=word_tokenize(answer.lower())
     tagged=pos_tag(tokens)
-    print(tagged)
     # define
     nouns={}
     relationships={}
