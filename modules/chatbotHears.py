@@ -183,10 +183,10 @@ def FindNounsInDataBase(answer,data,ui):
 
     for word in wordTokens:
         for key in keys:
-            if word == key.lower():
+            if word.lower() == key.lower():
                 if ui!=None:
                     ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
-                theList.append(word)
+                theList.append(key)
             elif word=="None":
                 return None
     return theList

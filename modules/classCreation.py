@@ -43,9 +43,10 @@ def checkInheritance(word,parent,ui):
         return 0
 
 def createNoun(noun,parent,data,ui,moreGeneralized=True):
+        
     # check if the word is in data base
     for word in data[0].keys():
-        if noun==word.lower():
+        if noun.lower()==word.lower():
             ui.rememberOneTime("The word \""+noun+"\" is already in the dataBase\n")
             return
 
@@ -64,16 +65,16 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
                 keepParent.append(theParent)
             elif result==1:
                 relation="componentOf"+noun.title()
-                keepRelation.append(relation,theParent,noun)
+                keepRelation.append((relation,theParent,noun))
             elif result==2:
                 relation="componentOf"+noun.title()
-                keepRelation.append(relation,noun,theParent)
+                keepRelation.append((relation,noun,theParent))
             elif result==3:
                 relation="composedOf"+noun.title()
-                keepRelation.append(relation,theParent,noun)                
+                keepRelation.append((relation,theParent,noun))                
             elif result==4:
                 relation="composedOf"+noun.title()
-                keepRelation.append(relation,noun,theParent)
+                keepRelation.append((relation,noun,theParent))
 
 
     answer= utility.questionWithYesOrNo(ui,talk.FindDefinition(noun))

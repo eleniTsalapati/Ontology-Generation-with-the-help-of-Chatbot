@@ -6,17 +6,11 @@ def questionWithYesOrNo(ui,txt):
     answer=0
     # do the question here
     ui.changeMessage(txt)
+    print(txt)
 
-    while answer==0 :
-
-        # get answer
-        answerUI=ui.hearTrueOrFalse()
-        answer=hear.GetTrueOrFalse(answerUI)
-
-        # not correct answer
-        if answer==0:
-            ui.rememberOneTime(txt)
-            ui.changeMessage(talk.CouldNotUnderstand())
+    # get answer
+    answerUI=ui.hearTrueOrFalse()
+    answer=hear.GetTrueOrFalse(answerUI)
 
     return answer
 

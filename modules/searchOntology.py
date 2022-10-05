@@ -99,11 +99,11 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
         # ui.rememberTableOnce()
 
         # check if it can be generalized
-        if (parent==None and theResponse["is_root"]==False and moreGeneralize==True):
+        if (parent==[None] and theResponse["is_root"]==False and moreGeneralize==True):
             answer=utility.questionWithYesOrNo(ui,talk.termKeepCategories(term,"parents"))
             if answer==1:
                 acceptSearch(term,current["ontology_name"],current["obo_id"],"parents",data,ui)
-        elif(parent!=None):
+        elif(parent!=[None]):
             ui.rememberOneTime("It is the root of your given ontology\n")
         else:
             ui.rememberOneTime("It is the root of the \""+current["ontology_name"]+"\"\n")
