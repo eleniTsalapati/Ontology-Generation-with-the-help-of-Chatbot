@@ -1,4 +1,4 @@
-# Chatbot-for-Ontology-Generation
+# Chatbot for Ontology Generation
 
 ## Summary of the Project
 The perpose of this project is to use a ChatBot to create a new ontology by either using allready existing classes from outside ontologies or new of your own and to link them with respect of OntoClean rules and inheritance rules.
