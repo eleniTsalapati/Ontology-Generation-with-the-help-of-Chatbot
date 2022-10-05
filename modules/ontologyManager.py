@@ -23,7 +23,6 @@ def addData(ontology,data):
             if theParent==name or theParent=="Thing":
                 continue
             keepParent.append(theParent)
-        print(name,keepParent)
         data[0][name]=[object,name,keepParent,0]
 
     for relation in list(ontology.object_properties()):

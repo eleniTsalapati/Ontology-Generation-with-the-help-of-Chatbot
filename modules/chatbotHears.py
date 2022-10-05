@@ -7,9 +7,6 @@ sia = SentimentIntensityAnalyzer()
 lemmatizer = WordNetLemmatizer()
 
 def WhatOntologyToAnswer(answer,ui):
-    print(">"+answer)
-    print()
-
     # tokenize and take tags of the words
     tokens=word_tokenize(answer.lower())
     tagged=pos_tag(tokens)
@@ -94,9 +91,6 @@ def WhatOntologyToAnswer(answer,ui):
     return (nouns,relationships)
 
 def GetTrueOrFalse(answer):
-    print(">"+answer)
-    print()
-    
     polarity=sia.polarity_scores(answer.lower())
     if polarity['neg']<polarity['pos']:
         return 1
@@ -106,15 +100,9 @@ def GetTrueOrFalse(answer):
         return 0
 
 def GetDefinition(answer):
-    print(">"+answer)
-    print()
-    
     return answer
 
 def thePath(answer):
-    print(">"+answer)
-    print()
-
     # check if the answer is found
     tokens=answer.split()
     for token in tokens:
@@ -126,9 +114,6 @@ def thePath(answer):
     return None
 
 def GetNouns(answer,ui):
-    print(">"+answer)
-    print()
-
     # tokenize and take tags of the words
     tokens=word_tokenize(answer.lower())
     tagged=pos_tag(tokens)
@@ -173,8 +158,6 @@ def GetNouns(answer,ui):
     return nouns
 
 def FindNounsInDataBase(answer,data,ui):
-    print(">"+answer)
-    print()
     theList=[]
 
     wordTokens = word_tokenize(answer.lower())

@@ -6,7 +6,6 @@ def questionWithYesOrNo(ui,txt):
     answer=0
     # do the question here
     ui.changeMessage(txt)
-    print(txt)
 
     # get answer
     answerUI=ui.hearTrueOrFalse()

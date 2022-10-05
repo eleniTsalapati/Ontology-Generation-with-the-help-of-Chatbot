@@ -9,7 +9,6 @@ import urllib.parse
 def acceptSearch(term,ontology,obo_id,find,data,ui):
     # get api answer
     url="https://www.ebi.ac.uk/ols/api/ontologies/"+ontology+"/"+find+"?id="+obo_id
-    print(url)
     response = requests.get(url)
     dataBase=response.json()
     keep=[]
@@ -81,8 +80,6 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
     answer=utility.questionWithYesOrNo(ui,talk.termFoundNoDescription(term,current["ontology_name"]))        
 
     if answer==1:
-        # you want to keep it
-        print(current.keys())
         
         # search the term to check for children and parents 
         text=urllib.parse.quote(current["iri"],safe='')
