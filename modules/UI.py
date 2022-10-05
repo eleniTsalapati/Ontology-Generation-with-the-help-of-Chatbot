@@ -186,7 +186,7 @@ class UI:
                 self.subjectTable.insert(parent="",index="end",iid=last,text="",
                 values=(last,data[0][key][1],parent),tags="notUsed")
                 if data[0][key][3]==1:
-                    self.subjectTable.item(i,tags="used")
+                    self.subjectTable.item(last,tags="used")
                 last+=1
 
 
