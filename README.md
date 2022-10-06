@@ -36,30 +36,49 @@ Also, the following libraries are used:
 
   The Library "Tkinter" is used for the UI.
 
-### Install and Uninstall in Linux Environment:
-To download every Library together in **Linux** Environment, use the following commands:
-The python file *ntlk_data.py* will download the necessary data set from NLTK.
+### How to install Python
+#### Windows
+You can install python for Windows in the link: https://www.python.org/downloads/windows/ 
+
+I would suggest clicking the PATH option otherwise the libraries might not download correcrty.
+
+#### Linux
+You can install python for Linux in the link: https://www.python.org/downloads/source/
+or by running in the following commands:
+```
+$ sudo apt-get update
+$ sudo apt-get install python3.9
+```
+
+### Install and Uninstall Libraries:
+**If you have not accapted the Path Option on Windows then you have to be cearfull downloading the libraries.**
+
+To download every Library together, use the following commands:
 
 ```
-pip3 install --upgrade pip
-pip3 install --upgrade nltk
-python3 ./commands/nltk_data.py
-pip3 install owlready2
-pip3 install requests
-sudo apt-get install python-tk
+$ pip install --upgrade pip
+$ pip install --upgrade nltk
+$ pip install owlready2
+$ pip install requests
+$ pip install tk
 ```
 
-To uninstall in **Linux** is an easy task. Just use the following commands:
+It is neccasary to dowload the data set from NLTK. You can do it with the following command:
+```
+$ python ./commands/nltk_data.py
+```
+
+To uninstall just use the following commands:
 
 ```
-pip3 uninstall nltk
-pip3 uninstall owlready2
-pip3 uninstall requests
-sudo apt-get remove python-tk
+$ pip uninstall nltk
+$ pip uninstall owlready2
+$ pip uninstall requests
+$ pip uninstall tk
 ```
 
 The above commands do not remove the NTLK data set. To remove the data set, use the following commands: 
 ```
-python3 ./commands/path_ntlk.py
-rm -r OutputPath
+$ python ./commands/path_ntlk.py
+$ rm -r OutputPath
 ``` 
