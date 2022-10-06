@@ -4,7 +4,7 @@
 The purpose of this project is to use a ChatBot to create a new ontology by either taking already existing classes from external ontologies or creating new classes and linking them concerning OntoClean rules and inheritance rules.
 
 ## How to use
-After installing everything (check how to download it below), you just run `$ python3 main.py` and a UI will appear. The user will have to use the UI. The UI will ask questions and the user will have to answer either by yes or no (by clicking the button) or write an answer. To search the ontology file, the user can use the button to find it faster.
+After installing everything (check how to download it below), you just run `python3 main.py` and a UI will appear. The user will have to use the UI. The UI will ask questions and the user will have to answer either by yes or no (by clicking the button) or write an answer. To search the ontology file, the user can use the button to find it faster.
 
 ***IMPORTANT: When writing a text, be careful with the grammar and syntax.***
 
@@ -46,8 +46,8 @@ I would suggest clicking the PATH option otherwise the libraries might not downl
 You can install python for Linux in the link: https://www.python.org/downloads/source/
 or by running in the following commands:
 ```
-$ sudo apt-get update
-$ sudo apt-get install python3.9
+sudo apt-get update
+sudo apt-get install python3.9
 ```
 
 ### Install and Uninstall Libraries:
@@ -56,29 +56,29 @@ $ sudo apt-get install python3.9
 To download every Library together, use the following commands:
 
 ```
-$ pip install --upgrade pip
-$ pip install --upgrade nltk
-$ pip install owlready2
-$ pip install requests
-$ pip install tk
+pip install --upgrade pip
+pip install --upgrade nltk
+pip install owlready2
+pip install requests
+pip install tk
 ```
 
 It is neccasary to dowload the data set from NLTK. You can do it with the following command:
 ```
-$ python ./commands/nltk_data.py
+python ./commands/nltk_data.py
 ```
 
 To uninstall just use the following commands:
 
 ```
-$ pip uninstall nltk
-$ pip uninstall owlready2
-$ pip uninstall requests
-$ pip uninstall tk
+pip uninstall nltk
+pip uninstall owlready2
+pip uninstall requests
+pip uninstall tk
 ```
 
 The above commands do not remove the NTLK data set. To remove the data set, use the following commands: 
 ```
-$ python ./commands/path_ntlk.py
-$ rm -r OutputPath
+python ./commands/path_ntlk.py
+rm -r OutputPath
 ``` 
