@@ -79,6 +79,6 @@ pip uninstall tk
 
 The above commands do not remove the NTLK data set. To remove the data set, use the following commands: 
 ```
-python ./commands/path_ntlk.py
+python ./commands/path_nltk.py
 rm -r OutputPath
 ``` 
