@@ -12,6 +12,7 @@ from modules.mainFunction import *
 # data=[dataObj,dataRel,ontology]
 # dataObj=[class,name,parent,used/notUsed]
 # dataRel=[class,obj1name,obj2name]
+print("!")
 data=[{},{}]
 ui= UI()
 # Welcome
@@ -26,9 +27,9 @@ while answer == None:
     if answer==None:
         ui.rememberOneTime(talk.Welcome())
         ui.changeMessage(talk.CouldNotUnderstand())
-
+file=answer
 ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
-data.append(manager.LoadOntology(answer))
+data.append(manager.LoadOntology(file))
 manager.addData(data[2],data)
 
 while(True):
@@ -58,6 +59,7 @@ while(True):
 
 
 # Save the ontology
-manager.SaveOntology(data[2])
+manager.SaveOntology(data[2],file)
 
 ui.close()
+print("!")

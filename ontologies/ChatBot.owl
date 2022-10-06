@@ -34,20 +34,8 @@
 <owl:Class rdf:about="http://purl.obolibrary.org/obo/NCIT_C25663">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">satellite</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Situated near; accompanying.</description>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#altimeter">
-  <rdfs:subClassOf rdf:resource="#remoteSensor"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">altimeter</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#opticalSensor">
-  <rdfs:subClassOf rdf:resource="#remoteSensor"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">opticalSensor</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Situated near; accompanying.</description>
 </owl:Class>
 
 <owl:Class rdf:about="#solarPanel">
@@ -60,6 +48,18 @@
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nasa</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ogg</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#altimeter">
+  <rdfs:subClassOf rdf:resource="#remoteSensor"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">altimeter</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#opticalSensor">
+  <rdfs:subClassOf rdf:resource="#remoteSensor"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">opticalSensor</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
 
