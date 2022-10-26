@@ -49,8 +49,8 @@ sudo apt-get install python3.9
 ## Install Libraries:
 **If you have not accapted the Path Option on Windows then you have to be cearfull downloading the libraries.**
 
-First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
-If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
+First you have to use the open a command prompt on Windows or a terminal in Linux in the folder of the repository.
+If the path of the command prompt or terminal is not correct, then use `cd path_of_the_folder` to go to the correct folder.
 
 To download every Library together, use the following commands:
 
