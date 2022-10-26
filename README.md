@@ -10,11 +10,7 @@ After installing everything (check how to download it below), you just run `pyth
 
 For example, the program will understand: *a cat eats the fish* or *cats eat fishes* but will **NOT** understand *cat eat fish*.
 
-## Implementation of this repository :
-### Hardware requirements: 
-OS : Windows, MscOS, Linux (any OS in this would work). Minimum RAM : 4GB. Minimum Storage : As the NTLK Data Set size is insignificant, a minimum of 1MB - 50MB should be suitable.
-
-### Software requirements: 
+## Requirements: 
 Any suitable IDE that can run python files should also be suitable. (Python 3.9.6)
 
 Also, suppose the user wants to connect the ontology with external ontologies. In that case, a network connection is needed to access the EMBL-EBI site that gives more information about each ontology through their API.
@@ -36,13 +32,13 @@ Also, the following libraries are used:
 
   The Library "Tkinter" is used for the UI.
 
-### How to install Python
-#### Windows
+## How to install Python
+### Windows
 You can install python for Windows in the link: https://www.python.org/downloads/windows/ 
 
 I would suggest clicking the PATH option otherwise the libraries might not download correcrty.
 
-#### Linux
+### Linux
 You can install python for Linux in the link: https://www.python.org/downloads/source/
 or by running in the following commands:
 ```
@@ -50,8 +46,9 @@ sudo apt-get update
 sudo apt-get install python3.9
 ```
 
-### Install Libraries:
+## Install Libraries:
 **If you have not accapted the Path Option on Windows then you have to be cearfull downloading the libraries.**
+
 First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
 If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
 
@@ -70,7 +67,7 @@ It is neccasary to dowload the data set from NLTK. You can do it with the follow
 python ./commands/nltk_data.py
 ```
 
-### Uninstall Libraries:
+## Uninstall Libraries:
 First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
 If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
 
