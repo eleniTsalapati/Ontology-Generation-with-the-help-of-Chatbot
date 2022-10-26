@@ -52,6 +52,8 @@ sudo apt-get install python3.9
 
 ### Install Libraries:
 **If you have not accapted the Path Option on Windows then you have to be cearfull downloading the libraries.**
+First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
+If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
 
 To download every Library together, use the following commands:
 
@@ -69,15 +71,20 @@ python ./commands/nltk_data.py
 ```
 
 ### Uninstall Libraries:
+First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
+If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
 
 To uninstall the NTLK data set use the following command to find the file: 
 ```
 python ./commands/path_nltk.py
 ``` 
-and either find the folder and delete it or use in **Linux** terminal the following command:
+and either find the folder and delete it 
+
+Or only in **Linux terminal** use the following command:
 ```
 rm -r OutputPath
 ``` 
+where the OutputPath is the result of the previous command.
 
 To uninstall the Libraries just use the following commands:
 ```
