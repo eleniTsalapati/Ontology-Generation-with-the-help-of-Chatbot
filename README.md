@@ -76,7 +76,12 @@ conda env create -f path\chatBot_ontology_creation_env.yaml
 
 Then you have to activate the enviroment by typing `conda activate chatBot_ontology_creation_env`.
 
-Then you have to cd to the github file that you have downloaded by `cd path\folder`.
+Then you have to cd to the github file (Chatbot-for-Ontology-Generation) that you have downloaded by `cd path\folder`.
+
+It is neccasary to dowload the data set from NLTK. You can do it with the following command:
+```
+python ./commands/nltk_data.py
+```
 
 You are ready to run `python main.py`.
 
@@ -107,3 +112,9 @@ pip uninstall tk
 ## Uninstall Libraries with anaconda:
 First if you have still activate the enviroment then you have to deactivate: `conda deactivate`.
 Then you find the folder that holds the enviroment (usually under c:/users/[user_name]/anacoda[number]/env) and delete that folder and you are done.
+
+To uninstall the NTLK data set use the following command to find the file: 
+```
+python ./commands/path_nltk.py
+``` 
+and either find the folder and delete it 
