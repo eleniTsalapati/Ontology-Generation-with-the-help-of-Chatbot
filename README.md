@@ -46,10 +46,10 @@ sudo apt-get update
 sudo apt-get install python3.9
 ```
 
-## Install Libraries:
+## Install Libraries without anaconda:
 **If you have not accapted the Path Option on Windows then you have to be cearfull downloading the libraries.**
 
-First you have to use the open a command prompt on Windows or a terminal in Linux in the folder of the repository.
+First you have to  open a command prompt on Windows or a terminal in Linux in the folder of the repository.
 If the path of the command prompt or terminal is not correct, then use `cd path_of_the_folder` to go to the correct folder.
 
 To download every Library together, use the following commands:
@@ -67,7 +67,20 @@ It is neccasary to dowload the data set from NLTK. You can do it with the follow
 python ./commands/nltk_data.py
 ```
 
-## Uninstall Libraries:
+## Install Libraries with anaconda:
+First you have to dowload the chatBot_ontology_creation_env.yaml and open anaconda prompt. 
+Then run in the prompt the following command to create the enviroment with the installed libraries:
+```
+conda env create -f paht\chatBot_ontology_creation_env.yaml
+```
+
+Then you have to activate the enviroment by typing `conda activate chatBot_ontology_creation_env`.
+
+Then you have to cd to the github file that you have downloaded by `cd paht\folder`.
+
+You are ready to run `python main.py`.
+
+## Uninstall Libraries without anaconda:
 First you have to use the open a command prompt on Windows or in a terminal in Linux in the folder of the repository.
 If the path is not correct then use `cd path_of_the_folder` to go to the correct folder.
 
@@ -90,3 +103,7 @@ pip uninstall owlready2
 pip uninstall requests
 pip uninstall tk
 ```
+
+## Uninstall Libraries with anaconda:
+First if you have still activate the enviroment then you have to deactivate: `conda deactivate`.
+Then you find the folder that holds the enviroment (usually under c:/users/[user_name]/anacoda[number]/env) and delete that folder and you are done.
