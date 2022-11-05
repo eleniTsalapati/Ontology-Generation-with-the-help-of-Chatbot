@@ -1,14 +1,16 @@
 # Chatbot for Ontology Generation
 
 ## Summary of the Project
-The purpose of this project is to use a ChatBot to create a new ontology by either taking already existing classes from external ontologies or creating new classes and linking them concerning OntoClean rules and inheritance rules.
+The purpose of this project is to use a ChatBot to create a new ontology by either taking already existing classes from external ontologies or creating new classes and linking them according to OntoClean rules and inheritance rules.
 
 ## How to use
-After installing everything (check how to download it below), you just run `python3 main.py` and a UI will appear. The user will have to use the UI. The UI will ask questions and the user will have to answer either by yes or no (by clicking the button) or write an answer. To search the ontology file, the user can use the button to find it faster.
+After installing everything (check how to download it below), you just run `python3 main.py` and a UI will appear. The user will have to use the UI. The UI will ask questions and the user will have to answer either by clicking the buttons or writing the response. To search the ontology file, the user can use the button to find it faster.
 
 ***IMPORTANT: When writing a text, be careful with the grammar and syntax.***
 
 For example, the program will understand: *a cat eats the fish* or *cats eat fishes* but will **NOT** understand *cat eat fish*.
+
+***Also for numerous Continuous nouns you have to connect them with the underscore "_".***
 
 ## Requirements: 
 Any suitable IDE that can run python files should also be suitable. (Python 3.9.6)
@@ -110,11 +112,12 @@ pip uninstall tk
 ```
 
 ## Uninstall Libraries with anaconda:
-First if you have still activate the enviroment then you have to deactivate: `conda deactivate`.
-Then you find the folder that holds the enviroment (usually under c:/users/[user_name]/anacoda[number]/env) and delete that folder and you are done.
 
-To uninstall the NTLK data set use the following command to find the file: 
+First, to uninstall the NTLK data set use the following command to find the file: 
 ```
 python ./commands/path_nltk.py
 ``` 
-and either find the folder and delete it 
+and find the folder and delete it. 
+
+If the enviroment is still activated, then you have to deactivate it: `conda deactivate`.
+Then you find the folder that holds the enviroment (usually under c:/users/[user_name]/anacoda[number]/env) and delete that folder and you are done.
