@@ -1,11 +1,25 @@
 from owlready2 import *
 
+def checkHttp(file):
+    http="http://"
+    # there is no room for http
+    if len(file) <len(http):
+        return False
+    
+    # check if all one of the letter in http is not inside file
+    for i in range(len(http)):
+        if file[i]!=http[i]:
+            return False
+    return True
 def LoadOntology(file):
     ontology = get_ontology(file).load()
     return ontology
 
-def SaveOntology(ontology):
-    ontology.save()
+def SaveOntology(ontology,file):
+    if checkHttp(file)==True:
+        ontology.save()
+    else:
+        ontology.save(file=file[7:])
 
 def findLabel(object):
     if object.label!=[]:
