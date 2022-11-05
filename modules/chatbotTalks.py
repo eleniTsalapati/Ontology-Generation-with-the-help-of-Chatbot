@@ -5,66 +5,29 @@
 def Welcome():
     txt="Welcome, User!\n"
     txt+="This Chatbot is made to create an Ontology.\n"
-    txt+="I will ask you questions about the ontology and you have to answer them.\n"
+    txt+="I will ask you questions about the ontology and you have to answer them."
+    txt+="The ontology will be created by providing to the chatbot the competency questions and " 
+    txt+="then by answering clarifying questions posed by the chatbot. "
+    txt+="Whenever this is possible external ontologies by https://www.ebi.ac.uk/ols/index are reused.\n"
     txt+="Let's start!!\n\n"
-    txt+="In which file shall I save the ontology?\n"
-    txt+="IMPORTANT!!\n"
-    txt+="If the file path is local then it has to begin with \"file://\" "
-    txt+="or you can search the local file from the button \"Find File\"\n"
-    txt+="If the file path is digital then it has to begin with \"http://\"\n"
+    txt+="In which file shall I save the ontology?\n\n"
+    txt+="IMPORTANT!!\n\n"
+    txt+="If the file is local then your answer has to begin with \"file://\" following the path file "
+    txt+="or you can find the local file by using the button \"Find File\"\n\n"
+    txt+="If the file is digital then it has to begin with \"http://\" following with the URL\n"
     return txt
     
 def WhatOntologyToAnswer():
-    txt="Give a sentence to add in the ontology?\n\n"
-    txt+="Please be careful with the grammar, syntax of the answer as it will affect it.\n"
+    txt="Give a Competency Question to add in the ontology?\n\n"
+    txt+="If you have a lot of nouns, then you need to have underscore \"_\" in between the nouns. \n"
+    txt+="For example: Mitigation_Action and NOT Mitigation action\n\n"
+    txt+="Please be careful with the grammar(the articles), syntax of the answer as it will affect it.\n"
     txt+="Recognize: A cat eats fishes, Cats eat the fish\n"
     txt+="Not Recognize: Cat eat fish\n"
     return txt
 
 def CouldNotUnderstand():
     txt="\n\n Sorry but I could not understand your answer.\n\n"
-    return txt
-
-def AskDifferentTypes(word):
-    txt="Are there different specialization of  \""+ word +"\" you want to add?\n"
-    return txt
-
-def GetDifferentTypes(word):
-    txt="Enumerate all different specialization of  \""+ word +"\".\n"
-    return txt
-
-def MoreOntology():
-    txt="Do you want to add a sentence for your ontology?\n"
-    return txt
-    
-def EnumerateSpecialization():
-    txt="Do you want to enumerate the different specialization of words in the ontology?\n"
-    return txt
-
-def EnumerateGeneralization():
-    txt="Do you want to add a generalization into your ontology?\n"
-    txt+="Meaning that the all ready made subjects will be the specialization of the new word\n\n"
-    txt+="IMPORTANT: If the answer is negative then the program will finish here and the ontology will be saved!\n"
-    return txt
-
-def AskForHyper():
-    txt="What new word do you want to become Hyper?\n"
-    return txt
-
-def DefineHyper(word):
-    txt="Can you give the name of the HyperClass of \""+word+"\" ?\n"
-    return txt
-
-def AskHyperOfHyper(word):
-    txt="Do you want to add a HyperClass for \""+word+"\"?\n"
-    return txt
-
-def FindHyperOfHyper(word):
-    txt="What is the HyperClass of \""+word+"\"?\n"
-    return txt
-
-def BecomeHyper(word):
-    txt="Which words from those you used, do you want to be subcategory of \""+word+"\"?\n"
     return txt
 
 #  -----------------------------------------------------------------------------------------------------------------

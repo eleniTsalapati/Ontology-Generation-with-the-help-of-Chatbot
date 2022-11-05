@@ -27,37 +27,29 @@ while answer == None:
         ui.rememberOneTime(talk.Welcome())
         ui.changeMessage(talk.CouldNotUnderstand())
 
+path=answer
 ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
 data.append(manager.LoadOntology(answer))
 manager.addData(data[2],data)
-
-while(True):
+answer=-1
+while(answer!=3):
     ui.makeTables(data)
-    answer= utility.questionWithYesOrNo(ui,talk.MoreOntology())
 
-    if answer == 1:
+    ui.changeMessage("Your ontology has been saved.\nChoose one action from the buttons bellow!")
+    manager.SaveOntology(data[2])
+    answer=ui.hearMenu()
+    
+    if answer == 0:
         ui.rememberTableOnce()
         Sentence(data,ui)
-        continue
-
-    ui.rememberTableOnce()
-    answer= utility.questionWithYesOrNo(ui,talk.EnumerateSpecialization())
-    if answer == 1:
-        ui.rememberTableOnce()
-        specialize(data,ui)
-        continue
-
-    ui.rememberTableOnce()
-    answer= utility.questionWithYesOrNo(ui,talk.EnumerateGeneralization())
-    if answer == 1:
+    elif answer == 1:
         ui.rememberTableOnce()
         generalized(data,ui)
-        continue
-
-    break
-
+    elif answer == 2:
+        ui.rememberTableOnce()
+        specialize(data,ui)
+    
 
 # Save the ontology
 manager.SaveOntology(data[2])
-
-ui.close()
+ui.close(path)

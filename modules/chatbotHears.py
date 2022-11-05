@@ -5,6 +5,32 @@ from nltk.stem import WordNetLemmatizer
 
 sia = SentimentIntensityAnalyzer()
 lemmatizer = WordNetLemmatizer()
+def lemmatization(word,ui):
+    if len(word.split("_"))==1:
+        theLementation=lemmatizer.lemmatize(word)
+        if theLementation!= []:
+            ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n")
+            return (theLementation,True)    
+    else:
+        splitted=word.split("_")
+        txt=""
+        flag=False
+        for tmp in splitted:
+            theLementation=lemmatizer.lemmatize(tmp)
+            if theLementation!= []:
+                if txt=="":
+                    txt=theLementation
+                else:
+                    txt=txt+"_"+theLementation.title()
+                ui.rememberOneTime("Lemmatize the \""+tmp+"\" to \""+theLementation+"\"\n")
+                flag=True
+            else:
+                if txt=="":
+                    txt=tmp
+                else:
+                    txt=txt+"_"+tmp.title()        
+        return(txt,flag)
+    return(word.title(),False)
 
 def WhatOntologyToAnswer(answer,ui):
     # tokenize and take tags of the words
@@ -35,12 +61,9 @@ def WhatOntologyToAnswer(answer,ui):
         elif 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
 
             # Singularize or lemmatize the word to be singular
-            if 'NNS' == word[1] or 'NNPS' == word[1]:
-                theLementation=lemmatizer.lemmatize(word[0])
-                if theLementation!= []:
-                    ui.rememberOneTime("Lemmatize the \""+word[0]+"\" to \""+theLementation+"\"\n")
-                    word=(theLementation,word[1])
-                    flagLem=True
+            x,flagLem=lemmatization(word[0],ui)
+            word=(x,word[1])
+
             # add it to the word
             if theWord!="":
                 theWord = theWord+word[0].title()
@@ -136,13 +159,9 @@ def GetNouns(answer,ui):
         elif 'NNS' == word[1] or 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
             
             # Singularize or lemmatize the word to be singular
-            if 'NNS' == word[1] or 'NNPS' == word[1]:
-                theLementation=lemmatizer.lemmatize(word[0])
-                if theLementation!= []:
-                    ui.rememberOneTime("Lemmatize the \""+word[0]+"\" to \""+theLementation+"\"\n")
-                    word=(theLementation,word[1])
-                    flagLem=True
-
+            x,flagLem=lemmatization(word[0],ui)
+            word=(x,word[1])
+                
             # add it to the word
             if theWord!="":
                 theWord = theWord+word[0].title()
@@ -158,21 +177,24 @@ def GetNouns(answer,ui):
     return nouns
 
 def FindNounsInDataBase(answer,data,ui):
-    theList=[]
+    insideDataBase=[]
+    notInside=[]
 
     wordTokens = word_tokenize(answer.lower())
     
     keys=data[0].keys()
 
     for word in wordTokens:
+        if word=="None":
+            continue
         for key in keys:
             if word.lower() == key.lower():
                 if ui!=None:
                     ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
-                theList.append(key)
-            elif word=="None":
-                return None
-    return theList
+                insideDataBase.append(key)
+            else:
+                notInside.append(key)
+    return (insideDataBase,notInside)
 
 def FindNounInDataBase(answer,data):
     theList=FindNounsInDataBase(answer,data,None)

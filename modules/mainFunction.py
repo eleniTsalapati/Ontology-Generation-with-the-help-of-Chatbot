@@ -3,7 +3,6 @@ from re import sub
 import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
 import modules.chatbotHears as hear
-import modules.searchOntology as search
 import modules.utility as utility
 from modules.classCreation import *
 
@@ -36,7 +35,7 @@ def Sentence(data,ui):
         if obj1 not in data[0].keys() or obj2 not in data[0].keys():
             continue
 
-        relation=relation+obj2.title()
+        relation=obj1.title()+"_"+relation.title()+"_"+obj2.title()
 
         # mark as used
         data[0][obj1][3]=1
@@ -51,29 +50,53 @@ def Sentence(data,ui):
 
 
 def specialize(data,ui):
-    ui.changeMessage("Which words from the dataBase do you want to specialize?\nGive it as it is in the DataBase\n")
+    ui.changeMessage("Which words from the dataBase do you want to specialize? In essence, you will add a(n) (inheritance)child to this word.\nGive it as it is in the DataBase\n\n For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n")
     answerUI=ui.hear()
-    nouns=hear.FindNounsInDataBase(answerUI,data,ui)
-    for noun in nouns:        
-        ui.rememberTableOnce()
-        ui.changeMessage(talk.GetDifferentTypes(noun))
+    parents=hear.FindNounsInDataBase(answerUI,data,ui)
+    for parent in parents:        
+        ui.makeTables(data)
+        ui.changeMessage("Which words do you want to give as specialization (inheritance child) of "+parent+"(inheritance parent)?\n The words can be inside the DataBase (give it as it is) or outside of it.\n\n For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n")
         answerUI=ui.hear()
-        types=hear.GetNouns(answerUI,ui)
+        inside,outside=hear.FindNounsInDataBase(answerUI,data,ui)
+        # if they are in the database
+        for noun in inside:
+            addInheritance(noun,[parent],data,ui)
 
         # for each type from the different types 
-        for type in types:            
-            createNoun(type,[noun],data,ui,False)
+        for noun in outside:            
+            createNoun(noun,[parent],data,ui,False)
 
 def generalized(data,ui):
-    ui.changeMessage("Which words do you want to add?")
-    answerUI=ui.hear()
-    nouns=hear.GetNouns(answerUI,ui)
-    for noun in nouns:        
+    ui.makeTables(data)
+    answer=utility.questionWithYesOrNo(ui,"Which words do you want to give as generalization(inheritance parent)?\n\nFor example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n")
+    # take the parent
+    if answer==1:
+        # from the database
         ui.rememberTableOnce()
-        ui.changeMessage("Which words from DataBase do you want to be categorized as generalized with the word\""+noun+"\"\n Give it as it is in the DataBase\n")
+        ui.changeMessage("Which words do you want to take from the DataBase to be the Generalization(parent)?\n\nGive it as it is in the DataBase\n")
         answerUI=ui.hear()
         parents=hear.FindNounsInDataBase(answerUI,data,ui)
-        if parents==None:
+    else:
+        # new word
+        ui.rememberTableOnce()
+        ui.changeMessage("Which words do you want to add to be the Generalization(parent)?")
+        answerUI=ui.hear()
+        parents=hear.GetNouns(answerUI,ui)
+        for parent in parents:
+            if createNoun(parent,[],data,ui,False)==False:
+                ui.changeMessage("Something went wrong with saving the word\n")
+
+    for parent in parents:        
+        if parent not in data[0].keys():
+            continue
+
+        ui.makeTables(data)
+        ui.changeMessage("Which words do you want to give to be generalized(inheritance child) from "+parent+"(inheritance parent)?\nIn essence, with which words the generalized word "+parent+" you gave is linked to?\n\nFor example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n")
+        answerUI=ui.hear()
+        nouns=hear.FindNounsInDataBase(answerUI,data,ui)
+            
+        if nouns==[]:
             ui.rememberOneTime("No data was found\n")
-        else:
-            createNoun(noun,parents,data,ui,False)
+            continue
+        for noun in nouns:
+            addInheritance(noun,[parent],data,ui)

@@ -12,16 +12,25 @@ class UI:
         self.txt=""
         self.msg=None
         self.win=None
+
+        self.butSentence=None
+        self.butGeneralize=None
+        self.butSpecify=None
+        self.butExit=None
+
         self.butTrue=None
         self.butFalse=None
-        self.butPack=False
+        self.butPackTrueorFalse=False
+        self.butPackMenu=False
         self.entry=None
         self.entryPack=False
+        
         self.frame1=None
         self.frame2=None
         self.frame3=None
         self.frame4=None
         self.frame5=None
+        
         self.flag=False
         self.answer=""
         self.rememberTxt=""
@@ -63,17 +72,42 @@ class UI:
         self.flag=False
         
     def gotTrue(self):
-        self.answer="Yes"
+        self.answer=1
         self.butTrue.config(state= "disabled")
         self.butFalse.config(state= "disabled")
         self.flag=False
-    
+
     def gotFalse(self):
-        self.answer="No"
+        self.answer=0
         self.butTrue.config(state= "disabled")
         self.butFalse.config(state= "disabled")
         self.flag=False
     
+    def gotSentence(self):
+        self.answer=0
+        self.butTrue.config(state= "disabled")
+        self.butFalse.config(state= "disabled")
+        self.flag=False
+    
+    def gotGeneralize(self):
+        self.answer=1
+        self.butTrue.config(state= "disabled")
+        self.butFalse.config(state= "disabled")
+        self.flag=False
+    
+    def gotSpecify(self):
+        self.answer=2
+        self.butTrue.config(state= "disabled")
+        self.butFalse.config(state= "disabled")
+        self.flag=False
+    
+    def gotExit(self):
+        self.answer=3
+        self.butTrue.config(state= "disabled")
+        self.butFalse.config(state= "disabled")
+        self.flag=False
+    
+
     def create(self):
         self.win = Tk() 
         self.win.geometry("1000x500") 
@@ -89,6 +123,11 @@ class UI:
 
         self.entry.config(state= "readonly")
         self.entry.bind("<Return>", self.gotText)
+
+        self.butSentence=Button(self.frame2,text="Competency Question",command=self.gotSentence)
+        self.butGeneralize=Button(self.frame2,text="Generalize",command=self.gotGeneralize)
+        self.butSpecify=Button(self.frame2,text="Specify",command=self.gotSpecify)
+        self.butExit=Button(self.frame2,text="Exit",command=self.gotExit)
 
         self.butTrue=Button(self.frame2,text="Yes",bg='green',fg="white",command=self.gotTrue)
         self.butFalse=Button(self.frame2,text="No",bg='red',fg="white",command=self.gotFalse)        
@@ -166,25 +205,43 @@ class UI:
         # Add Data in subjectTable
         theList=list(self.subjectTable.get_children())
         last=len(theList)
+        # for all the classes
         for key in data[0].keys():
-            i=0
-            for i in range(len(theList)):
-                item=self.subjectTable.item(i)
+            # check if it is already inside the table 
+            for j in range(len(theList)):
+                item=self.subjectTable.item(j)
                 
                 # change color
                 if item["values"][1] == key:
                     if data[0][key][3]==1:
-                        self.subjectTable.item(i,tags="used")
+                        self.subjectTable.item(j,tags="used")
                     else:
-                        self.subjectTable.item(i,tags="notUsed")
+                        self.subjectTable.item(j,tags="notUsed")
+                    
+                    # find the parents
+                    parent=""
+                    for tmp in  data[0][key][2]:
+                        parent+=tmp+" "
+                    if parent=="":
+                        parent="None"
+                    
+                    # change the parent if it is different
+                    if item["values"][2]!= parent:
+                        self.subjectTable.item(j,values=(item["values"][0],item["values"][1],data[0][key][2]))
+                    
                     break
-            if i == len(theList):   
+            # otherwise it was not inside the table
+            else :   
                 parent=""
                 for item in  data[0][key][2]:
                     parent+=item+" "
                 # insert them inside
-                self.subjectTable.insert(parent="",index="end",iid=last,text="",
-                values=(last,data[0][key][1],parent),tags="notUsed")
+                if parent!="":
+                    self.subjectTable.insert(parent="",index="end",iid=last,text="",
+                                            values=(last,data[0][key][1],parent),tags="notUsed")
+                else:
+                    self.subjectTable.insert(parent="",index="end",iid=last,text="",
+                                            values=(last,data[0][key][1],"None"),tags="notUsed")
                 if data[0][key][3]==1:
                     self.subjectTable.item(last,tags="used")
                 last+=1
@@ -213,6 +270,43 @@ class UI:
         self.rememberTable=True
         self.frame3.pack()
 
+    def hearMenu(self):
+        if self.flagTable==True:
+            self.frame3.pack_forget()
+            self.flagTable=False
+        
+        if self.rememberTable==True:
+            self.frame3.pack()
+            self.rememberTable=False
+            self.flagTable=True
+
+        if self.entryPack==True:
+            self.entry.pack_forget()
+            self.entryPack=False
+        if self.filePack==True:
+            self.butFile.pack_forget()
+            self.filePack=False
+        if self.butPackTrueorFalse==True:
+            self.butFalse.pack_forget()
+            self.butTrue.pack_forget()
+            self.butPackTrueorFalse=False
+
+        self.butPackMenu=True
+        self.butSentence.pack(side=LEFT,expand=True,fill=BOTH)
+        self.butGeneralize.pack(side=LEFT,expand=True,fill=BOTH)
+        self.butSpecify.pack(side=LEFT,expand=True,fill=BOTH)
+        self.butExit.pack(side=LEFT,expand=True,fill=BOTH)
+        self.butSentence.config(state= "normal")
+        self.butGeneralize.config(state= "normal")
+        self.butSpecify.config(state= "normal")
+        self.butExit.config(state= "normal")
+        
+        self.flag=True
+        while self.flag:
+            self.win.update_idletasks()
+            self.win.update()
+        return self.answer
+
     def hearTrueOrFalse(self):
         if self.flagTable==True:
             self.frame3.pack_forget()
@@ -229,12 +323,21 @@ class UI:
         if self.filePack==True:
             self.butFile.pack_forget()
             self.filePack=False
-        self.butPack=True
-        self.flag=True
+
+        if self.butPackMenu==True:
+            self.butSentence.pack_forget()
+            self.butSpecify.pack_forget()
+            self.butGeneralize.pack_forget()
+            self.butExit.pack_forget()
+            self.butPackMenu=False
+        
+        self.butPackTrueorFalse=True
         self.butTrue.pack(side=LEFT,expand=True,fill=BOTH)
         self.butFalse.pack(side=RIGHT,expand=True,fill=BOTH)
         self.butTrue.config(state= "normal")
         self.butFalse.config(state= "normal")
+        
+        self.flag=True
         while self.flag:
             self.win.update_idletasks()
             self.win.update()
@@ -250,15 +353,22 @@ class UI:
             self.rememberTable=False
             self.flagTable=True
 
-        if self.butPack==True:
+        if self.butPackTrueorFalse==True:
             self.butFalse.pack_forget()
             self.butTrue.pack_forget()
-            self.butPack=False
+            self.butPackTrueorFalse=False
+        
+        if self.butPackMenu==True:
+            self.butSentence.pack_forget()
+            self.butSpecify.pack_forget()
+            self.butGeneralize.pack_forget()
+            self.butExit.pack_forget()
+            self.butPackMenu=False
+
         if self.filePack==True:
             self.butFile.pack_forget()
             self.filePack=False
 
-        self.flag=True
         self.entryPack=True
         self.entry.pack() 
         self.entry.config(state= "normal")
@@ -267,12 +377,14 @@ class UI:
             self.butFile.pack()
             self.filePack=True
             self.flagFile=False
+
+        self.flag=True
         while self.flag:
             self.win.update_idletasks()
             self.win.update()
         return self.answer
 
-    def close(self):
-        messagebox.showinfo("Clossing...",  "I would like to thank you for using this ChatBot to develop your ontology!")
+    def close(self,path):
+        messagebox.showinfo("Clossing...",  "I would like to thank you for using this ChatBot to develop your ontology! Check in the path: "+path+"\n")
 
     

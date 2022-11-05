@@ -8,21 +8,16 @@ def questionWithYesOrNo(ui,txt):
     ui.changeMessage(txt)
 
     # get answer
-    answerUI=ui.hearTrueOrFalse()
-    answer=hear.GetTrueOrFalse(answerUI)
-
-    return answer
+    return ui.hearTrueOrFalse()
 
 def convertStringToLowerTittle(txt):
     # convert the name to lower with capital case
     labels=txt.split()
-    flag=False
     theLabel=""
     for label in labels:
-        if flag==True:
-            theLabel+=label.title()
+        if theLabel=="":
+            theLabel=label.lower()
         else:
-            theLabel+=label.lower()
-            flag=True
+            theLabel=theLabel+"_"+label.title()
     return theLabel
     

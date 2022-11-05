@@ -42,18 +42,66 @@ def checkInheritance(word,parent,ui):
     else:
         return 0
 
+def addInheritance(noun,parent,data,ui):
+    # so check for the inheritance
+    keepParent=[]
+    keepRelation=[]
+    if parent!=None:
+        for theParent in parent:
+            result=checkInheritance(noun,theParent,ui)
+            if result==0:
+                keepParent.append(theParent)
+            elif result==1:
+                relation=theParent.title()+"_ComponentOf_"+noun.title()
+                keepRelation.append((relation,theParent,noun))
+            elif result==2:
+                relation=noun.title()+"_ComponentOf_"+theParent.title()
+                keepRelation.append((relation,noun,theParent))
+            elif result==3:
+                relation=theParent.title()+"_ComposedOf_"+noun.title()
+                keepRelation.append((relation,theParent,noun))                
+            elif result==4:
+                relation=noun.title()+"_ComposedOf_"+theParent.title()
+                keepRelation.append((relation,noun,theParent))
+    
+    # add parents
+    for theParent in keepParent:        
+        manager.addParent(data[2],data[0][noun][0],data[0][theParent][0])
+        data[0][noun][2].append(theParent)
+
+    # add relations
+    for relation,object1,object2 in keepRelation:
+
+        # one object was not kept
+        if object1 not in data[0].keys() or object2 not in data[0].keys():
+            ui.rememberOneTime("One object does not exist so \""+relation+"\" is not created\n")
+            continue 
+
+        # mark as seen
+        data[0][object1][3]=1
+        data[0][object2][3]=1
+        
+        # create relation
+        if relation not in data[1].keys():
+            # create the relationship
+            data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][object1][0],data[0][object2][0]),[object1],relation,object2]
+        else:
+            manager.AddConnection(data[2],data[1][relation][0],data[0][object1][0])
+            data[1][relation][2].append(object1)
+    return True
+
 def createNoun(noun,parent,data,ui,moreGeneralized=True):
         
     # check if the word is in data base
     for word in data[0].keys():
         if noun.lower()==word.lower():
             ui.rememberOneTime("The word \""+noun+"\" is already in the dataBase\n")
-            return
+            return False
 
-    ui.rememberTableOnce()
+    ui.makeTables(data)
     answer= utility.questionWithYesOrNo(ui,"Shall I keep \""+noun+"\"\n")
     if answer==-1:
-        return
+        return False
 
     # so check for the inheritance
     keepParent=[]
@@ -64,18 +112,18 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
             if result==0:
                 keepParent.append(theParent)
             elif result==1:
-                relation="componentOf"+noun.title()
+                relation=theParent.title()+"_ComponentOf_"+noun.title()
                 keepRelation.append((relation,theParent,noun))
             elif result==2:
-                relation="componentOf"+noun.title()
+                relation=noun.title()+"_ComponentOf_"+theParent.title()
                 keepRelation.append((relation,noun,theParent))
             elif result==3:
-                relation="composedOf"+noun.title()
+                relation=theParent.title()+"_ComposedOf_"+noun.title()
                 keepRelation.append((relation,theParent,noun))                
             elif result==4:
-                relation="composedOf"+noun.title()
+                relation=noun.title()+"_ComposedOf_"+theParent.title()
                 keepRelation.append((relation,noun,theParent))
-
+    
 
     answer= utility.questionWithYesOrNo(ui,talk.FindDefinition(noun))
     found=False
@@ -92,7 +140,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
         # you have given a definition
         (definition,definedBy)=findYourDefinition(noun,ui)
         if definition==None:
-            return 
+            return True
 
         # create the object
         data[0][noun]=[manager.CreateObject(data[2],noun),noun,[],0]
@@ -110,7 +158,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
         # one object was not kept
         if object1 not in data[0].keys() or object2 not in data[0].keys():
             ui.rememberOneTime("One object does not exist so \""+relation+"\" is not created\n")
-            continue
+            continue 
 
         # mark as seen
         data[0][object1][3]=1
@@ -123,7 +171,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
         else:
             manager.AddConnection(data[2],data[1][relation][0],data[0][object1][0])
             data[1][relation][2].append(object1)
-
+    return True
 
 def findYourDefinition(noun,ui):
 

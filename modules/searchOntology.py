@@ -11,7 +11,6 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
     url="https://www.ebi.ac.uk/ols/api/ontologies/"+ontology+"/"+find+"?id="+obo_id
     response = requests.get(url)
     dataBase=response.json()
-    keep=[]
     mark=6
     count=0
 
@@ -93,14 +92,13 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
         data[0][term][0].iri=current["iri"]
 
         manager.Explanation(data[2],data[0][term][0],description,current["ontology_name"])
-        # ui.rememberTableOnce()
 
         # check if it can be generalized
-        if (parent==[None] and theResponse["is_root"]==False and moreGeneralize==True):
+        if (parent==[] and theResponse["is_root"]==False and moreGeneralize==True):
             answer=utility.questionWithYesOrNo(ui,talk.termKeepCategories(term,"parents"))
             if answer==1:
                 acceptSearch(term,current["ontology_name"],current["obo_id"],"parents",data,ui)
-        elif(parent!=[None]):
+        elif(parent!=[]):
             ui.rememberOneTime("It is the root of your given ontology\n")
         else:
             ui.rememberOneTime("It is the root of the \""+current["ontology_name"]+"\"\n")
@@ -120,14 +118,28 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
 
     
 def searchForTerm(data,term,parent,ui,moreGeneralized):
-    search_url="http://www.ebi.ac.uk/ols/api/search?q="+term
-    response = requests.get(search_url)
+    txt=""
+    for theTerm in term.split("_"):
+        if txt=="":
+            txt=theTerm.lower()
+        else:
+            txt=txt+"+"+theTerm.lower()
+    search_url="http://www.ebi.ac.uk/ols/api/search"
+    print(search_url+"?q="+txt)
+    response = requests.get(search_url+"?q="+txt)
     # check if there is ontology 
     if response.status_code%100 ==4 or response.status_code%100 ==5:
         ui.rememberOneTime("No ontology found\n")
         return (None,None,None)
     
     searchAnswer=response.json()
+    txt=""
+    for theTerm in term.split("_"):
+        if txt=="":
+            txt=theTerm.lower()
+        else:
+            txt=txt+" "+theTerm.lower()
+
     flag=True
     previous=None
     # look only the first 5 ontologies
@@ -137,7 +149,7 @@ def searchForTerm(data,term,parent,ui,moreGeneralized):
 
         current=searchAnswer['response']['docs'][count]
         # check if it is the term you want
-        if current["label"].lower() == term :
+        if current["label"].lower() == txt :
             previous=searchAnswer['response']['docs'][count]
             # check if you want the this ontology
             used =handleOntology(data,term,parent,current,ui,moreGeneralized)
