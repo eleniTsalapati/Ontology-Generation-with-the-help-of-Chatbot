@@ -180,20 +180,23 @@ def FindNounsInDataBase(answer,data,ui):
     insideDataBase=[]
     notInside=[]
 
-    wordTokens = word_tokenize(answer.lower())
+    tokens = word_tokenize(answer.lower())
+    tagged=pos_tag(tokens)
     
     keys=data[0].keys()
 
-    for word in wordTokens:
-        if word=="None":
+    for word in tagged:
+        if word[0]=="None":
             continue
         for key in keys:
-            if word.lower() == key.lower():
+            if word[0].lower() == key.lower():
                 if ui!=None:
-                    ui.rememberOneTime("In the DataBase I found the \""+word+"\"\n")
+                    ui.rememberOneTime("In the DataBase I found the \""+key+"\"\n")
                 insideDataBase.append(key)
-            else:
-                notInside.append(key)
+                break
+        else:
+            if 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
+                notInside.append(word[0])
     return (insideDataBase,notInside)
 
 def FindNounInDataBase(answer,data):
