@@ -11,7 +11,9 @@ class UI:
     def __init__(self):
         self.txt=""
         self.msg=None
-        self.win=None
+        self.win=None  
+
+        self.entryMode=0
 
         self.butPackDefinition=False
         self.butSearch=None
@@ -154,6 +156,32 @@ class UI:
         self.butGeneralize.config(state= "disabled")
         self.flag=False
     
+    def displaySelectedItem1(self,a):
+        # add data
+        selectedItem = self.subjectTable.selection()[0]
+        if self.entry.get()=="" or self.entry.get()==" ":
+            self.entry.insert(END, self.subjectTable.item(selectedItem)['values'][1])
+        else:
+            if self.entryMode==0:
+                self.entry.insert(END, " "+self.subjectTable.item(selectedItem)['values'][1])
+            else:
+                self.entry.insert(END, ", "+self.subjectTable.item(selectedItem)['values'][1])
+
+    def displaySelectedItem2(self,a):
+        # add data
+
+        selectedItem = self.relationsTable.selection()[0]
+        value=self.relationsTable.item(selectedItem)['values'][1]+" "
+        value=value+self.relationsTable.item(selectedItem)['values'][2]+" "
+        value=value+self.relationsTable.item(selectedItem)['values'][3]
+
+        if self.entry.get()=="" or self.entry.get()==" ":
+            self.entry.insert(END,value)
+        else:
+            if self.entryMode==0:
+                self.entry.insert(END, " "+value)
+            else:
+                self.entry.insert(END, ", "+value)
 
     def create(self):
         self.win = Tk() 
@@ -216,7 +244,7 @@ class UI:
 
         self.subjectTable.tag_configure('used', background='white')
         self.subjectTable.tag_configure('notUsed', background='orange')
-
+        self.subjectTable.bind("<<TreeviewSelect>>", self.displaySelectedItem1)
         self.subjectTable.pack()
 
         # THE OTHER TABLE
@@ -245,7 +273,7 @@ class UI:
         self.relationsTable.heading("object1",text="Object 1",anchor=CENTER)
         self.relationsTable.heading("relation",text="Relation",anchor=CENTER)
         self.relationsTable.heading("object2",text="Object 2",anchor=CENTER)
-
+        self.relationsTable.bind("<<TreeviewSelect>>", self.displaySelectedItem2)
         self.relationsTable.pack()    
 
         txt="The red rows have not yet been INSERTED\n"
@@ -323,6 +351,8 @@ class UI:
         self.frame3.pack()
 
     def hearMenu(self):
+        self.entryMode=0
+
         if self.flagTable==True:
             self.frame3.pack_forget()
             self.flagTable=False
@@ -367,6 +397,8 @@ class UI:
         return self.answer
 
     def hearDefinition(self):
+        self.entryMode=0
+
         if self.flagTable==True:
             self.frame3.pack_forget()
             self.flagTable=False
@@ -411,6 +443,8 @@ class UI:
         return self.answer
 
     def hearTrueOrFalse(self):
+        self.entryMode=0
+
         if self.flagTable==True:
             self.frame3.pack_forget()
             self.flagTable=False
@@ -452,7 +486,9 @@ class UI:
             self.win.update()
         return self.answer
 
-    def hear(self):
+    def hear(self,entryMode=0):
+        self.entryMode=entryMode
+
         if self.flagTable==True:
             self.frame3.pack_forget()
             self.flagTable=False

@@ -21,3 +21,8 @@ def convertStringToLowerTittle(txt):
             theLabel=theLabel+"_"+label.title()
     return theLabel
     
+def FindNounsInDataBase(data,ui,txt):
+    ui.makeTables(data)
+    ui.changeMessage(txt)
+    answerUI=ui.hear(1)
+    return hear.FindNounsInDataBase(answerUI,data,ui)

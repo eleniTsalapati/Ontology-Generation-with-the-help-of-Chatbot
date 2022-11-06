@@ -198,9 +198,3 @@ def FindNounsInDataBase(answer,data,ui):
             if 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
                 notInside.append(word[0])
     return (insideDataBase,notInside)
-
-def FindNounInDataBase(answer,data):
-    theList=FindNounsInDataBase(answer,data,None)
-    if theList==None or theList==[]:
-        return None
-    return theList[0]

@@ -50,27 +50,19 @@ def Sentence(data,ui):
 
 
 def specialize(data,ui):
-    ui.changeMessage("Which words from the dataBase do you want to specialize? In essence, you will add a(n) (inheritance)child to this word.\nGive it as it is in the DataBase\n\n For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n")
-    answerUI=ui.hear()
-    parents,_=hear.FindNounsInDataBase(answerUI,data,ui)
+    parents,_=utility.FindNounsInDataBase(data,ui,"Which words from the dataBase do you want to specialize? In essence, you will add a(n) (inheritance)child to this word.\nGive it as it is in the DataBase\n\n For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n")
     for parent in parents:        
-        ui.makeTables(data)
-        ui.changeMessage("Which words do you want to give as specialization (inheritance child) of "+parent+"(inheritance parent)?\n The words can be inside the DataBase (give it as it is) or outside of it.\n\n For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n")
-        answerUI=ui.hear()
-        inside,outside=hear.FindNounsInDataBase(answerUI,data,ui)
+        inside,outside=utility.FindNounsInDataBase(data,ui,"Which words do you want to give as specialization (inheritance child) of "+parent+"(inheritance parent)?\n The words can be inside the DataBase (give it as it is) or outside of it.\n\n For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n")
         # if they are in the database
         for noun in inside:
             addInheritance(noun,[parent],data,ui)
-
         # for each type from the different types 
         for noun in outside:            
             createNoun(noun,[parent],data,ui,False)
 
 def generalized(data,ui):
-    ui.makeTables(data)
-    ui.changeMessage("Which words do you want to give as generalization(inheritance parent)?\n\nFor example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n It can be in the DataBase or not.\n")
-    answerUI=ui.hear()
-    inside,outside=hear.FindNounsInDataBase(answerUI,data,ui)
+
+    inside,outside=utility.FindNounsInDataBase(data,ui,"Which words do you want to give as generalization(inheritance parent)?\n\nFor example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n It can be in the DataBase or not.\n")
     for parent in outside:
         if createNoun(parent,[],data,ui,False)==False:
             ui.changeMessage("Something went wrong with saving the word\n")
@@ -79,13 +71,10 @@ def generalized(data,ui):
         if parent not in data[0].keys():
             continue
 
-        ui.makeTables(data)
-        ui.changeMessage("Which words do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\nIn essence, with which words the generalized word "+parent+" you gave is linked to?\n\nFor example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n")
-        answerUI=ui.hear()
-        nouns,_=hear.FindNounsInDataBase(answerUI,data,ui)
-            
+        nouns,_=utility.FindNounsInDataBase(data,ui,"Which words do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\nIn essence, with which words the generalized word "+parent+" you gave is linked to?\n\nFor example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n")
         if nouns==[]:
             ui.rememberOneTime("No data was found\n")
             continue
+        
         for noun in nouns:
             addInheritance(noun,[parent],data,ui)
