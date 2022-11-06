@@ -50,9 +50,9 @@ def Sentence(data,ui):
 
 
 def specialize(data,ui):
-    parents,_=utility.FindNounsInDataBase(data,ui,"Which words from the dataBase do you want to specialize? In essence, you will add a(n) (inheritance)child to this word.\nGive it as it is in the DataBase\n\n For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n")
+    parents,_=utility.FindNounsInDataBase(data,ui,talk.WhatToSpecialize())
     for parent in parents:        
-        inside,outside=utility.FindNounsInDataBase(data,ui,"Which words do you want to give as specialization (inheritance child) of "+parent+"(inheritance parent)?\n The words can be inside the DataBase (give it as it is) or outside of it.\n\n For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n")
+        inside,outside=utility.FindNounsInDataBase(data,ui,talk.WhatIsTheSpecialization(parent))
         # if they are in the database
         for noun in inside:
             addInheritance(noun,[parent],data,ui)
@@ -62,7 +62,7 @@ def specialize(data,ui):
 
 def generalized(data,ui):
 
-    inside,outside=utility.FindNounsInDataBase(data,ui,"Which words do you want to give as generalization(inheritance parent)?\n\nFor example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n It can be in the DataBase or not.\n")
+    inside,outside=utility.FindNounsInDataBase(data,ui,talk.WhatIsTheGeneralization())
     for parent in outside:
         if createNoun(parent,[],data,ui,False)==False:
             ui.changeMessage("Something went wrong with saving the word\n")
@@ -71,7 +71,7 @@ def generalized(data,ui):
         if parent not in data[0].keys():
             continue
 
-        nouns,_=utility.FindNounsInDataBase(data,ui,"Which words do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\nIn essence, with which words the generalized word "+parent+" you gave is linked to?\n\nFor example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n")
+        nouns,_=utility.FindNounsInDataBase(data,ui,talk.WhatToGeneralize(parent))
         if nouns==[]:
             ui.rememberOneTime("No data was found\n")
             continue

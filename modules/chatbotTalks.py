@@ -26,6 +26,36 @@ def WhatOntologyToAnswer():
     txt+="Not Recognize: Cat eat fish\n"
     return txt
 
+def WhatToSpecialize():
+    txt="Which words from the dataBase do you want to specialize?\n"
+    txt+="In essence, you will add a(n) (inheritance) child to this word.\n"
+    txt+="For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n\n"
+    txt+="Give it as it is in the DataBase\n\n"
+    txt+="You can also select the word form the table down bellow.\n"
+    return txt
+
+def WhatIsTheSpecialization(parent):
+    txt="Which words do you want to give as specialization (inheritance child) of "+parent+" (inheritance parent)?\n"
+    txt+="For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n\n"
+    txt+="The words can be either be from the DataBase or not.\n\n"
+    txt+="You can also select the word form the table down bellow.\n"
+    return txt
+
+def WhatIsTheGeneralization():
+    txt="Which words do you want to give as generalization(inheritance parent)?\n"
+    txt+="For example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n\n"
+    txt+="The words can be either be from the DataBase or not.\n\n"
+    txt+="You can also select the word form the table down bellow.\n"
+    return txt
+    
+def WhatToGeneralize(parent):
+    txt="Which words do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\n"
+    txt+="In essence, with which words the generalized word "+parent+" you gave is linked to?\n"
+    txt+="For example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n\n"
+    txt+="The words can be either be from the DataBase or not.\n\n"
+    txt+="You can also select the word form the table down bellow.\n"
+    return txt
+
 def CouldNotUnderstand():
     txt="\n\n Sorry but I could not understand your answer.\n\n"
     return txt
