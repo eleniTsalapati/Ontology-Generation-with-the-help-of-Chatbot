@@ -3,7 +3,6 @@ import modules.chatbotTalks as talk
 import modules.chatbotHears as hear
 
 def questionWithYesOrNo(ui,txt):
-    answer=0
     # do the question here
     ui.changeMessage(txt)
 
@@ -22,7 +21,6 @@ def convertStringToLowerTittle(txt):
     return theLabel
     
 def FindNounsInDataBase(data,ui,txt):
-    ui.makeTables(data)
     ui.changeMessage(txt)
     answerUI=ui.hear(1)
     return hear.FindNounsInDataBase(answerUI,data,ui)

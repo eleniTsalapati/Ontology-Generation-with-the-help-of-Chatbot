@@ -71,23 +71,8 @@ def addInheritance(noun,parent,data,ui):
 
     # add relations
     for relation,object1,object2 in keepRelation:
+        createRelation(data,ui,object1,relation,object2)
 
-        # one object was not kept
-        if object1 not in data[0].keys() or object2 not in data[0].keys():
-            ui.rememberOneTime("One object does not exist so \""+relation+"\" is not created\n")
-            continue 
-
-        # mark as seen
-        data[0][object1][3]=1
-        data[0][object2][3]=1
-        
-        # create relation
-        if relation not in data[1].keys():
-            # create the relationship
-            data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][object1][0],data[0][object2][0]),[object1],relation,object2]
-        else:
-            manager.AddConnection(data[2],data[1][relation][0],data[0][object1][0])
-            data[1][relation][2].append(object1)
     return True
 
 def createNoun(noun,parent,data,ui,moreGeneralized=True):
@@ -165,21 +150,29 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
     
         # add relations
         for relation,object1,object2 in keepRelation:
-
-            # one object was not kept
-            if object1 not in data[0].keys() or object2 not in data[0].keys():
-                ui.rememberOneTime("One object does not exist so \""+relation+"\" is not created\n")
-                continue 
-
-            # mark as seen
-            data[0][object1][3]=1
-            data[0][object2][3]=1
-            
-            # create relation
-            if relation not in data[1].keys():
-                # create the relationship
-                data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][object1][0],data[0][object2][0]),[object1],relation,object2]
-            else:
-                manager.AddConnection(data[2],data[1][relation][0],data[0][object1][0])
-                data[1][relation][2].append(object1)
+            createRelation(data,ui,object1,relation,object2)
     return True
+
+def createRelation(data,ui,obj1,relation,obj2):
+    
+    # one object was not kept
+    if obj1 not in data[0].keys() or obj2 not in data[0].keys():
+        return
+
+    relation=obj1+"_"+relation.title()+"_"+obj2.title()
+
+    ui.makeTables(data)
+    answer=utility.questionWithYesOrNo(ui,"Shall I keep "+relation+" ?\n")
+    if answer==-1:
+        return
+
+    # mark as used
+    data[0][obj1][3]=1
+    data[0][obj2][3]=1
+
+    if relation not in data[1].keys():
+        # create the relationship
+        data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0]),[obj1],relation,obj2]
+    else:
+        manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0])
+        data[1][relation][1].append(obj1)

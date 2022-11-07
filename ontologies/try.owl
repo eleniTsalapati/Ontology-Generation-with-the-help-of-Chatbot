@@ -13,6 +13,16 @@
   <rdfs:range rdf:resource="#fish"/>
 </owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#fish_Is_Animal">
+  <rdfs:domain rdf:resource="#fish"/>
+  <rdfs:range rdf:resource="#animal"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#factory_Is_Fuel_Cell">
+  <rdfs:domain rdf:resource="#factory"/>
+  <rdfs:range rdf:resource="#fuel_Cell"/>
+</owl:ObjectProperty>
+
 <owl:AnnotationProperty rdf:about="#description"/>
 
 <owl:Class rdf:about="#cat">
@@ -31,6 +41,18 @@
 <owl:Class rdf:about="#animal">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">animal</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#factory">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">factory</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#fuel_Cell">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fuel_Cell</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 

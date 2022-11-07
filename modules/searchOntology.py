@@ -75,7 +75,7 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
         description=current["description"][0]
 
     # ask if you want to keep it
-    ui.rememberTableOnce()
+    ui.makeTables(data)
     answer=utility.questionWithYesOrNo(ui,talk.termFoundNoDescription(term,current["ontology_name"]))        
 
     if answer==1:

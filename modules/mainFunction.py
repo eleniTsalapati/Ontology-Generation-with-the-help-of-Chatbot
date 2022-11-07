@@ -4,11 +4,12 @@ import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
 import modules.chatbotHears as hear
 import modules.utility as utility
-from modules.classCreation import *
+from modules.creationFunctions import *
 
 def Sentence(data,ui):
 
     # See what the ontology should answer
+    ui.makeTables(data)
     ui.changeMessage(talk.WhatOntologyToAnswer())
     answerUI=ui.hear()
     (nouns,relationships)=hear.WhatOntologyToAnswer(answerUI,ui)
@@ -26,32 +27,16 @@ def Sentence(data,ui):
 
     # for all relationships
     for relation in relationships.keys():
-
         # if one object is not created then do not create the relationship
         obj1=relationships[relation][0]
         obj2=relationships[relation][1]
-
-        # one object was not kept
-        if obj1 not in data[0].keys() or obj2 not in data[0].keys():
-            continue
-
-        relation=obj1.title()+"_"+relation.title()+"_"+obj2.title()
-
-        # mark as used
-        data[0][obj1][3]=1
-        data[0][obj2][3]=1
-
-        if relation not in data[1].keys():
-            # create the relationship
-            data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0]),[obj1],relation,obj2]
-        else:
-            manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0])
-            data[1][relation][1].append(obj1)
-
+        createRelation(data,ui,obj1,relation,obj2)
 
 def specialize(data,ui):
+    ui.makeTables(data)
     parents,_=utility.FindNounsInDataBase(data,ui,talk.WhatToSpecialize())
     for parent in parents:        
+        ui.makeTables(data)
         inside,outside=utility.FindNounsInDataBase(data,ui,talk.WhatIsTheSpecialization(parent))
         # if they are in the database
         for noun in inside:
@@ -61,7 +46,7 @@ def specialize(data,ui):
             createNoun(noun,[parent],data,ui,False)
 
 def generalized(data,ui):
-
+    ui.makeTables(data)
     inside,outside=utility.FindNounsInDataBase(data,ui,talk.WhatIsTheGeneralization())
     for parent in outside:
         if createNoun(parent,[],data,ui,False)==False:
@@ -71,6 +56,7 @@ def generalized(data,ui):
         if parent not in data[0].keys():
             continue
 
+        ui.makeTables(data)
         nouns,_=utility.FindNounsInDataBase(data,ui,talk.WhatToGeneralize(parent))
         if nouns==[]:
             ui.rememberOneTime("No data was found\n")

@@ -9,6 +9,7 @@ from turtle import left, right
 
 class UI:
     def __init__(self):
+
         self.txt=""
         self.msg=None
         self.win=None  
@@ -49,9 +50,11 @@ class UI:
         self.flagFile=True
         self.filePack=False
 
+        self.lenSubjectTable=0
         self.subjectTable=None 
         self.relationsTable=None
         self.flagTable=True 
+        self.lenRememberTable=0
         self.rememberTable=False
 
     def rememberOneTime(self,txt):
@@ -160,20 +163,20 @@ class UI:
         # add data
         selectedItem = self.subjectTable.selection()[0]
         if self.entry.get()=="" or self.entry.get()==" ":
-            self.entry.insert(END, self.subjectTable.item(selectedItem)['values'][1])
+            self.entry.insert(END, self.subjectTable.item(selectedItem)['values'][0])
         else:
             if self.entryMode==0:
-                self.entry.insert(END, " "+self.subjectTable.item(selectedItem)['values'][1])
+                self.entry.insert(END, " "+self.subjectTable.item(selectedItem)['values'][0])
             else:
-                self.entry.insert(END, ", "+self.subjectTable.item(selectedItem)['values'][1])
+                self.entry.insert(END, ", "+self.subjectTable.item(selectedItem)['values'][0])
 
     def displaySelectedItem2(self,a):
         # add data
 
         selectedItem = self.relationsTable.selection()[0]
-        value=self.relationsTable.item(selectedItem)['values'][1]+" "
-        value=value+self.relationsTable.item(selectedItem)['values'][2]+" "
-        value=value+self.relationsTable.item(selectedItem)['values'][3]
+        value=self.relationsTable.item(selectedItem)['values'][0]+" "
+        value=value+self.relationsTable.item(selectedItem)['values'][1]+" "
+        value=value+self.relationsTable.item(selectedItem)['values'][2]
 
         if self.entry.get()=="" or self.entry.get()==" ":
             self.entry.insert(END,value)
@@ -230,15 +233,13 @@ class UI:
         self.subjectTable.configure(yscrollcommand = self.scroll1.set)
         
         # Definition of Columns
-        self.subjectTable['columns']=("id","name","parent")
+        self.subjectTable['columns']=("name","parent")
         self.subjectTable.column("#0",width=0,stretch=NO)
-        self.subjectTable.column("id",anchor=CENTER,width=80,stretch=YES,)
         self.subjectTable.column("name",anchor=CENTER,width=120,stretch=YES)
         self.subjectTable.column("parent",anchor=CENTER,width=120,stretch=YES)
 
         # Definition of Headings
         self.subjectTable.heading("#0",text="",anchor=CENTER)
-        self.subjectTable.heading("id",text="ID",anchor=CENTER)
         self.subjectTable.heading("name",text="Name",anchor=CENTER)
         self.subjectTable.heading("parent",text="Parent",anchor=CENTER)
 
@@ -260,16 +261,14 @@ class UI:
         self.relationsTable.configure(yscrollcommand = self.scroll2.set)
 
         # Definition of Columns
-        self.relationsTable['columns']=("id","object1","relation","object2")
+        self.relationsTable['columns']=("object1","relation","object2")
         self.relationsTable.column("#0",width=0,stretch=NO)
-        self.relationsTable.column("id",anchor=CENTER,width=80)
         self.relationsTable.column("object1",anchor=CENTER,width=80)
         self.relationsTable.column("relation",anchor=CENTER,width=80)
         self.relationsTable.column("object2",anchor=CENTER,width=80)
 
         # Definition of Headings
         self.relationsTable.heading("#0",text="",anchor=CENTER)
-        self.relationsTable.heading("id",text="ID",anchor=CENTER)
         self.relationsTable.heading("object1",text="Object 1",anchor=CENTER)
         self.relationsTable.heading("relation",text="Relation",anchor=CENTER)
         self.relationsTable.heading("object2",text="Object 2",anchor=CENTER)
@@ -282,9 +281,18 @@ class UI:
         self.msg2.pack()
 
     def makeTables(self,data):
+        if(self.lenSubjectTable<len(data[0].keys())):
+            self.updateTable(data)
+        elif (self.lenRememberTable<len(data[0].keys())):
+            self.updateTable(data)
+        else:
+            self.rememberTableOnce()
+        
+    def updateTable(self,data):
+        print(self.lenSubjectTable)
+        print(len(data[0]))
         # Add Data in subjectTable
         theList=list(self.subjectTable.get_children())
-        last=len(theList)
         # for all the classes
         for key in data[0].keys():
             # check if it is already inside the table 
@@ -292,7 +300,7 @@ class UI:
                 item=self.subjectTable.item(j)
                 
                 # change color
-                if item["values"][1] == key:
+                if item["values"][0] == key:
                     if data[0][key][3]==1:
                         self.subjectTable.item(j,tags="used")
                     else:
@@ -306,8 +314,8 @@ class UI:
                         parent="None"
                     
                     # change the parent if it is different
-                    if item["values"][2]!= parent:
-                        self.subjectTable.item(j,values=(item["values"][0],item["values"][1],data[0][key][2]))
+                    if item["values"][1]!= parent:
+                        self.subjectTable.item(j,values=(item["values"][0],data[0][key][2]))
                     
                     break
             # otherwise it was not inside the table
@@ -317,14 +325,14 @@ class UI:
                     parent+=item+" "
                 # insert them inside
                 if parent!="":
-                    self.subjectTable.insert(parent="",index="end",iid=last,text="",
-                                            values=(last,data[0][key][1],parent),tags="notUsed")
+                    self.subjectTable.insert(parent="",index="end",iid=self.lenSubjectTable,text="",
+                                            values=(data[0][key][1],parent),tags="notUsed")
                 else:
-                    self.subjectTable.insert(parent="",index="end",iid=last,text="",
-                                            values=(last,data[0][key][1],"None"),tags="notUsed")
+                    self.subjectTable.insert(parent="",index="end",iid=self.lenSubjectTable,text="",
+                                            values=(data[0][key][1],"None"),tags="notUsed")
                 if data[0][key][3]==1:
-                    self.subjectTable.item(last,tags="used")
-                last+=1
+                    self.subjectTable.item(self.lenSubjectTable,tags="used")
+                self.lenSubjectTable+=1
 
 
         # Add Data in relation
@@ -336,13 +344,12 @@ class UI:
             start=int(theList[-1])+1
         # for the keys from the start to the end
         keys=list(data[1].keys())
-        last=len(keys)
         for i in range(start,len(keys)):
             for obj1 in data[1][keys[i]][1]:
                 # insert them inside
-                self.relationsTable.insert(parent="",index="end",iid=last,text="",
-                values=(i+1,obj1,data[1][keys[i]][2],data[1][keys[i]][3]))
-                last+=1
+                self.relationsTable.insert(parent="",index="end",iid=self.lenRememberTable,text="",
+                values=(obj1,data[1][keys[i]][2],data[1][keys[i]][3]))
+                self.lenRememberTable+=1
         self.rememberTable=True
         self.frame3.pack()
 

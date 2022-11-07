@@ -40,13 +40,10 @@ while(answer!=3):
     answer=ui.hearMenu()
     
     if answer == 0:
-        ui.rememberTableOnce()
         Sentence(data,ui)
     elif answer == 1:
-        ui.rememberTableOnce()
         generalized(data,ui)
     elif answer == 2:
-        ui.rememberTableOnce()
         specialize(data,ui)
     
 
