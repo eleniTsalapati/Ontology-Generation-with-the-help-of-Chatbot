@@ -4,10 +4,17 @@
 
 def Welcome():
     txt="Welcome, User!\n"
-    txt+="This Chatbot is made to create an Ontology.\n"
-    txt+="I will ask you questions about the ontology and you have to answer them."
-    txt+="The ontology will be created by providing to the chatbot the competency questions and " 
-    txt+="then by answering clarifying questions posed by the chatbot. "
+    txt+="This chatbot will help you develop your ontology!\n"
+    txt+="From the given sentences (competency questions) it can create:\n"
+    txt+="  -Hierarchy of classes\n"
+    txt+="  -Object properties\n"
+    txt+="  -Domain and range restrictions of object properties\n\n"
+    txt+="From the generalization it can create:\n"
+    txt+="  -Hierarchy of classes\n"
+    txt+="  -Object properties\n\n"
+    txt+="From the specialization it can create:\n"
+    txt+="  -Hierarchy of classes\n"
+    txt+="  -Object properties\n\n"
     txt+="Whenever this is possible external ontologies by https://www.ebi.ac.uk/ols/index are reused.\n"
     txt+="Let's start!!\n\n"
     txt+="In which file shall I save the ontology?\n\n"
@@ -27,33 +34,33 @@ def WhatOntologyToAnswer():
     return txt
 
 def WhatToSpecialize():
-    txt="Which words from the ontology do you want to specialize?\n"
-    txt+="In essence, you will add a(n) (inheritance) child to this word.\n"
+    txt="Which classes from the ontology do you want to specialize?\n"
+    txt+="In essence, you will add a(n) (inheritance) child to this class.\n"
     txt+="For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n\n"
     txt+="Give it as it is in the ontology\n\n"
-    txt+="You can also select the word form the table down bellow.\n"
+    txt+="You can also select the class form the table down bellow.\n"
     return txt
 
 def WhatIsTheSpecialization(parent):
-    txt="Which words do you want to give as specialization (inheritance child) of "+parent+" (inheritance parent)?\n"
+    txt="Which classes do you want to give as specialization (inheritance child) of "+parent+" (inheritance parent)?\n"
     txt+="For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n\n"
-    txt+="The words can be either be from the ontology or not.\n\n"
-    txt+="You can also select the word form the table down bellow.\n"
+    txt+="The classes can be either be from the ontology or not.\n\n"
+    txt+="You can also select the class form the table down bellow.\n"
     return txt
 
 def WhatIsTheGeneralization():
-    txt="Which words do you want to give as generalization(inheritance parent)?\n"
+    txt="Which classes do you want to give as generalization(inheritance parent)?\n"
     txt+="For example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n\n"
-    txt+="The words can be either be from the ontology or not.\n\n"
-    txt+="You can also select the word form the table down bellow.\n"
+    txt+="The classes can be either be from the ontology or not.\n\n"
+    txt+="You can also select the class form the table down bellow.\n"
     return txt
     
 def WhatToGeneralize(parent):
-    txt="Which words do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\n"
-    txt+="In essence, with which words the generalized word "+parent+" you gave is linked to?\n"
+    txt="Which classes do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\n"
+    txt+="In essence, with which classes the generalized class "+parent+" you gave is linked to?\n"
     txt+="For example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n\n"
-    txt+="The words can be either be from the ontology or not.\n\n"
-    txt+="You can also select the word form the table down bellow.\n"
+    txt+="The classes can be either be from the ontology or not.\n\n"
+    txt+="You can also select the class form the table down bellow.\n"
     return txt
 
 def CouldNotUnderstand():
@@ -81,6 +88,8 @@ def KeepWord(word):
     txt+="If the answer is negative then the ontology will not keep this word.\n"
     return txt
 
+def keepProperty(property):
+    return "Should I keep the \""+property+"\""
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        search Ontology talks
 #  -----------------------------------------------------------------------------------------------------------------

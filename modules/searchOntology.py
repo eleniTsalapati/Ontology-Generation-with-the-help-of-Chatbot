@@ -25,6 +25,7 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
         count+=1
         # check if we have seen 5 subjects so to not see more
         if count==mark:
+            ui.makeTables(data)
             answer=utility.questionWithYesOrNo(ui,talk.seen5(term,text))
             if answer==1:
                 mark+=5
@@ -32,6 +33,7 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
                 break
         # check to see if you want the word
         answer=0
+        ui.makeTables(data)
         if "description" in word.keys() and word["description"]!=[]:
             answer=utility.questionWithYesOrNo(ui,talk.termKeepTheCategoryWithDescription(term,word["label"],word["description"][0],ontology,find))
         else:
@@ -42,16 +44,20 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
             label=utility.convertStringToLowerTittle(word["label"])
 
             # crete object
-            data[0][label]=[manager.CreateObject(data[2],label),label,[],0]
-            ui.makeTables(data)
+            # create local
+            external=ontology+":"+label
+            data[0][label]=[manager.CreateObject(data[2],label),label,[external],0]
+            # create external
+            data[0][external]=[manager.CreateObject(data[2],external),external,[],0]
+            data[0][external][0].iri=word["iri"]
+            manager.addParent(data[2],data[0][label][0],data[0][external][0])
 
-            data[0][label][0].iri=word["iri"]
 
             # add description
             if "description" in word.keys() and word["description"]!=[]:
-                manager.Explanation(data[2],data[0][term][0],word["description"][0],ontology)
+                manager.Explanation(data[2],data[0][external][0],word["description"][0],ontology)
             else:
-                manager.Explanation(data[2],data[0][term][0],"",ontology)
+                manager.Explanation(data[2],data[0][external][0],"",ontology)
             
             
             # add the necessary data
@@ -88,10 +94,16 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
         theResponse=response.json()
 
         # create data
-        data[0][term]=[manager.CreateObject(data[2],term),term,[],0]
-        data[0][term][0].iri=current["iri"]
 
-        manager.Explanation(data[2],data[0][term][0],description,current["ontology_name"])
+        # create local
+        external=current["ontology_name"]+":"+term
+        data[0][term]=[manager.CreateObject(data[2],term),term,[external],0]
+        # create external
+        data[0][external]=[manager.CreateObject(data[2],external),external,[],0]
+        data[0][external][0].iri=current["iri"]
+        manager.addParent(data[2],data[0][term][0],data[0][external][0])
+
+        manager.Explanation(data[2],data[0][external][0],description,current["ontology_name"])
 
         # check if it can be generalized
         if (parent==[] and theResponse["is_root"]==False and moreGeneralize==True):
@@ -162,7 +174,7 @@ def searchForTerm(data,term,parent,ui,moreGeneralized):
         if count == 0 :
             ui.rememberOneTime("I have not found an ontology with that label!\n")
         elif count<5:
-            ui.rememberOneTime("I do not have anymore ontologies to shown\n")
+            ui.rememberOneTime("No other external ontologies include this class\n")
         else:
             ui.rememberOneTime("I have shown you 5 ontologies. Due to that I will not show any more\n")
         if previous!=None:

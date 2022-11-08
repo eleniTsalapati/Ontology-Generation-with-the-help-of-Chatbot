@@ -10,7 +10,7 @@ def lemmatization(word,ui):
         theLementation=lemmatizer.lemmatize(word)
         if theLementation!= []:
             ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n")
-            return (theLementation,True)    
+            return (theLementation.title(),True)    
     else:
         splitted=word.split("_")
         txt=""
@@ -19,14 +19,14 @@ def lemmatization(word,ui):
             theLementation=lemmatizer.lemmatize(tmp)
             if theLementation!= []:
                 if txt=="":
-                    txt=theLementation
+                    txt=theLementation.title()
                 else:
                     txt=txt+"_"+theLementation.title()
                 ui.rememberOneTime("Lemmatize the \""+tmp+"\" to \""+theLementation+"\"\n")
                 flag=True
             else:
                 if txt=="":
-                    txt=tmp
+                    txt=tmp.title()
                 else:
                     txt=txt+"_"+tmp.title()        
         return(txt,flag)

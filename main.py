@@ -10,7 +10,7 @@ from modules.mainFunction import *
 # -------------------------------------------------------
 
 # data=[dataObj,dataRel,ontology]
-# dataObj=[class,name,parent,used/notUsed]
+# dataObj=[class,name,parent,used/notUsed,external/or not]
 # dataRel=[class,obj1name,obj2name]
 data=[{},{}]
 ui= UI()

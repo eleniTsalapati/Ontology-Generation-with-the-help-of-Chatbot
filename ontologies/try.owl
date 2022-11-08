@@ -8,52 +8,54 @@
 
 <owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows/Uni/Chatbot-for-Ontology-Generation/ontologies/try.owl"/>
 
-<owl:ObjectProperty rdf:about="#Cat_Eat_Fish">
-  <rdfs:domain rdf:resource="#cat"/>
-  <rdfs:range rdf:resource="#fish"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#fish_Is_Animal">
-  <rdfs:domain rdf:resource="#fish"/>
-  <rdfs:range rdf:resource="#animal"/>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#factory_Is_Fuel_Cell">
-  <rdfs:domain rdf:resource="#factory"/>
-  <rdfs:range rdf:resource="#fuel_Cell"/>
-</owl:ObjectProperty>
-
 <owl:AnnotationProperty rdf:about="#description"/>
 
-<owl:Class rdf:about="#cat">
-  <rdfs:subClassOf rdf:resource="#animal"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cat</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+<owl:Class rdf:about="#Material_Entity">
+  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000040"/>
+  <rdfs:subClassOf rdf:resource="#independent_Continuant"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Material_Entity</rdfs:label>
 </owl:Class>
 
-<owl:Class rdf:about="#fish">
-  <rdfs:subClassOf rdf:resource="#animal"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fish</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">asdas</description>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#animal">
+<owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000040">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">animal</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo:Material_Entity</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo</rdfs:isDefinedBy>
 </owl:Class>
 
-<owl:Class rdf:about="#factory">
-  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">factory</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+<owl:Class rdf:about="#independent_Continuant">
+  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000004"/>
+  <rdfs:subClassOf rdf:resource="#continuant"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">independent_Continuant</rdfs:label>
 </owl:Class>
 
-<owl:Class rdf:about="#fuel_Cell">
+<owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000004">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fuel_Cell</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo:independent_Continuant</rdfs:label>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">b is an independent continuant = Def. b is a continuant which is such that there is no c and no t such that b s-depends_on c at t. (axiom label in BFO2 Reference: [017-002])</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#continuant">
+  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000002"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">continuant</rdfs:label>
+</owl:Class>
+
+<owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000002">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo:continuant</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#object_Aggregate">
+  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/BFO_0000027"/>
+  <rdfs:subClassOf rdf:resource="#Material_Entity"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">object_Aggregate</rdfs:label>
+</owl:Class>
+
+<owl:Class rdf:about="http://purl.obolibrary.org/obo/BFO_0000027">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo:object_Aggregate</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">bfo</rdfs:isDefinedBy>
 </owl:Class>
 
 

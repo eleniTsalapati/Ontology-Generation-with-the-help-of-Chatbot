@@ -188,7 +188,7 @@ class UI:
 
     def create(self):
         self.win = Tk() 
-        self.win.geometry("1000x500") 
+        self.win.geometry("1000x750") 
 
         self.frame1 = LabelFrame(self.win,text="ChatBot Messages:")
         self.frame1.pack()
@@ -217,13 +217,13 @@ class UI:
         self.butFile=Button(self.frame2,text="Find file",command=self.browse_button)
 
         self.frame3= LabelFrame(self.win,text="Your Data")
-        self.frame3.pack()
+        self.frame3.pack(fill=X)
 
         self.frame6= Frame(self.frame3)
-        self.frame6.pack()
+        self.frame6.pack(fill=X)
         # One TABLE
         self.frame4=Frame(self.frame6)
-        self.frame4.pack(side=LEFT)
+        self.frame4.pack(fill=X)
         self.subjectTable= ttk.Treeview(self.frame4)
 
 
@@ -246,13 +246,13 @@ class UI:
         self.subjectTable.tag_configure('used', background='white')
         self.subjectTable.tag_configure('notUsed', background='orange')
         self.subjectTable.bind("<<TreeviewSelect>>", self.displaySelectedItem1)
-        self.subjectTable.pack()
+        self.subjectTable.pack(fill=X)
 
         # THE OTHER TABLE
         #  -------------
 
         self.frame5=Frame(self.frame6)
-        self.frame5.pack(side=RIGHT)
+        self.frame5.pack(fill=X)
         self.relationsTable= ttk.Treeview(self.frame5)
 
         # Scrollbar
@@ -273,7 +273,7 @@ class UI:
         self.relationsTable.heading("relation",text="Relation",anchor=CENTER)
         self.relationsTable.heading("object2",text="Object 2",anchor=CENTER)
         self.relationsTable.bind("<<TreeviewSelect>>", self.displaySelectedItem2)
-        self.relationsTable.pack()    
+        self.relationsTable.pack(fill=X)    
 
         txt="The red rows have not yet been INSERTED\n"
         txt+="The orange rows have not yet been USED to make a relation with another object"
@@ -351,11 +351,11 @@ class UI:
                 values=(obj1,data[1][keys[i]][2],data[1][keys[i]][3]))
                 self.lenRememberTable+=1
         self.rememberTable=True
-        self.frame3.pack()
+        self.frame3.pack(fill=X)
 
     def rememberTableOnce(self):
         self.rememberTable=True
-        self.frame3.pack()
+        self.frame3.pack(fill=X)
 
     def hearMenu(self):
         self.entryMode=0
@@ -365,7 +365,7 @@ class UI:
             self.flagTable=False
         
         if self.rememberTable==True:
-            self.frame3.pack()
+            self.frame3.pack(fill=X)
             self.rememberTable=False
             self.flagTable=True
 
@@ -411,7 +411,7 @@ class UI:
             self.flagTable=False
         
         if self.rememberTable==True:
-            self.frame3.pack()
+            self.frame3.pack(fill=X)
             self.rememberTable=False
             self.flagTable=True
 
@@ -457,7 +457,7 @@ class UI:
             self.flagTable=False
         
         if self.rememberTable==True:
-            self.frame3.pack()
+            self.frame3.pack(fill=X)
             self.rememberTable=False
             self.flagTable=True
 
