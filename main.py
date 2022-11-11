@@ -29,14 +29,15 @@ while answer == None:
 
 path=answer
 ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
-data.append(manager.LoadOntology(path))
+data.append(manager.LoadOntology(path,ui))
 manager.addData(data[2],data)
 answer=-1
 while(answer!=3):
+    manager.SaveOntology(data[2],path,ui)
+
     ui.makeTables(data)
 
     ui.changeMessage("Your ontology has been saved.\nChoose one action from the buttons bellow!")
-    manager.SaveOntology(data[2],path)
     answer=ui.hearMenu()
     
     if answer == 0:
@@ -48,5 +49,5 @@ while(answer!=3):
     
 
 # Save the ontology
-manager.SaveOntology(data[2],path)
+manager.SaveOntology(data[2],path,ui)
 ui.close(path)

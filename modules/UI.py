@@ -209,7 +209,7 @@ class UI:
         
         self.butSentence=Button(self.frame2,text="Competency Question",command=self.gotSentence)
         self.butGeneralize=Button(self.frame2,text="Generalize",command=self.gotGeneralize)
-        self.butSpecify=Button(self.frame2,text="Specify",command=self.gotSpecify)
+        self.butSpecify=Button(self.frame2,text="Specialize",command=self.gotSpecify)
         self.butExit=Button(self.frame2,text="Exit",command=self.gotExit)
 
         self.butTrue=Button(self.frame2,text="Yes",bg='green',fg="white",command=self.gotTrue)
@@ -289,8 +289,6 @@ class UI:
             self.rememberTableOnce()
         
     def updateTable(self,data):
-        print(self.lenSubjectTable)
-        print(len(data[0]))
         # Add Data in subjectTable
         theList=list(self.subjectTable.get_children())
         # for all the classes
@@ -501,7 +499,7 @@ class UI:
             self.flagTable=False
         
         if self.rememberTable==True:
-            self.frame3.pack()
+            self.frame3.pack(fill=X)
             self.rememberTable=False
             self.flagTable=True
 
@@ -542,7 +540,9 @@ class UI:
             self.win.update()
         return self.answer
 
-    
+    def error(self,message):
+        messagebox.showerror("Error",message=message)
+
     def close(self,path):
         messagebox.showinfo("Clossing...",  "I would like to thank you for using this ChatBot to develop your ontology! Check in the path: "+path+"\n")
 

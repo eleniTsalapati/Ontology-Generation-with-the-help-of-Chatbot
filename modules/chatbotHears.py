@@ -188,13 +188,16 @@ def FindNounsInDataBase(answer,data,ui):
     for word in tagged:
         if word[0]=="None":
             continue
+        print(word)
         for key in keys:
             if word[0].lower() == key.lower():
                 if ui!=None:
-                    ui.rememberOneTime("In the DataBase I found the \""+key+"\"\n")
-                insideDataBase.append(key)
+                    ui.rememberOneTime("In the ontology I found the \""+key+"\"\n")
+                returnValue,_=lemmatization(key,ui)
+                insideDataBase.append(returnValue)
                 break
         else:
             if 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
-                notInside.append(word[0])
+                returnValue,_=lemmatization(word[0],ui)
+                notInside.append(returnValue)
     return (insideDataBase,notInside)

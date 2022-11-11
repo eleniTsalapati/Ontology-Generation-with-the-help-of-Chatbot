@@ -11,16 +11,22 @@ def checkHttp(file):
         if file[i]!=http[i]:
             return False
     return True
-def LoadOntology(file):
-    ontology = get_ontology(file).load()
-    return ontology
+def LoadOntology(file,ui):
+    try:
+        ontology = get_ontology(file).load()
+        return ontology
+    except Exception as err:
+        ui.error(f"There was an error with {file} with error:{err}")
 
-def SaveOntology(ontology,file):
-    if checkHttp(file)==True:
-        ontology.save()
-    else:
-        ontology.save(file=file[7:])
-
+def SaveOntology(ontology,file,ui):
+    try:
+        if checkHttp(file)==True:
+            ontology.save()
+        else:
+            ontology.save(file=file[7:])
+    except Exception as err:
+        ui.error(f"There was an error with {file} with error:{err}")
+   
 def findLabel(object):
     if object.label!=[]:
         label=object.label[0]
@@ -54,32 +60,49 @@ def addData(ontology,data):
                     data[1][name][1].append(obj1)
 
 
-def CreateObject(ontology,word):
-    with ontology:
-        NewClass = types.new_class(word, (Thing,))
-        NewClass.label = word
-    return NewClass
+def CreateObject(ontology,word,ui):
+    try:
+        with ontology:
+            NewClass = types.new_class(word, (Thing,))
+            NewClass.label = word
+        return NewClass
+    except Exception as err:
+        ui.error(f"There was an error with {word} with error:{err}")
+    
 
-def ConnectObjects(ontology,connection,object1,object2):
-    with ontology:
-        NewClass = types.new_class(connection,(object1 >> object2,))
-    return NewClass
+def ConnectObjects(ontology,connection,object1,object2,ui):
+    try:
+        with ontology:
+            NewClass = types.new_class(connection,(object1 >> object2,))
+        return NewClass
+    except Exception as err:
+        ui.error(f"There was an error with {connection}, {object1.label[0]} and {object2.label} with error:{err}")
+    
 
-def AddConnection(ontology,connection,object1):
-    with ontology:
-        connection.domain.append(object1)
+def AddConnection(ontology,connection,object1,ui):
+    try:
+        with ontology:
+            connection.domain.append(object1)
+    except Exception as err:
+        ui.error(f"There was an error with {connection} with error:{err}")
 
-def Explanation(ontology,theClass,explanation,definedBy):
-    with ontology:
-        class description(AnnotationProperty):
-            pass
-        if explanation!="":
-            theClass.description.append(explanation)
-        theClass.isDefinedBy = [definedBy]
+def Explanation(ontology,theClass,explanation,definedBy,ui):
+    try:
+        with ontology:
+            class description(AnnotationProperty):
+                pass
+            if explanation!="":
+                theClass.description.append(explanation)
+            theClass.isDefinedBy = [definedBy]
+    except Exception as err:
+        ui.error(f"There was an error with {theClass.label[0]} with error:{err}")
 
-def addParent(ontology,theClass,parent):
-    with ontology:
-        if len(theClass.is_a)==1 and str(theClass.is_a[0]).split(".")[1]=="Thing":
-            theClass.is_a=[parent]
-        else:
-            theClass.is_a.append(parent)
+def addParent(ontology,theClass,parent,ui):
+    try:
+        with ontology:
+            if len(theClass.is_a)==1 and str(theClass.is_a[0]).split(".")[1]=="Thing":
+                theClass.is_a=[parent]
+            else:
+                theClass.is_a.append(parent)
+    except Exception as err:
+        ui.error(f"There was an error with {theClass.label[0]} and {parent.label[0]} with error:{err}")

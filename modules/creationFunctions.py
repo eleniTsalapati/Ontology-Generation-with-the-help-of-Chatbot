@@ -66,7 +66,7 @@ def addInheritance(noun,parent,data,ui):
     
     # add parents
     for theParent in keepParent:        
-        manager.addParent(data[2],data[0][noun][0],data[0][theParent][0])
+        manager.addParent(data[2],data[0][noun][0],data[0][theParent][0],ui)
         data[0][noun][2].append(theParent)
 
     # add relations
@@ -115,14 +115,13 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
 
         # The user wants to find the definition
         if answer==0:
-            # try:
+            try:
             # search the definition
-            found=search.searchForTerm(data,noun,parent,ui,moreGeneralized)            
-            if found==False:
-                ui.rememberOneTime("Please choose again\n")
-            # except:
-            #     ui.rememberOneTime("There is an error with the code either because there is a bug or you do not have access to Internet\n")
-
+                found=search.searchForTerm(data,noun,parent,ui,moreGeneralized)            
+                if found==False:
+                    ui.rememberOneTime("Please choose again\n")
+            except Exception as err:
+                ui.error(f"There was an error with the search, with error:{err}")
         elif answer==1:
             found=True
             ui.changeMessage(talk.YourDefinition(noun))
@@ -130,22 +129,22 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
             definition=hear.GetDefinition(answerUI)
             definedBy="You"
             # create the object
-            data[0][noun]=[manager.CreateObject(data[2],noun),noun,[],0,0]
+            data[0][noun]=[manager.CreateObject(data[2],noun,ui),noun,[],0,0]
             # add definition
-            manager.Explanation(data[2],data[0][noun][0],definition,definedBy)
+            manager.Explanation(data[2],data[0][noun][0],definition,definedBy,ui)
 
         elif answer==2:
             found=True
             definition=""
             definedBy=""
             # create the object
-            data[0][noun]=[manager.CreateObject(data[2],noun),noun,[],0,0]
+            data[0][noun]=[manager.CreateObject(data[2],noun,ui),noun,[],0,0]
             # add definition
-            manager.Explanation(data[2],data[0][noun][0],definition,definedBy)
+            manager.Explanation(data[2],data[0][noun][0],definition,definedBy,ui)
 
         # add parents
         for theParent in keepParent:        
-            manager.addParent(data[2],data[0][noun][0],data[0][theParent][0])
+            manager.addParent(data[2],data[0][noun][0],data[0][theParent][0],ui)
             data[0][noun][2].append(theParent)
     
         # add relations
@@ -172,7 +171,7 @@ def createRelation(data,ui,obj1,relation,obj2):
 
     if relation not in data[1].keys():
         # create the relationship
-        data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0]),[obj1],relation,obj2]
+        data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,obj2]
     else:
-        manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0])
+        manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0],ui)
         data[1][relation][1].append(obj1)

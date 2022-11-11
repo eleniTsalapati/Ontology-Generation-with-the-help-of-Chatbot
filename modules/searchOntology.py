@@ -46,27 +46,37 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
             # crete object
             # create local
             external=ontology+":"+label
-            data[0][label]=[manager.CreateObject(data[2],label),label,[external],0]
+            data[0][label]=[manager.CreateObject(data[2],label,ui),label,[external],0]
             # create external
-            data[0][external]=[manager.CreateObject(data[2],external),external,[],0]
+            data[0][external]=[manager.CreateObject(data[2],external,ui),external,[],0]
             data[0][external][0].iri=word["iri"]
-            manager.addParent(data[2],data[0][label][0],data[0][external][0])
-
+            manager.addParent(data[2],data[0][label][0],data[0][external][0],ui)
+            
 
             # add description
             if "description" in word.keys() and word["description"]!=[]:
-                manager.Explanation(data[2],data[0][external][0],word["description"][0],ontology)
+                manager.Explanation(data[2],data[0][external][0],word["description"][0],ontology,ui)
             else:
-                manager.Explanation(data[2],data[0][external][0],"",ontology)
+                manager.Explanation(data[2],data[0][external][0],"",ontology,ui)
             
             
             # add the necessary data
             if find=="parents":
-                manager.addParent(data[2],data[0][term][0],data[0][label][0])
+                # local
+                manager.addParent(data[2],data[0][term][0],data[0][label][0],ui)
                 data[0][term][2].append(label)                            
+                # external
+                external2=ontology+":"+term
+                manager.addParent(data[2],data[0][external2][0],data[0][external][0],ui)
+                data[0][external2][2].append(external)                            
             else:
-                manager.addParent(data[2],data[0][label][0],data[0][term][0])
+                manager.addParent(data[2],data[0][label][0],data[0][term][0],ui)
                 data[0][label][2].append(term)
+
+                # external
+                external2=ontology+":"+term
+                manager.addParent(data[2],data[0][external][0],data[0][external2][0],ui)
+                data[0][external][2].append(external2)                            
 
             # do recursive action
             if find=="children" and word["has_children"]==True:
@@ -97,13 +107,13 @@ def handleOntology(data,term,parent,current,ui,moreGeneralize):
 
         # create local
         external=current["ontology_name"]+":"+term
-        data[0][term]=[manager.CreateObject(data[2],term),term,[external],0]
+        data[0][term]=[manager.CreateObject(data[2],term,ui),term,[external],0]
         # create external
-        data[0][external]=[manager.CreateObject(data[2],external),external,[],0]
+        data[0][external]=[manager.CreateObject(data[2],external,ui),external,[],0]
         data[0][external][0].iri=current["iri"]
-        manager.addParent(data[2],data[0][term][0],data[0][external][0])
+        manager.addParent(data[2],data[0][term][0],data[0][external][0],ui)
 
-        manager.Explanation(data[2],data[0][external][0],description,current["ontology_name"])
+        manager.Explanation(data[2],data[0][external][0],description,current["ontology_name"],ui)
 
         # check if it can be generalized
         if (parent==[] and theResponse["is_root"]==False and moreGeneralize==True):
@@ -137,7 +147,6 @@ def searchForTerm(data,term,parent,ui,moreGeneralized):
         else:
             txt=txt+"+"+theTerm.lower()
     search_url="http://www.ebi.ac.uk/ols/api/search"
-    print(search_url+"?q="+txt)
     response = requests.get(search_url+"?q="+txt)
     # check if there is ontology 
     if response.status_code%100 ==4 or response.status_code%100 ==5:
