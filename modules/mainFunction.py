@@ -64,3 +64,10 @@ def generalized(data,ui):
         
         for noun in nouns:
             addInheritance(noun,[parent],data,ui)
+
+def destroy(data,ui):
+    ui.makeTables(data)
+    # find the classes and the relationships
+    classes,relationships_others=utility.FindNounsInDataBase(data,ui,"Which Class or relationship should I destroy?")
+    utility.deleteData(data,ui,classes,relationships_others,True)
+    
