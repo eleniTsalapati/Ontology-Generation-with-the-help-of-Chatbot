@@ -7,6 +7,8 @@ import slowTextView as stv
 class C4OWindow(Gtk.ApplicationWindow):
     def __init__(self,file_path,file_name, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # make the application be at the maximum size of the screen
+        self.maximize()
         self.file_path = file_path
         self.file_name = file_name
 
@@ -42,39 +44,126 @@ class C4OWindow(Gtk.ApplicationWindow):
             menu = builder.get_object("file-menu")
             file_button.set_menu_model(menu)
 
+        # make a vertical box that is in all the space of the window
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
         # make a textview
         textview = stv.SlowTextView()
         if file_path == "":
             textview.add_text("ChatBot:\n\tGreetings new user! This is the the ChatBot for Ontologies.\n To continue select a folder to create a new ontology or select an existing ontology to edit.",0)
         else:
-            textview.add_text("ChatBot:\n\tGreetings. The file "+file_name+" has been opened.",0)
-        textview.set_editable(False)
-        # have the textview not clickable
-        # have the textview be only 50% of the window
-        textview.set_size_request(0, 100)
-        self.add(textview)
-        
+            textview.add_text("ChatBot:\n\tGreetings. The file "+file_name+" has been opened.",0)        
 
         # make a scrollable textview
         scrollingTextView=Gtk.ScrolledWindow()
         scrollingTextView.add(textview)
-        self.add(scrollingTextView)
+        # add the textview+scrolling to the vertical box
+        vbox.pack_start(scrollingTextView, True, True, 2)
+
+
+        grid= Gtk.Grid()
+        grid.set_column_homogeneous(True)
+
+        broaden=Gtk.Button("Broaden")
+        broaden.set_sensitive(False)
+        grid.attach(broaden,0,0,1,1)
+
+        narrow=Gtk.Button("Narrow")
+        narrow.set_sensitive(False)
+        grid.attach(narrow,1,0,1,1)
+
+        trash=Gtk.Button()
+        # add the image bin.png to the button and resize it to the size of the button
+        image = Gtk.Image.new_from_file("trash.png")
+        image.set_pixel_size(20)
+        trash.add(image)
+        trash.set_sensitive(False)
+        grid.attach(trash,2,0,1,1)
 
         # add a text entry
         entry = Gtk.Entry()
         # make it so that when you press enter the text is added to the textview
         entry.connect("activate", lambda x: textview.add_text("User:\n\t"+entry.get_text()))
-        # have the entry be only 50% of the window above the textview
-        entry.set_size_request(0, 50)   
-        self.add(entry)
-        
-        
-        # TODO: ADD A VERTICAL BOX WIDGET IN THE WINDOW (self.add)
+        # empty the entry after each entry
+        entry.connect("activate", lambda x: entry.set_text(""))
+        grid.attach(entry,3,0,5,1)
 
-        #       ADD A TEXT VIEW IN THE VERTICAL BOX AND MAKE IT READ-ONLY (Gtk.TextView.props.editable)
-        #       ADD A SCROLLABLE WINDOW AROUND THE TEXT VIEW (Gtk.ScrolledWindow)
-        #       ADD AN ENTRY IN THE VERTICAL BOX
-        #       MAKE IT SO EVERYTHING YOU WRITE IN THE ENTRY APPEARS IN THE TEXTVIEW (like a chat) (Gtk.Entry.signals.activate)
+        Competency_Question=Gtk.Button("Competency Question")
+        if file_path == "":
+            Competency_Question.set_sensitive(False)
+        else:
+            Competency_Question.set_sensitive(True)
+        grid.attach(Competency_Question,8,0,3,1)
+
+        store = Gtk.TreeStore(str, str, str)
+
+        treeview = Gtk.TreeView(store)
+        treeview.set_tooltip_column(2)
+        treeview.set_hover_selection(True)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Title", renderer, text=0)
+        treeview.append_column(column)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Description", renderer, text=1)
+        treeview.append_column(column)
+
+        row1=store.append(None, ["Child", "This is the description for Item 1", "The child are:None\n The Parents are: Parent,GrandParent"])
+        row2=store.append(None, ["Parent", "This is the description for Item 2", "The child are:Child\n The Parents are: GrandParent"])
+        row3=store.append(None, ["GrandParent", "This is the description for Item 3", "The child are:Child,Parent\n The Parents are:None"])
+        store.append(row1, ["Parent: Parent","",""])
+        store.append(row1, ["Parent: GrandParent","",""])
+        store.append(row2, ["Child: child","",""])
+        store.append(row2, ["Parent: GrandParent","",""])
+        store.append(row3, ["Child: child","",""])
+        store.append(row3, ["Child: Parent","",""])
+
+        # when a value is clicked in the treeview, add the title to the entry with the previous text
+        # and make the broaden button and narrow button active         
+        treeview.connect("row-activated", lambda x, y, z: entry.get_text() + " " +entry.set_text(store[y][0]))
+        treeview.connect("row-activated", lambda x, y, z: broaden.set_sensitive(True))
+        treeview.connect("row-activated", lambda x, y, z: narrow.set_sensitive(True))
+        treeview.connect("row-activated", lambda x, y, z: trash.set_sensitive(True))
+        treeview.connect("row-activated", lambda x, y, z: Competency_Question.set_sensitive(False))
+        # if the entry is empty, make the broaden button and narrow button inactive
+        entry.connect("changed", lambda x: broaden.set_sensitive(False))
+        entry.connect("changed", lambda x: narrow.set_sensitive(False))
+        entry.connect("changed", lambda x: trash.set_sensitive(False))
+        entry.connect("changed", lambda x: Competency_Question.set_sensitive(True))
+
+        # add a scrollable treeview
+        scrollingTreeView=Gtk.ScrolledWindow()
+        scrollingTreeView.add(treeview)
+        grid.attach(scrollingTreeView,0,1,7,1)
+
+
+        store = Gtk.TreeStore(str, str, str)
+        treeview = Gtk.TreeView(store)
+        
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Term", renderer, text=0)
+        treeview.append_column(column)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Connection", renderer, text=1)
+        treeview.append_column(column)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Term", renderer, text=2)
+        treeview.append_column(column)
+
+        row1=store.append(None, ["Child", "is_aasdasdsasdadsasadsadsdasdasadsdasaasddsasdasadsadsadsadasdasdsadsaddsadsdasadsdasadsdas", "Parent"])
+        row2=store.append(None, ["Parent", "is_a", "GrandParent"])
+        row3=store.append(None, ["GrandParent", "is_a", "GreatGrandParent"])
+
+        # make the store have the values to be wrapped
+        
+        # add a scrollable treeview
+        scrollingTreeView=Gtk.ScrolledWindow()
+        scrollingTreeView.add(treeview)
+        grid.attach(scrollingTreeView,7,1,4,1)
+
+        vbox.pack_start(grid, True, True, 0)
+
+        # add the vertical box to the window
+        self.add(vbox)
 
         self.show_all()
 
@@ -82,7 +171,7 @@ class C4OWindow(Gtk.ApplicationWindow):
     # destory the window
     def destroyWindow(self):
         self.destroy()
-        
+
     # create a new file
     def createNewWindow(self,file_path,file_name):
         win2 = C4OWindow(file_path,file_name,application=self.get_application())
