@@ -2,7 +2,7 @@
 <interface>
   <menu id="file-menu">
     <section>
-        <item>
+    <item>
             <attribute name="label">Open File</attribute>
             <attribute name="action">app.open_file</attribute>
         </item>
@@ -10,9 +10,8 @@
             <attribute name="label">Save File</attribute>
             <attribute name="action">app.save_file</attribute>
         </item>
-        <item>
-            <attribute name="label">--------</attribute>
-        </item>
+    </section>
+    <section>
         <item>
             <attribute name="label">About</attribute>
             <attribute name="action">app.about</attribute>

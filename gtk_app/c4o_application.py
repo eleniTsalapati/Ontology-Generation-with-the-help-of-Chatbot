@@ -84,8 +84,10 @@ class C4OApplication(Gtk.Application):
             # delete the dialog
             dialog.destroy()
             # create a new window and destroy the previous
-            self.window.createNewWindow(file_path,file_name)
-            self.window.destroyWindow()
+        
+            self.window.hb.props.title = " - 213"
+            # self.window.createNewWindow(file_path,file_name)
+            # self.window.destroyWindow()
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
             dialog.destroy()
@@ -142,3 +144,6 @@ class C4OApplication(Gtk.Application):
 if __name__ == "__main__":
     app = C4OApplication()
     app.run(sys.argv)
+
+
+# https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Stack.html

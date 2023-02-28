@@ -19,13 +19,13 @@ class C4OWindow(Gtk.ApplicationWindow):
 
         # headerbar
         #
-        hb = Gtk.HeaderBar()
-        hb.set_show_close_button(True)
-        hb.props.title = self.file_name+" - C4O"
-        self.set_titlebar(hb)
+        self.hb = Gtk.HeaderBar()
+        self.hb.set_show_close_button(True)
+        self.hb.props.title = self.file_name+" - C4O"
+        self.set_titlebar(self.hb)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        hb.pack_start(box)
+        self.hb.pack_start(box)
 
         file_button = Gtk.MenuButton.new()
         box.add(file_button)
@@ -61,16 +61,16 @@ class C4OWindow(Gtk.ApplicationWindow):
         vbox.pack_start(scrollingTextView, True, True, 2)
 
 
-        grid= Gtk.Grid()
-        grid.set_column_homogeneous(True)
+        input= Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        input.set_homogeneous(False)
 
         broaden=Gtk.Button("Broaden")
         broaden.set_sensitive(False)
-        grid.attach(broaden,0,0,1,1)
+        input.pack_start(broaden, False, False, 2)
 
         narrow=Gtk.Button("Narrow")
         narrow.set_sensitive(False)
-        grid.attach(narrow,1,0,1,1)
+        input.pack_start(narrow, False, False, 2)
 
         trash=Gtk.Button()
         # add the image bin.png to the button and resize it to the size of the button
@@ -78,22 +78,39 @@ class C4OWindow(Gtk.ApplicationWindow):
         image.set_pixel_size(20)
         trash.add(image)
         trash.set_sensitive(False)
-        grid.attach(trash,2,0,1,1)
+        input.pack_start(trash,False, False, 2)
 
+        input_field= Gtk.Stack()
         # add a text entry
         entry = Gtk.Entry()
         # make it so that when you press enter the text is added to the textview
         entry.connect("activate", lambda x: textview.add_text("User:\n\t"+entry.get_text()))
         # empty the entry after each entry
         entry.connect("activate", lambda x: entry.set_text(""))
-        grid.attach(entry,3,0,5,1)
+        # add a button to the input field
+        buttonTrue=Gtk.ColorButton("True")
+        buttonFalse=Gtk.ColorButton("False")
+        buttonTrue.connect("clicked", lambda x: textview.add_text("User:\n\tTrue"))
+        buttonFalse.connect("clicked", lambda x: textview.add_text("User:\n\tFalse"))
+        buttonTrue.colour="green"
+        buttonFalse.colour="red"
+        bothButtons=Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        bothButtons.pack_start(buttonTrue,False, False, 2)
+        bothButtons.pack_start(buttonFalse,False, False, 2)
+        
+        input_field.add_named(bothButtons,"buttons")
+        input_field.add_named(entry,"entry")
+
+        input.pack_start(input_field,True, True, 2)
 
         Competency_Question=Gtk.Button("Competency Question")
         if file_path == "":
             Competency_Question.set_sensitive(False)
         else:
             Competency_Question.set_sensitive(True)
-        grid.attach(Competency_Question,8,0,3,1)
+        input.pack_start(Competency_Question,False, False, 2)
+
+        paned=Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
 
         store = Gtk.TreeStore(str, str, str)
 
@@ -131,14 +148,14 @@ class C4OWindow(Gtk.ApplicationWindow):
         entry.connect("changed", lambda x: Competency_Question.set_sensitive(True))
 
         # add a scrollable treeview
-        scrollingTreeView=Gtk.ScrolledWindow()
-        scrollingTreeView.add(treeview)
-        grid.attach(scrollingTreeView,0,1,7,1)
+        scrollingTreeView1=Gtk.ScrolledWindow()
+        scrollingTreeView1.add(treeview)
 
+        paned.add1(scrollingTreeView1)
 
         store = Gtk.TreeStore(str, str, str)
         treeview = Gtk.TreeView(store)
-        
+
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Term", renderer, text=0)
         treeview.append_column(column)
@@ -156,12 +173,14 @@ class C4OWindow(Gtk.ApplicationWindow):
         # make the store have the values to be wrapped
         
         # add a scrollable treeview
-        scrollingTreeView=Gtk.ScrolledWindow()
-        scrollingTreeView.add(treeview)
-        grid.attach(scrollingTreeView,7,1,4,1)
+        scrollingTreeView2=Gtk.ScrolledWindow()
+        scrollingTreeView2.add(treeview)
+        # expand the scrollingTreeView to fill the window
+        paned.add2(scrollingTreeView2)
 
-        vbox.pack_start(grid, True, True, 0)
 
+        vbox.pack_start(input, False, True, 2)
+        vbox.pack_start(paned, True, True, 2)
         # add the vertical box to the window
         self.add(vbox)
 
