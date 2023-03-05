@@ -4,13 +4,12 @@ import modules.ontologyManager as manager
 import modules.chatbotHears as hear
 import modules.utility as utility
 from modules.mainFunction import *
-
+import modules.log as log
 # -------------------------------------------------------
 #                       main
 # -------------------------------------------------------
-
 # data=[dataObj,dataRel,ontology]
-# dataObj=[class,name,parent,used/notUsed,external/or not]
+# dataObj=[class,name,parent,used/notUsed,external/or not, list with instances]
 # dataRel=[class,obj1name,obj2name]
 data=[{},{}]
 ui= UI()
@@ -22,30 +21,37 @@ ui.changeMessage(talk.Welcome())
 while answer == None:
     answerUI=ui.hear()
     answer=hear.thePath(answerUI)
-    
-    if answer==None:
+    if answer==None or (answer[:7]=="file://" and answer[7]!="/"):
+        ui.give_back_browser_button()
         ui.rememberOneTime(talk.Welcome())
-        ui.changeMessage(talk.CouldNotUnderstand())
-
+        txt="Be careful to add \"file://\"and then the correct path.\n"
+        txt+="For example: file:///home/user/Desktop/file"
+        ui.changeMessage(talk.CouldNotUnderstand()+txt)
+        answer=None
 path=answer
 ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
 data.append(manager.LoadOntology(path,ui))
 manager.addData(data[2],data)
-answer=-1
-while(answer!=3):
+while(True):
     manager.SaveOntology(data[2],path,ui)
 
+    ui.changeMessage("Your ontology has been saved.\nChoose one action from the buttons bellow!")
     ui.makeTables(data)
 
-    ui.changeMessage("Your ontology has been saved.\nChoose one action from the buttons bellow!")
     answer=ui.hearMenu()
     
-    if answer == 0:
+    if answer == "Sentence":
         Sentence(data,ui)
-    elif answer == 1:
+    elif answer == "Generalized":
         generalized(data,ui)
-    elif answer == 2:
+    elif answer == "Specialize":
         specialize(data,ui)
+    elif answer == "Destroy Entity":
+        destroy(data,ui)
+    elif answer == "Exit":
+        break  
+    else:
+        ui.rememberOneTime(talk.CouldNotUnderstand())
     
 
 # Save the ontology

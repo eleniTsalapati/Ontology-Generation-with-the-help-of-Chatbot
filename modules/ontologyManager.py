@@ -50,7 +50,7 @@ def addData(ontology,data):
             for domain in list(relation.domain):
                 obj1=findLabel(domain)
                 obj2=findLabel(range)
-                name=findLabel(relation)+obj2.title()
+                name=findLabel(relation)
 
                 data[0][obj1][3]=1
                 data[0][obj2][3]=1

@@ -13,11 +13,7 @@ def Welcome():
     txt+="From the specialization, you can specialize an existing class (ie: create new Sub Classes).\n\n"
     txt+="Whenever this is possible external ontologies by https://www.ebi.ac.uk/ols/index are reused.\n"
     txt+="Let's start!!\n\n"
-    txt+="In which file shall I save the ontology?\n\n"
-    txt+="IMPORTANT!!\n\n"
-    txt+="If the file is local then your answer has to begin with \"file://\" following the path file "
-    txt+="or you can find the local file by using the button \"Find File\"\n\n"
-    txt+="If the file is digital then it has to begin with \"http://\" following with the URL\n"
+    txt+="In which file shall I save the ontology?"
     return txt
     
 def WhatOntologyToAnswer():
@@ -60,7 +56,7 @@ def WhatToGeneralize(parent):
     return txt
 
 def CouldNotUnderstand():
-    txt="\n\n Sorry but I could not understand your answer.\n\n"
+    txt="\n\nSorry but I could not understand your answer.\n\n"
     return txt
 
 #  -----------------------------------------------------------------------------------------------------------------

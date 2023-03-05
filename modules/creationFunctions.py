@@ -15,7 +15,7 @@ def checkInheritance(word,parent,ui):
     answer=utility.questionWithYesOrNo(ui,talk.ontoCheck(parent,word))
     
     # there is a parent and there is wrong with the inheritance
-    if answer==-1:        
+    if answer==0:        
         # check IDENTITY
         answer=utility.questionWithYesOrNo(ui,talk.identityComponentOf(parent,word))
         if answer==1:
@@ -89,7 +89,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
         ui.makeTables(data)
         ui.changeMessage("What should I do for \""+noun+"\"")
         answer=ui.hearDefinition()
-        if answer==3:
+        if answer=="Do not Keep the class":
             return False
 
         # so check for the inheritance
@@ -114,7 +114,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
                     keepRelation.append((relation,noun,theParent))
 
         # The user wants to find the definition
-        if answer==0:
+        if answer=="Search Definition":
             try:
             # search the definition
                 found=search.searchForTerm(data,noun,parent,ui,moreGeneralized)            
@@ -122,7 +122,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
                     ui.rememberOneTime("Please choose again\n")
             except Exception as err:
                 ui.error(f"There was an error with the search, with error:{err}")
-        elif answer==1:
+        elif answer=="Give Definition":
             found=True
             ui.changeMessage(talk.YourDefinition(noun))
             answerUI=ui.hear()
@@ -133,7 +133,7 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
             # add definition
             manager.Explanation(data[2],data[0][noun][0],definition,definedBy,ui)
 
-        elif answer==2:
+        elif answer=="Keep without Definition":
             found=True
             definition=""
             definedBy=""
@@ -162,7 +162,7 @@ def createRelation(data,ui,obj1,relation,obj2):
 
     ui.makeTables(data)
     answer=utility.questionWithYesOrNo(ui,talk.keepProperty(relation))
-    if answer==-1:
+    if answer==0:
         return
 
     # mark as used
