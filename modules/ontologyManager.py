@@ -11,12 +11,13 @@ def checkHttp(file):
         if file[i]!=http[i]:
             return False
     return True
-def LoadOntology(file,ui):
+def LoadOntology(file,errorFunction):
     try:
         ontology = get_ontology(file).load()
         return ontology
     except Exception as err:
-        ui.error(f"There was an error with {file} with error:{err}")
+        errorFunction(f"There was an error with {file} with error:{err}")
+        return None
 
 def SaveOntology(ontology,file,ui):
     try:

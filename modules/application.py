@@ -1,14 +1,21 @@
-import sys
-
+from modules.UI import UI
+import modules.chatbotTalks as talk
+import modules.ontologyManager as manager
+import modules.chatbotHears as hear
+import modules.utility as utility
+from modules.mainFunction import *
+import modules.log as log
 import gi,os
+from modules.shared_data import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk
 
-from c4o_window import C4OWindow
+from modules.window import C4OWindow
 
 class C4OApplication(Gtk.Application):
-    def __init__(self, *args, **kwargs):
+    def __init__(self,*args, **kwargs):
+        
         super().__init__(
             *args,
             application_id="org.example.myapp",
@@ -79,15 +86,8 @@ class C4OApplication(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             file_path = dialog.get_filename()
-            # get the file name
-            file_name = file_path.split("/")[-1]
-            # delete the dialog
             dialog.destroy()
-            # create a new window and destroy the previous
-        
-            self.window.hb.props.title = " - 213"
-            # self.window.createNewWindow(file_path,file_name)
-            # self.window.destroyWindow()
+            self.fileOpened(file_path)
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
             dialog.destroy()
@@ -114,14 +114,8 @@ class C4OApplication(Gtk.Application):
                 os.remove(file_path)
             # create the file
             open(file_path, 'x').close()
-            # get the file name
-            file_name = file_path.split("/")[-1]
-
-            # delete the dialog
             dialog.destroy()
-            # create a new window and destroy the previous
-            self.window.createNewWindow(file_path,file_name)
-            self.quit()
+            self.fileOpened(file_path)
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
             dialog.destroy()
@@ -138,12 +132,27 @@ class C4OApplication(Gtk.Application):
         about_dialog.present()
 
     def on_quit(self, action, param):
+        self.window.textview.closeLog()
         self.quit()
 
+    def fileOpened(self,path):
+        # opening the path
+        answer=manager.LoadOntology(path,self.window.addError)
+        if answer!=None:
+            global data,dangerArea,thePath
+            dangerArea.acquire()
+            data.append(answer)
+            manager.addData(data[2],data)
+            thePath=path
+            dangerArea.release()
 
-if __name__ == "__main__":
-    app = C4OApplication()
-    app.run(sys.argv)
-
-
-# https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Stack.html
+            # rename the UI
+            file_name = path.split("/")[-1]
+            self.window.hb.props.title = file_name + "- C4O"
+            self.window.addTextUser("Open"+ path)
+            self.window.addTextChatBot("Openning the file \""+path+"\". Wait for a moment...")
+            self.window.addTextChatBot(talk.Menu(),100)
+            self.window.addTextChatBot(talk.Help(),100)
+            
+            self.window.Menu()
+    

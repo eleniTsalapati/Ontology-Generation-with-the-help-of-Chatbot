@@ -4,56 +4,54 @@ import modules.ontologyManager as manager
 import modules.chatbotHears as hear
 import modules.utility as utility
 from modules.mainFunction import *
+from modules.application import C4OApplication
+import sys
 import modules.log as log
+import threading
 # -------------------------------------------------------
 #                       main
 # -------------------------------------------------------
-# data=[dataObj,dataRel,ontology]
-# dataObj=[class,name,parent,used/notUsed,external/or not, list with instances]
-# dataRel=[class,obj1name,obj2name]
-data=[{},{}]
-ui= UI()
-# Welcome
-ui.create()
-# Load the ontology
-answer = None
-ui.changeMessage(talk.Welcome())
-while answer == None:
-    answerUI=ui.hear()
-    answer=hear.thePath(answerUI)
-    if answer==None or (answer[:7]=="file://" and answer[7]!="/"):
-        ui.give_back_browser_button()
-        ui.rememberOneTime(talk.Welcome())
-        txt="Be careful to add \"file://\"and then the correct path.\n"
-        txt+="For example: file:///home/user/Desktop/file"
-        ui.changeMessage(talk.CouldNotUnderstand()+txt)
-        answer=None
-path=answer
-ui.rememberOneTime("I have loaded the file \""+answer+"\"\n\n")
-data.append(manager.LoadOntology(path,ui))
-manager.addData(data[2],data)
-while(True):
-    manager.SaveOntology(data[2],path,ui)
+from modules.shared_data import *
+def UI_(lock):
+    app = C4OApplication()
+    app.run(sys.argv)
+    log.closeLog()
 
-    ui.changeMessage("Your ontology has been saved.\nChoose one action from the buttons bellow!")
-    ui.makeTables(data)
+def server(lock):
+    global data,dangerArea,hearServer,answerUI,thePath
+    while(True):
+        hearServer.acquire()
+        dangerArea.acquire()
+        manager.SaveOntology(data[2],thePath)
 
-    answer=ui.hearMenu()
-    
-    if answer == "Sentence":
-        Sentence(data,ui)
-    elif answer == "Generalized":
-        generalized(data,ui)
-    elif answer == "Specialize":
-        specialize(data,ui)
-    elif answer == "Destroy Entity":
-        destroy(data,ui)
-    elif answer == "Exit":
-        break  
-    else:
-        ui.rememberOneTime(talk.CouldNotUnderstand())
-    
+        theList=answerUI.split(";")
+        answer=theList[0]
+        sentence=" ".join(theList[1:])
+        dangerArea.release()
+        print(answer,sentence)
+        # if answer == "Sentence":
+        #     Sentence(data,sentence)
+        # elif answer == "Generalized":
+        #     generalized(data,sentence)
+        # elif answer == "Specialize":
+        #     specialize(data,sentence)
+        # elif answer == "Destroy Entity":
+        #     destroy(data,sentence)
 
-# Save the ontology
-manager.SaveOntology(data[2],path,ui)
-ui.close(path)
+if __name__ =="__main__":
+    lock = threading.Lock()
+    t1 = threading.Thread(target=UI_, args=(lock,))
+    t2 = threading.Thread(target=server, args=(lock,))
+ 
+    # starting thread 1
+    t1.start()
+    # starting thread 2
+    t2.start()
+ 
+    # wait until thread 1 is completely executed
+    t1.join()
+    # wait until thread 2 is completely executed
+    t2.join()
+ 
+    # both threads completely executed
+    print("Done!")

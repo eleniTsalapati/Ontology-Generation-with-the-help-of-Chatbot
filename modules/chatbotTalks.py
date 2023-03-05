@@ -16,13 +16,31 @@ def Welcome():
     txt+="In which file shall I save the ontology?"
     return txt
     
-def WhatOntologyToAnswer():
-    txt="Give a Competency Question to add in the ontology?\n\n"
-    txt+="If you have a lot of nouns, then you need to have underscore \"_\" in between the nouns. \n"
-    txt+="For example: Mitigation_Action and NOT Mitigation action\n\n"
-    txt+="Please be careful with the grammar(the articles), syntax of the answer as it will affect it.\n"
-    txt+="Recognize: A cat eats fishes, Cats eat the fish\n"
-    txt+="Not Recognize: Cat eat fish\n"
+def Menu():
+    txt="Your Ontology has been uploaded. Now you can choose 1 from 4 options.\n\t"
+    txt+="You can give: Competency Question, Narrow a term, Broaden a term, Delete a term."
+    return txt
+
+def Help():
+    # Competency Question
+    txt="To give a COMPETENCY QUESTION you have to put your answer in the area bellow and then press the button.\n\t"
+    txt+="If you have a lot of nouns, then you need to have underscore \"_\" in between the nouns. \n\t"
+    txt+="For example: Mitigation_Action and NOT Mitigation action\n\n\t"
+    txt+="Please be careful with the grammar(the articles), syntax of the answer as it will affect it.\n\t"
+    txt+="Recognize: A cat eats fishes, Cats eat the fish\n\t"
+    txt+="Not Recognize: Cat eat fish\n\n\t"
+    
+    # Narrow term
+    txt+="To NARROW a term, double click the term from the left table which you want to be narrowed and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed.\n\n\t"
+
+    # Broaden term
+    txt+="To BROADEN a term, double click the term from the left table which you want to be broaden and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed.\n\n\t"
+
+    # Delete term
+    txt+="To DELETE a term, double click the term from the left table which you want to be deleted and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed."
     return txt
 
 def WhatToSpecialize():

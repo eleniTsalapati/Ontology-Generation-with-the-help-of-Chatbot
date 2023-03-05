@@ -86,7 +86,8 @@ def createNoun(noun,parent,data,ui,moreGeneralized=True):
 
     found=False
     while(found==False):
-        ui.makeTables(data)
+        while(True):
+            print(1)
         ui.changeMessage("What should I do for \""+noun+"\"")
         answer=ui.hearDefinition()
         if answer=="Do not Keep the class":
