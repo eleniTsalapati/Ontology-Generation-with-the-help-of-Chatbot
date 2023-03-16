@@ -4,12 +4,16 @@ from gi.repository import Gtk
 import modules.slowTextView as stv
 from modules.mainFunction import *
 from modules.shared_data import *
+import modules.searchOntology as search
+import modules.creationFunctions as creationFunctions
+from modules.dialogOptions import CheckDialogRelationship
+
 class C4OWindow(Gtk.ApplicationWindow):
-    def __init__(self,file_path,file_name, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
         # make the application be at the maximum size of the screen
-        self.file_path = file_path
-        self.file_name = file_name
+        self.file_name = "Untitled"
         # window properties
         #
         self.set_border_width(10)
@@ -99,8 +103,16 @@ class C4OWindow(Gtk.ApplicationWindow):
          # add a button to the input field
         buttonSearch=Gtk.Button("Search Online")
         buttonGiveDefinition=Gtk.Button("Give Definition")
-        buttonNoDefinition=Gtk.Button("Without Definition")
+        buttonNoDefinition=Gtk.Button("Keep Without Definition")
         buttonNoKeep=Gtk.Button("Do Not Keep Term")
+        
+        # set up the connections
+        buttonSearch.connect("clicked",self.DefinitionMenu,"Search Online")
+        buttonGiveDefinition.connect("clicked",self.DefinitionMenu,"Give Definition")
+        buttonNoDefinition.connect("clicked",self.DefinitionMenu,"Keep Without Definition")
+        buttonNoKeep.connect("clicked",self.DefinitionMenu,"Do Not Keep Term")
+
+        # put them in a box
         definitionButtons=Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         definitionButtons.pack_start(buttonSearch,False, False, 2)
         definitionButtons.pack_start(buttonGiveDefinition,False, False, 2)
@@ -108,13 +120,14 @@ class C4OWindow(Gtk.ApplicationWindow):
         definitionButtons.pack_start(buttonNoKeep,False, False, 2)
         definitionButtons.props.halign=Gtk.Align.CENTER
 
-        self.input_field.add_named(self.entry,"entry")
+        self.input_field.add_named(self.entry,"Entry")
         self.entry.set_visible (True)
+        self.entry.connect("activate",self.getAnswer)
         self.input_field.add_named(bothButtons,"TrueOrFalse")
         bothButtons.set_visible (True)
         self.input_field.add_named(definitionButtons,"Definitions")
         definitionButtons.set_visible (True)
-        self.input_field.set_visible_child_name("entry")
+        self.input_field.set_visible_child_name("Entry")
 
         input.pack_start(self.input_field,True, True, 2)
 
@@ -122,8 +135,8 @@ class C4OWindow(Gtk.ApplicationWindow):
         input.pack_start(self.competencyQuestion,False, False, 2)
 
         self.competencyQuestion.connect("clicked",self.MenuFunction,"Sentence")
-        self.broaden.connect("clicked",self.MenuFunction,"Generalized")
-        self.narrow .connect("clicked",self.MenuFunction,"Specialize")
+        self.broaden.connect("clicked",self.MenuFunction,"Broaden")
+        self.narrow .connect("clicked",self.MenuFunction,"Narrow")
         self.trash.connect("clicked",self.MenuFunction,"Destroy Entity")
         
 
@@ -132,40 +145,23 @@ class C4OWindow(Gtk.ApplicationWindow):
         paned=Gtk.Paned(orientation=Gtk.Orientation.HORIZONTAL)
         paned.set_wide_handle(True)
         paned.set_position(500)
-        store = Gtk.TreeStore(str, str, str)
+        self.storeTerm = Gtk.TreeStore(str, str, str)
 
-        treeview = Gtk.TreeView(store)
+        treeview = Gtk.TreeView(self.storeTerm)
         treeview.set_tooltip_column(2)
         treeview.set_hover_selection(True)
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Title", renderer, text=0)
+        column = Gtk.TreeViewColumn("Term", renderer, text=0)
         treeview.append_column(column)
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Description", renderer, text=1)
+        column = Gtk.TreeViewColumn("Parent", renderer, text=1)
         treeview.append_column(column)
-
-        row1=store.append(None, ["Child", "This is the description for Item 1", "The child are:None\n The Parents are: Parent,GrandParent"])
-        # row2=store.append(None, ["Parent", "This is the description for Item 2", "The child are:Child\n The Parents are: GrandParent"])
-        # row3=store.append(None, ["GrandParent", "This is the description for Item 3", "The child are:Child,Parent\n The Parents are:None"])
-        store.append(row1, ["Parent: Parent","",""])
-        # store.append(row1, ["Parent: GrandParent","",""])
-        # store.append(row2, ["Child: child","",""])
-        # store.append(row2, ["Parent: GrandParent","",""])
-        # store.append(row3, ["Child: child","",""])
-        # store.append(row3, ["Child: Parent","",""])
-
+        
         # # when a value is clicked in the treeview, add the title to the entry with the previous text
         # # and make the broaden button and narrow button active         
-        # treeview.connect("row-activated", lambda x, y, z: entry.get_text() + " " +entry.set_text(store[y][0]))
-        # treeview.connect("row-activated", lambda x, y, z: broaden.set_sensitive(True))
-        # treeview.connect("row-activated", lambda x, y, z: narrow.set_sensitive(True))
-        # treeview.connect("row-activated", lambda x, y, z: trash.set_sensitive(True))
-        # treeview.connect("row-activated", lambda x, y, z: competencyQuestion.set_sensitive(False))
+        treeview.connect("row-activated", self.TableActivated)
         # # if the entry is empty, make the broaden button and narrow button inactive
-        # entry.connect("changed", lambda x: broaden.set_sensitive(False))
-        # entry.connect("changed", lambda x: narrow.set_sensitive(False))
-        # entry.connect("changed", lambda x: trash.set_sensitive(False))
-        # entry.connect("changed", lambda x: competencyQuestion.set_sensitive(True))
+        self.entry.connect("changed", self.EntryChanged)
 
         # add a scrollable treeview
         scrollingTreeView1=Gtk.ScrolledWindow()
@@ -173,24 +169,18 @@ class C4OWindow(Gtk.ApplicationWindow):
 
         paned.add1(scrollingTreeView1)
 
-        store = Gtk.TreeStore(str, str, str)
-        treeview = Gtk.TreeView(store)
+        self.storeRelationship = Gtk.TreeStore(str, str, str)
+        treeview = Gtk.TreeView(self.storeRelationship)
 
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Term", renderer, text=0)
+        column = Gtk.TreeViewColumn("Term1", renderer, text=0)
         treeview.append_column(column)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Connection", renderer, text=1)
         treeview.append_column(column)
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Term", renderer, text=2)
+        column = Gtk.TreeViewColumn("Term2", renderer, text=2)
         treeview.append_column(column)
-
-        # row1=store.append(None, ["Child", "is_aasdasdsasdadsasadsadsdasdasadsdasaasddsasdasadsadsadsadasdasdsadsaddsadsdasadsdasadsdas", "Parent"])
-        # row2=store.append(None, ["Parent", "is_a", "GrandParent"])
-        # row3=store.append(None, ["GrandParent", "is_a", "GreatGrandParent"])
-
-        # make the store have the values to be wrapped
         
         # add a scrollable treeview
         scrollingTreeView2=Gtk.ScrolledWindow()
@@ -203,20 +193,48 @@ class C4OWindow(Gtk.ApplicationWindow):
         vbox.pack_start(paned, True, True, 2)
         # add the vertical box to the window
         self.add(vbox)
-        self.Start()
+        self.DeactivateAll()
+        self.Initialize()
         self.show_all()
 
-    
-    # destory the window
+    def TableActivated(self,x,y,z): 
+        text=self.entry.get_text()+", "
+        if text==", ":
+            text=""
+        self.entry.set_text(text+self.storeTerm[y][0])
+        self.broaden.set_sensitive(True)
+        self.narrow.set_sensitive(True)
+        self.trash.set_sensitive(True)
+        self.competencyQuestion.set_sensitive(False)
+    def EntryChanged(self,x):
+        self.broaden.set_sensitive(False)
+        self.narrow.set_sensitive(False)
+        self.trash.set_sensitive(False)
+        self.competencyQuestion.set_sensitive(True)
+
+    # destroy the window
     def destroyWindow(self):
         self.destroy()
 
-    # create a new file
-    def createNewWindow(self,file_path,file_name):
-        win2 = C4OWindow(file_path,file_name,application=self.get_application())
-        win2.show_all()
+    def Initialize(self):
+        self.data=[{},{}]
+        self.rememberParentToAdd={}
+        self.taskNouns=0
+        self.nouns={}
+        self.moreGeneralized=False
+        self.noun=None
+        self.parent=None
+        self.definedBy=None
+        self.entryTask=""
+        self.file_path=""
+        self.relationships={}
+        self.FirstTime=True
+        self.storeTermRows={}
+        self.storeTerm.clear()
+        self.storeRelationship.clear()
+        
 
-    def Start(self):
+    def DeactivateAll(self):
         self.broaden.set_sensitive(False)
         self.narrow.set_sensitive(False)
         self.trash.set_sensitive(False)
@@ -224,11 +242,18 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.competencyQuestion.set_sensitive(False)
 
     def Menu(self):
+        self.addTextChatBot(talk.Menu(),100)
+        if self.FirstTime==True:
+            self.FirstTime=False
+            self.addTextChatBot(talk.Help(),100)
+        manager.SaveOntology(self.data[2],self.file_path,self)
         self.broaden.set_sensitive(False)
         self.narrow.set_sensitive(False)
         self.trash.set_sensitive(False)
+        self.input_field.set_visible_child_name("Entry")
         self.input_field.get_visible_child().set_sensitive(True)
         self.competencyQuestion.set_sensitive(True)
+        self.entryTask="Menu"
     
     def TrueFalseAnswer(self):
         self.broaden.set_sensitive(False)
@@ -255,16 +280,147 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.textview.rememberOneTime(text)
 
     def MenuFunction(self,text,option,*args, **kwargs):
+        self.getAnswer="Menu"
+        self.DeactivateAll()
         text=self.entry.get_text()
-        self.textview.add_text("User:\n\t"+text,0)
-        global answerUI,hearServer,dangerArea
-        dangerArea.acquire()
-        answerUI=option+";"+text
-        dangerArea.release()
-        hearServer.release()
+        if option=="Sentence":
+            self.textview.add_text("User:\nSentence with"+text,0)
+            Sentence(text,self)
+        elif option=="Broaden":
+            self.textview.add_text("User:\nBroaden with"+text,0)
+            # broaden(self.data,text,self)
+        elif option=="Narrow":
+            self.textview.add_text("User:\nNarrow with"+text,0)
+            narrow(self.data,text,self)
 
-    def getAnswer(self):
+    def getAnswer(self,*args, **kwargs):
         # make it so that when you press enter the text is added to the textview
-        self.entry.connect("activate", lambda x: self.textview.add_text("User:\n\t"+self.entry.get_text(),0))
+        text=self.entry.get_text()
+        self.addTextUser(text)
         # empty the entry after each entry
-        self.entry.connect("activate", lambda x: self.entry.set_text(""))
+        self.entry.set_text("")
+        if self.entryTask=="Menu":
+            if self.competencyQuestion.get_sensitive()==True:
+                Sentence(text,self)
+            else:
+                self.addTextChatBot(talk.CouldNotUnderstand()+"Please select a button!")
+                self.Menu()
+        elif self.entryTask=="definition":
+            self.definedBy="You"
+            # create the object
+            self.data[0][self.noun]=[manager.CreateObject(self.data[2],self.noun,self),self.noun,[],0,0]
+            self.AddToTableTerm(self.noun)
+            
+            # add definition
+            manager.Explanation(self.data[2],self.data[0][self.noun][0],text,self.definedBy,self)
+            self.taskNouns-=1
+            self.checkTask()
+
+
+    def checkTask(self):
+        if self.taskNouns==0:
+            options=[]
+            for relation in self.relationships.keys():
+                
+                term1=self.relationships[relation][0]
+                term2=self.relationships[relation][1]
+                combination=term1+"_"+relation.title()+"_"+term2.title()
+                # one object was not kept
+                if term1 not in self.data[0].keys() or term2 not in self.data[0].keys():
+                    return
+                if relation.title() in self.data[1].keys():
+                    self.addTextChatBot("The relationship \""+combination+"\" is already in the dataBase")
+                    continue
+                options.append(combination)
+            if options!=[]:
+                dialog=CheckDialogRelationship(self,options)
+                selectedRelationships = dialog.run()
+                text="Selected:\n"
+                for selected in selectedRelationships:
+                    text+=selected+"\n"
+                    theRelationship=selected.split("_")
+                    term1=theRelationship[0]
+                    relation=theRelationship[1]
+                    term2=theRelationship[2]
+                    creationFunctions.createRelation(self.data,self,term1,relation,term2)
+                self.addTextUser(text)            
+            self.Menu()
+        else:
+            self.input_field.set_sensitive(True)
+            self.noun=list(self.nouns.keys())[len(self.nouns.keys())-self.taskNouns]
+            self.parent=self.nouns[self.noun]
+            creationFunctions.createNoun(self.noun,self.parent,self)
+
+    def search(self):
+        self.addTextChatBot(talk.FindDefinition(self.noun))
+        self.input_field.set_visible_child_name("Definitions")
+
+    def DefinitionMenu(self,*args, **kwargs):
+        answer=args[1]
+        self.addTextUser(answer)
+        if answer=="Search Online":
+            search.searchForTerm(self.data,self.noun,self.parent,self,self.moreGeneralized)            
+        elif answer=="Give Definition":
+            self.definedBy="You"
+            self.input_field.set_visible_child_name("Entry")
+            self.entryTask="definition"
+            self.addTextChatBot(talk.GiveDefinition(answer))
+        elif answer=="Keep Without Definition":
+            self.addTextChatBot(talk.KeepWithoutDefinition(answer))
+            # create the object
+            self.data[0][self.noun]=[manager.CreateObject(self.data[2],self.noun,self),self.noun,[],0,0]
+            self.AddToTableTerm(self.noun)
+            # add definition
+            manager.Explanation(self.data[2],self.data[0][self.noun][0],"","",self)
+            self.taskNouns-=1
+            self.checkTask()
+        elif answer=="Do Not Keep Term":
+            self.addTextChatBot(talk.DoNotKeep(answer))
+            self.taskNouns-=1
+            self.checkTask()
+
+    def GiveDefinition(self,definition):
+        self.definedBy="You"
+        # create the object
+        self.data[0][self.noun]=[manager.CreateObject(self.data[2],self.noun,self),self.noun,[],0,0]
+        self.AddToTableTerm(self.noun)
+        # add definition
+        manager.Explanation(self.data[2],self.data[0][self.noun][0],definition,self.definedBy,self)
+
+    def error(self,error):
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            flags=0,
+            message_type=Gtk.MessageType.ERROR,
+            buttons=Gtk.ButtonsType.CANCEL,
+            text=error,
+        )
+        dialog.run()
+        dialog.destroy()
+
+    def AddToTableTerm(self,term):
+        theParents=""
+        for parent in self.data[0][term][2]:
+            theParents+=parent+" "
+        if theParents=="":
+            theParents="None"
+        else:
+            theParents=theParents[:-1]
+        self.storeTermRows[term]=self.storeTerm.append(None, [term,theParents,"Parents:\n"+str(self.data[0][term][2])])
+        if term in self.rememberParentToAdd.keys():
+            for i in self.rememberParentToAdd[term]:
+                self.storeTerm.append(self.storeTermRows[term], ["Children",i,"Parents:\n"+str(self.data[0][term][2])])
+            self.rememberParentToAdd.pop(term)  
+        if theParents!="":
+            theParents=theParents.split(" ")
+        for parent in theParents:
+            if parent in self.storeTermRows:
+                self.storeTerm.insert_after(self.storeTermRows[parent],None, ["Children",term,"Parents:\n"+str(self.data[0][term][2])])
+            else:
+                if parent not in self.rememberParentToAdd.keys():
+                    self.rememberParentToAdd[parent]=[] 
+                self.rememberParentToAdd[parent].append(term)
+    
+
+    def AddToTableRelationship(self,term1,relation,term2):
+        self.storeRelationship.append(None,[term1,relation,term2])

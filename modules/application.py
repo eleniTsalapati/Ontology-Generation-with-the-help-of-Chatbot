@@ -1,4 +1,3 @@
-from modules.UI import UI
 import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
 import modules.chatbotHears as hear
@@ -52,12 +51,16 @@ class C4OApplication(Gtk.Application):
         action.connect("activate", self.save_file)
         self.add_action(action)
 
+        action = Gio.SimpleAction.new("help", None)
+        action.connect("activate", self.help)
+        self.add_action(action)
+
     def do_activate(self):
         # We only allow a single window and raise any existing ones
         if not self.window:
             # Windows are associated with the application
             # when the last one is closed the application shuts down
-            self.window = C4OWindow("","Untitled Document",application=self, title="Main Window")
+            self.window = C4OWindow(application=self, title="Main Window")
 
         self.window.present()
 
@@ -120,6 +123,13 @@ class C4OApplication(Gtk.Application):
             print("Cancel clicked")
             dialog.destroy()
 
+    def help(self, action, param):
+        dialog = Gtk.MessageDialog(parent=self.window, flags=0,
+                               buttons=Gtk.ButtonsType.OK, text=talk.Help())
+
+        Gtk.Dialog.run(dialog)
+        dialog.destroy()
+
     def on_about(self, action, param):
         about_dialog = Gtk.AboutDialog(transient_for=self.window)
         # add text to the about dialog
@@ -137,22 +147,17 @@ class C4OApplication(Gtk.Application):
 
     def fileOpened(self,path):
         # opening the path
+        path="file://"+path
+        self.window.Initialize()
+        self.window.file_path=path
         answer=manager.LoadOntology(path,self.window.addError)
         if answer!=None:
-            global data,dangerArea,thePath
-            dangerArea.acquire()
-            data.append(answer)
-            manager.addData(data[2],data)
-            thePath=path
-            dangerArea.release()
-
+            self.window.data.append(answer)
+            manager.addData(self.window.data[2],self.window.data,self.window)
             # rename the UI
             file_name = path.split("/")[-1]
             self.window.hb.props.title = file_name + "- C4O"
             self.window.addTextUser("Open"+ path)
             self.window.addTextChatBot("Openning the file \""+path+"\". Wait for a moment...")
-            self.window.addTextChatBot(talk.Menu(),100)
-            self.window.addTextChatBot(talk.Help(),100)
-            
             self.window.Menu()
     

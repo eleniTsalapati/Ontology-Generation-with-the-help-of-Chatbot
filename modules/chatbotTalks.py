@@ -17,7 +17,7 @@ def Welcome():
     return txt
     
 def Menu():
-    txt="Your Ontology has been uploaded. Now you can choose 1 from 4 options.\n\t"
+    txt="Your Ontology has been saved. Now you can choose 1 from 4 options.\n\t"
     txt+="You can give: Competency Question, Narrow a term, Broaden a term, Delete a term."
     return txt
 
@@ -82,65 +82,34 @@ def CouldNotUnderstand():
 #  -----------------------------------------------------------------------------------------------------------------
 
 def FindDefinition(word):
-    txt="Shall I search for the definition of  \""+ word +"\"?\n"
+    txt="What should I do with the definition of \""+ word +"\"? Select one option.\n"
     return txt
 
-def AskDefinition(word):
-    txt="Do you want to give your own definition for  \""+ word +"\"?\n"
-    return txt
+def GiveDefinition(word):
+    return "What should be the definition of  \""+ word +"\"? Put your answer in the text field and press enter.\n"
 
-def YourDefinition(word):
-    txt="What is your definition of  \""+ word +"\"?\n"
-    return txt
+def KeepWithoutDefinition(word):
+    return "I will keep the \""+word+"\" without any definition."
 
-def KeepWord(word):
-    txt="Shall I keep  \"" + word + "\" without a definition?\n"
-    txt+="If the answer is negative then the ontology will not keep this word.\n"
-    return txt
+def DoNotKeep(word):
+    return "I will not keep the \""+word+"\"."
 
-def keepProperty(property):
-    return "Should I keep the \""+property+"\""
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        search Ontology talks
 #  -----------------------------------------------------------------------------------------------------------------
 
-def termFoundNoDescription(term,ontology):
-    txt="The Ontology \""+ontology+"\" has no description for \""+term+"\".\n"
-    txt+="Should I keep this ontology without a description?\n"
-    txt+="If the answer is negative then this Ontology will be discarded and another Ontology will be searched.\n"
-    return txt
-
-def termKeepCategories(term,find):
-    txt="Shall I keep the "+find+" of \""+term+"\"?\n"
-    return txt
-
-def termKeepTheCategoryWithDescription(term,category,description,ontology,find):
-    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" with the description:\n"
+def FoundOntology(ontology,description):
+    txt="The Ontology \""+ontology+"\" was found with description:\n"
     txt+=description+"\n"
-    txt+="Shall I keep this?\n"
     return txt
 
-def termKeepTheCategoryWithoutDescription(term,category,ontology,find):
-    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" without a description.\n"
-    txt+="Shall I keep this?\n"
-    return txt
+def ChooseParent_Child(term,description):
+    return "\""+term+"\" with description:\n"+description+"\n"
+
+def termNoCategoryFound(term,ontology,type):
+    return "In the \""+ontology+"\" for the \""+term+"\" no \""+type+"\" was found." 
 
 
-def termNoCategoryFound(term,ontology,find):
-    txt="The ontology \""+ontology+"\" has no "+find+" for \""+term+"\".\n\n"
-    return txt
-
-
-def termFoundDescription(term,description,ontology):
-    txt="The Ontology \""+ontology+"\" has the following description for \""+term+"\":\n"
-    txt+=description+"\n"
-    txt+="Shall I keep this ontology with a description\n"
-    txt+="If the answer is negative then this Ontology will be discarded and another Ontology will be searched.\n"
-    return txt
-
-def seen5(term,find):
-    txt="You have seen 5 "+ find +" of \""+term+"\"\n Do you want to see more?\n"
-    return txt
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        Onto Clean
 #  -----------------------------------------------------------------------------------------------------------------
