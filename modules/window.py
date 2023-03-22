@@ -1,15 +1,17 @@
+from modules.searchOntology import *
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import modules.slowTextView as stv
 from modules.mainFunction import *
-from modules.shared_data import *
-import modules.searchOntology as search
 import modules.creationFunctions as creationFunctions
-from modules.dialogOptions import CheckDialogRelationship
+from modules.dialogOptions import CheckDialog
+import modules.chatbotTalks as talk
+import modules.ontologyManager as manager
 
 class C4OWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
+        self.whichTask=""
         super().__init__(*args, **kwargs)
         
         # make the application be at the maximum size of the screen
@@ -181,7 +183,10 @@ class C4OWindow(Gtk.ApplicationWindow):
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Term2", renderer, text=2)
         treeview.append_column(column)
-        
+        # # when a value is clicked in the treeview, add the title to the entry with the previous text
+        # # and make the broaden button and narrow button active         
+        treeview.connect("row-activated", self.TableActivated2)
+
         # add a scrollable treeview
         scrollingTreeView2=Gtk.ScrolledWindow()
         scrollingTreeView2.add(treeview)
@@ -206,6 +211,17 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.narrow.set_sensitive(True)
         self.trash.set_sensitive(True)
         self.competencyQuestion.set_sensitive(False)
+
+    def TableActivated2(self,x,y,z): 
+        text=self.entry.get_text()+", "
+        if text==", ":
+            text=""
+        self.entry.set_text(text+self.storeRelationship[y][0]+"_"+self.storeRelationship[y][1]+"_"+self.storeRelationship[y][2])
+        self.broaden.set_sensitive(True)
+        self.narrow.set_sensitive(True)
+        self.trash.set_sensitive(True)
+        self.competencyQuestion.set_sensitive(False)
+
     def EntryChanged(self,x):
         self.broaden.set_sensitive(False)
         self.narrow.set_sensitive(False)
@@ -218,6 +234,8 @@ class C4OWindow(Gtk.ApplicationWindow):
 
     def Initialize(self):
         self.data=[{},{}]
+        self.inside=[]
+        self.outside=[]
         self.rememberParentToAdd={}
         self.taskNouns=0
         self.nouns={}
@@ -230,6 +248,7 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.relationships={}
         self.FirstTime=True
         self.storeTermRows={}
+        self.storeRelationshipRows={}
         self.storeTerm.clear()
         self.storeRelationship.clear()
         
@@ -283,15 +302,23 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.getAnswer="Menu"
         self.DeactivateAll()
         text=self.entry.get_text()
+        self.entry.set_text("")
         if option=="Sentence":
-            self.textview.add_text("User:\nSentence with"+text,0)
+            self.textview.add_text("User:\n\tSentence with"+text,0)
+            self.whichTask="Sentence"
             Sentence(text,self)
         elif option=="Broaden":
-            self.textview.add_text("User:\nBroaden with"+text,0)
-            # broaden(self.data,text,self)
+            self.textview.add_text("User:\n\tBroaden with"+text,0)
+            self.whichTask="Broaden"
+            broaden(text,self)
         elif option=="Narrow":
-            self.textview.add_text("User:\nNarrow with"+text,0)
-            narrow(self.data,text,self)
+            self.whichTask="Narrow"
+            self.textview.add_text("User:\n\tNarrow with"+text,0)
+            narrow(text,self)
+        elif option=="Destroy Entity":
+            self.whichTask="Destroy Entity"
+            self.textview.add_text("User:\n\tDestroy:"+text,0)
+            destroy(text,self)
 
     def getAnswer(self,*args, **kwargs):
         # make it so that when you press enter the text is added to the textview
@@ -301,23 +328,90 @@ class C4OWindow(Gtk.ApplicationWindow):
         self.entry.set_text("")
         if self.entryTask=="Menu":
             if self.competencyQuestion.get_sensitive()==True:
+                self.whichTask="Sentence"
                 Sentence(text,self)
             else:
                 self.addTextChatBot(talk.CouldNotUnderstand()+"Please select a button!")
                 self.Menu()
         elif self.entryTask=="definition":
+            theNoun=self.noun
+            if self.whichTask=="Broaden":
+                theNoun=self.parent
             self.definedBy="You"
             # create the object
-            self.data[0][self.noun]=[manager.CreateObject(self.data[2],self.noun,self),self.noun,[],0,0]
-            self.AddToTableTerm(self.noun)
+            self.data[0][theNoun]=[manager.CreateObject(self.data[2],theNoun,self),theNoun,[],0,0]
+            self.AddToTableTerm(theNoun)
             
             # add definition
-            manager.Explanation(self.data[2],self.data[0][self.noun][0],text,self.definedBy,self)
-            self.taskNouns-=1
-            self.checkTask()
+            manager.Explanation(self.data[2],self.data[0][theNoun][0],text,self.definedBy,self)
+            creationFunctions.addInheritance(self.noun,[self.parent],self)
+            if self.whichTask=="Sentence":
+                self.taskNouns-=1
+                self.checkTaskAddTerm()
+            elif self.whichTask=="Narrow":
+                self.iter+=1
+                self.addOutside()
+            elif self.whichTask=="Broaden":
+                self.iter+=1
+                self.addOutside()
+        elif self.entryTask=="get nouns":
+            self.inside,self.outside=hear.FindNounsInDataBase(text,self)
+            self.iter=0
+            self.addOutside()
 
+    # this functions check Inheritance between parent and inside for Narrow and inside and noun for Broaden
+    def addInside(self): 
+        if self.iter==len(self.inside):
+            self.iter=0
+            if self.whichTask=="Narrow":
+                self.taskNouns-=1
+                self.checkTaskNarrow_Broaden()
+            elif self.whichTask=="Broaden":
+                self.taskNouns-=1
+                self.checkTaskNarrow_Broaden()
+        else:
+            if self.whichTask=="Narrow":
+                self.noun=self.inside[self.iter]
+                creationFunctions.addInheritance(self.noun,[self.parent],self)
+            else:
+                self.parent=self.inside[self.iter]
+                creationFunctions.addInheritance(self.noun,[self.parent],self)
+            self.iter+=1
+            self.addInside()
 
-    def checkTask(self):
+    # this function add the noun that is created
+    def addOutside(self):
+        if self.iter==len(self.outside):
+            self.iter=0
+            self.addInside()
+        else:
+            if self.whichTask=="Narrow":
+                self.noun=self.outside[self.iter]
+                creationFunctions.createNoun(self.noun,self.parent,self,False)            
+            else:
+                self.parent=self.outside[self.iter]
+                creationFunctions.createNoun(self.parent,[],self,False)            
+                # creationFunctions.addInheritance(self.noun,[self.parent],self)
+
+    def checkTaskNarrow_Broaden(self):
+        if self.taskNouns==0:
+            self.Menu()
+        else:
+            if self.whichTask=="Narrow":
+                self.parent=self.nouns[len(self.nouns)-self.taskNouns]
+                self.addTextChatBot(talk.whatToNarrow(self.parent))
+            else:
+                self.noun=self.nouns[len(self.nouns)-self.taskNouns]
+                self.addTextChatBot(talk.whatToBroaden(self.noun))
+            self.input_field.set_visible_child_name("Entry")
+            self.entryTask="get nouns"
+            self.broaden.set_sensitive(False)
+            self.narrow.set_sensitive(False)
+            self.trash.set_sensitive(False)
+            self.entry.set_sensitive(True)
+            self.competencyQuestion.set_sensitive(False)
+
+    def checkTaskAddTerm(self):
         if self.taskNouns==0:
             options=[]
             for relation in self.relationships.keys():
@@ -333,7 +427,7 @@ class C4OWindow(Gtk.ApplicationWindow):
                     continue
                 options.append(combination)
             if options!=[]:
-                dialog=CheckDialogRelationship(self,options)
+                dialog=CheckDialog(self,options,"Choose the relationships you want to keep")
                 selectedRelationships = dialog.run()
                 text="Selected:\n"
                 for selected in selectedRelationships:
@@ -358,26 +452,45 @@ class C4OWindow(Gtk.ApplicationWindow):
     def DefinitionMenu(self,*args, **kwargs):
         answer=args[1]
         self.addTextUser(answer)
+        keep=True
+        theNoun=self.noun
+        theParents=self.parent
+        if self.whichTask=="Broaden":
+            theNoun=self.parent
+            theParents=[]
         if answer=="Search Online":
-            search.searchForTerm(self.data,self.noun,self.parent,self,self.moreGeneralized)            
+            answer=searchForTerm(self.data,theNoun,theParents,self,self.moreGeneralized)            
+            if answer==True:
+                return
         elif answer=="Give Definition":
             self.definedBy="You"
             self.input_field.set_visible_child_name("Entry")
             self.entryTask="definition"
-            self.addTextChatBot(talk.GiveDefinition(answer))
+            self.addTextChatBot(talk.GiveDefinition(theNoun))
+            return
         elif answer=="Keep Without Definition":
-            self.addTextChatBot(talk.KeepWithoutDefinition(answer))
+            self.addTextChatBot(talk.KeepWithoutDefinition(theNoun))
             # create the object
-            self.data[0][self.noun]=[manager.CreateObject(self.data[2],self.noun,self),self.noun,[],0,0]
-            self.AddToTableTerm(self.noun)
+            self.data[0][theNoun]=[manager.CreateObject(self.data[2],theNoun,self),theNoun,[],0,0]
+            self.AddToTableTerm(theNoun)
             # add definition
-            manager.Explanation(self.data[2],self.data[0][self.noun][0],"","",self)
-            self.taskNouns-=1
-            self.checkTask()
+            manager.Explanation(self.data[2],self.data[0][theNoun][0],"","",self)
         elif answer=="Do Not Keep Term":
+            keep=False
             self.addTextChatBot(talk.DoNotKeep(answer))
+        # if you keep the item then check for Inheritance
+        if keep==True:
+            creationFunctions.addInheritance(self.noun,[self.parent],self)
+        # go to next noun
+        if self.whichTask=="Sentence":
             self.taskNouns-=1
-            self.checkTask()
+            self.checkTaskAddTerm()
+        elif self.whichTask=="Narrow":
+            self.iter+=1
+            self.addOutside()
+        elif self.whichTask=="Broaden":
+            self.iter+=1
+            self.addOutside()
 
     def GiveDefinition(self,definition):
         self.definedBy="You"
@@ -420,7 +533,66 @@ class C4OWindow(Gtk.ApplicationWindow):
                 if parent not in self.rememberParentToAdd.keys():
                     self.rememberParentToAdd[parent]=[] 
                 self.rememberParentToAdd[parent].append(term)
-    
 
     def AddToTableRelationship(self,term1,relation,term2):
-        self.storeRelationship.append(None,[term1,relation,term2])
+        self.storeRelationshipRows[relation]=self.storeRelationship.append(None,[term1,relation,term2])
+        
+    def AddToTableParent(self,noun,theParent):
+        theParents=""
+        for parent in self.data[0][noun][2]:
+            theParents+=parent+" "
+        if theParents=="":
+            theParents="None"
+        else:
+            theParents=theParents[:-1]
+        print(theParents)
+        self.storeTerm.set_value(self.storeTermRows[noun],1,theParents)
+        self.storeTerm.set_value(self.storeTermRows[noun],2,"Parents:\n"+str(self.data[0][noun][2]))
+        self.storeTerm.insert_after(self.storeTermRows[theParent],None, ["Children",noun,"Parents:\n"+str(self.data[0][noun][2])])
+
+    def RemoveTerm(self,term):
+        whatToRemove=[]
+        for row in range(len(self.storeTerm)):
+            values = [str(self.storeTerm[row][col]) for col in range(3)]
+            parents=values[2][9:].strip('][').split('\'')
+            total=""
+            flag=False
+            # check if the term is a parent
+            for i in range(len(parents)):
+                if i%2==1:
+                    if term == parents[i]:
+                        flag=True
+                        continue
+                    total+=parents[i]
+            if flag==True:
+                if total=="":
+                    total="None"
+                self.storeTerm.set_value(self.storeTerm[row].iter,1,total)
+                self.storeTerm.set_value(self.storeTerm[row].iter,2,"Parents:\n"+str(total))
+            # check if the term is in the child
+            if self.storeTerm.iter_has_child(self.storeTerm[row].iter)==True:
+                if term == self.storeTerm[self.storeTerm.iter_children(self.storeTerm[row].iter)][1]:
+                    whatToRemove.append(self.storeTerm.iter_children(self.storeTerm[0].iter))
+
+        for i in whatToRemove:
+            self.storeTerm.remove(i)
+
+        self.storeTerm.remove(self.storeTermRows[term])
+        self.storeTermRows.pop(term)
+        
+    def RemoveRelationship(self,relationship):
+        print(relationship)
+        self.storeRelationship.remove(self.storeRelationshipRows[relationship])
+        self.storeRelationshipRows.pop(relationship)
+
+    # ΤΟ DO
+    # fix relationship table
+    # save save
+    # Text: Broaden: list
+    # insert grade out the buttons
+    # give definition + button
+    # None-> Thing as parent
+    # kati [] []
+    # na einai mia apli inheritane 
+    # sync_reasoner() then inconsistent_classes() + button
+    # save -> create save button, autosave, close ask
