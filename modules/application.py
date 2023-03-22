@@ -1,14 +1,20 @@
-import sys
-
+import modules.chatbotTalks as talk
+import modules.ontologyManager as manager
+import modules.chatbotHears as hear
+import modules.utility as utility
+from modules.mainFunction import *
+import modules.log as log
 import gi,os
+from modules.shared_data import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk
 
-from c4o_window import C4OWindow
+from modules.window import C4OWindow
 
 class C4OApplication(Gtk.Application):
-    def __init__(self, *args, **kwargs):
+    def __init__(self,*args, **kwargs):
+        
         super().__init__(
             *args,
             application_id="org.example.myapp",
@@ -45,12 +51,16 @@ class C4OApplication(Gtk.Application):
         action.connect("activate", self.save_file)
         self.add_action(action)
 
+        action = Gio.SimpleAction.new("help", None)
+        action.connect("activate", self.help)
+        self.add_action(action)
+
     def do_activate(self):
         # We only allow a single window and raise any existing ones
         if not self.window:
             # Windows are associated with the application
             # when the last one is closed the application shuts down
-            self.window = C4OWindow("","Untitled Document",application=self, title="Main Window")
+            self.window = C4OWindow(application=self, title="Main Window")
 
         self.window.present()
 
@@ -79,15 +89,8 @@ class C4OApplication(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             file_path = dialog.get_filename()
-            # get the file name
-            file_name = file_path.split("/")[-1]
-            # delete the dialog
             dialog.destroy()
-            # create a new window and destroy the previous
-        
-            self.window.hb.props.title = " - 213"
-            # self.window.createNewWindow(file_path,file_name)
-            # self.window.destroyWindow()
+            self.fileOpened(file_path)
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
             dialog.destroy()
@@ -114,17 +117,18 @@ class C4OApplication(Gtk.Application):
                 os.remove(file_path)
             # create the file
             open(file_path, 'x').close()
-            # get the file name
-            file_name = file_path.split("/")[-1]
-
-            # delete the dialog
             dialog.destroy()
-            # create a new window and destroy the previous
-            self.window.createNewWindow(file_path,file_name)
-            self.quit()
+            self.fileOpened(file_path)
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")
             dialog.destroy()
+
+    def help(self, action, param):
+        dialog = Gtk.MessageDialog(parent=self.window, flags=0,
+                               buttons=Gtk.ButtonsType.OK, text=talk.Help())
+
+        Gtk.Dialog.run(dialog)
+        dialog.destroy()
 
     def on_about(self, action, param):
         about_dialog = Gtk.AboutDialog(transient_for=self.window)
@@ -138,12 +142,22 @@ class C4OApplication(Gtk.Application):
         about_dialog.present()
 
     def on_quit(self, action, param):
+        self.window.textview.closeLog()
         self.quit()
 
-
-if __name__ == "__main__":
-    app = C4OApplication()
-    app.run(sys.argv)
-
-
-# https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Stack.html
+    def fileOpened(self,path):
+        # opening the path
+        path="file://"+path
+        self.window.Initialize()
+        self.window.file_path=path
+        answer=manager.LoadOntology(path,self.window.addError)
+        if answer!=None:
+            self.window.data.append(answer)
+            manager.addData(self.window.data[2],self.window.data,self.window)
+            # rename the UI
+            file_name = path.split("/")[-1]
+            self.window.hb.props.title = file_name + "- C4O"
+            self.window.addTextUser("Open"+ path)
+            self.window.addTextChatBot("Openning the file \""+path+"\". Wait for a moment...")
+            self.window.Menu()
+    

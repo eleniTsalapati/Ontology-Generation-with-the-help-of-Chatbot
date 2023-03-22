@@ -9,12 +9,11 @@ def lemmatization(word,ui):
     if len(word.split("_"))==1:
         theLementation=lemmatizer.lemmatize(word)
         if theLementation!= []:
-            ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n\n")
-            return (theLementation.title(),True)    
+            ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n")
+            return theLementation.title() 
     else:
         splitted=word.split("_")
         txt=""
-        flag=False
         for tmp in splitted:
             theLementation=lemmatizer.lemmatize(tmp)
             if theLementation!= []:
@@ -23,15 +22,13 @@ def lemmatization(word,ui):
                 else:
                     txt=txt+"_"+theLementation.title()
                 ui.rememberOneTime("Lemmatize the \""+tmp+"\" to \""+theLementation+"\"\n")
-                flag=True
             else:
                 if txt=="":
                     txt=tmp.title()
                 else:
                     txt=txt+"_"+tmp.title()    
-        txt+="\n"    
-        return(txt,flag)
-    return(word.title(),False)
+        return txt
+    return word.title()
 
 def WhatOntologyToAnswer(answer,ui):
     # tokenize and take tags of the words
@@ -44,7 +41,6 @@ def WhatOntologyToAnswer(answer,ui):
     previous=None
     theWord=""
     relation=""
-    flagLem=False
     for word in tagged:
 
         # be sure that the VBN is correct tag due to some errors
@@ -62,7 +58,7 @@ def WhatOntologyToAnswer(answer,ui):
         elif 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
 
             # Singularize or lemmatize the word to be singular
-            x,flagLem=lemmatization(word[0],ui)
+            x=lemmatization(word[0],ui)
             word=(x,word[1])
 
             # add it to the word
@@ -108,9 +104,6 @@ def WhatOntologyToAnswer(answer,ui):
             flagPOS=True
         else :
             flagPOS=False
-    
-    if flagLem==True:
-        ui.rememberOneTime("\n")
 
     return (nouns,relationships)
 

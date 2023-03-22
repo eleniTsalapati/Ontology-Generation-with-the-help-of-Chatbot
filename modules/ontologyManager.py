@@ -11,12 +11,13 @@ def checkHttp(file):
         if file[i]!=http[i]:
             return False
     return True
-def LoadOntology(file,ui):
+def LoadOntology(file,errorFunction):
     try:
         ontology = get_ontology(file).load()
         return ontology
     except Exception as err:
-        ui.error(f"There was an error with {file} with error:{err}")
+        errorFunction(f"There was an error with {file} with error:{err}")
+        return None
 
 def SaveOntology(ontology,file,ui):
     try:
@@ -34,7 +35,7 @@ def findLabel(object):
         label=str(object).split(".")[1]
     return label
 
-def addData(ontology,data):
+def addData(ontology,data,ui):
     for object in list(ontology.classes()):
         name=findLabel(object)
         keepParent=[]
@@ -44,7 +45,7 @@ def addData(ontology,data):
                 continue
             keepParent.append(theParent)
         data[0][name]=[object,name,keepParent,0,0]
-
+        ui.AddToTableTerm(name)
     for relation in list(ontology.object_properties()):
         for range in list(relation.range):
             for domain in list(relation.domain):
@@ -56,8 +57,11 @@ def addData(ontology,data):
                 data[0][obj2][3]=1
                 if name not in data[1].keys():
                     data[1][name]=[relation,[obj1],name,obj2]
+                    ui.AddToTableRelationship(obj1,name,obj2)
                 else:
                     data[1][name][1].append(obj1)
+                    ui.AddToTableRelationship(data[1][name][0],name,data[1][name][1][-1])
+
 
 
 def CreateObject(ontology,word,ui):

@@ -16,13 +16,31 @@ def Welcome():
     txt+="In which file shall I save the ontology?"
     return txt
     
-def WhatOntologyToAnswer():
-    txt="Give a Competency Question to add in the ontology?\n\n"
-    txt+="If you have a lot of nouns, then you need to have underscore \"_\" in between the nouns. \n"
-    txt+="For example: Mitigation_Action and NOT Mitigation action\n\n"
-    txt+="Please be careful with the grammar(the articles), syntax of the answer as it will affect it.\n"
-    txt+="Recognize: A cat eats fishes, Cats eat the fish\n"
-    txt+="Not Recognize: Cat eat fish\n"
+def Menu():
+    txt="Your Ontology has been saved. Now you can choose 1 from 4 options.\n\t"
+    txt+="You can give: Competency Question, Narrow a term, Broaden a term, Delete a term."
+    return txt
+
+def Help():
+    # Competency Question
+    txt="To give a COMPETENCY QUESTION you have to put your answer in the area bellow and then press the button.\n\t"
+    txt+="If you have a lot of nouns, then you need to have underscore \"_\" in between the nouns. \n\t"
+    txt+="For example: Mitigation_Action and NOT Mitigation action\n\n\t"
+    txt+="Please be careful with the grammar(the articles), syntax of the answer as it will affect it.\n\t"
+    txt+="Recognize: A cat eats fishes, Cats eat the fish\n\t"
+    txt+="Not Recognize: Cat eat fish\n\n\t"
+    
+    # Narrow term
+    txt+="To NARROW a term, double click the term from the left table which you want to be narrowed and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed.\n\n\t"
+
+    # Broaden term
+    txt+="To BROADEN a term, double click the term from the left table which you want to be broaden and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed.\n\n\t"
+
+    # Delete term
+    txt+="To DELETE a term, double click the term from the left table which you want to be deleted and then click the button.\n\t"
+    txt+="Important. The term has to be shown in the field down, so the button can be pressed."
     return txt
 
 def WhatToSpecialize():
@@ -64,65 +82,34 @@ def CouldNotUnderstand():
 #  -----------------------------------------------------------------------------------------------------------------
 
 def FindDefinition(word):
-    txt="Shall I search for the definition of  \""+ word +"\"?\n"
+    txt="What should I do with the definition of \""+ word +"\"? Select one option.\n"
     return txt
 
-def AskDefinition(word):
-    txt="Do you want to give your own definition for  \""+ word +"\"?\n"
-    return txt
+def GiveDefinition(word):
+    return "What should be the definition of  \""+ word +"\"? Put your answer in the text field and press enter.\n"
 
-def YourDefinition(word):
-    txt="What is your definition of  \""+ word +"\"?\n"
-    return txt
+def KeepWithoutDefinition(word):
+    return "I will keep the \""+word+"\" without any definition."
 
-def KeepWord(word):
-    txt="Shall I keep  \"" + word + "\" without a definition?\n"
-    txt+="If the answer is negative then the ontology will not keep this word.\n"
-    return txt
+def DoNotKeep(word):
+    return "I will not keep the \""+word+"\"."
 
-def keepProperty(property):
-    return "Should I keep the \""+property+"\""
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        search Ontology talks
 #  -----------------------------------------------------------------------------------------------------------------
 
-def termFoundNoDescription(term,ontology):
-    txt="The Ontology \""+ontology+"\" has no description for \""+term+"\".\n"
-    txt+="Should I keep this ontology without a description?\n"
-    txt+="If the answer is negative then this Ontology will be discarded and another Ontology will be searched.\n"
-    return txt
-
-def termKeepCategories(term,find):
-    txt="Shall I keep the "+find+" of \""+term+"\"?\n"
-    return txt
-
-def termKeepTheCategoryWithDescription(term,category,description,ontology,find):
-    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" with the description:\n"
+def FoundOntology(ontology,description):
+    txt="The Ontology \""+ontology+"\" was found with description:\n"
     txt+=description+"\n"
-    txt+="Shall I keep this?\n"
     return txt
 
-def termKeepTheCategoryWithoutDescription(term,category,ontology,find):
-    txt="The Ontology \""+ontology+"\" has \""+category+"\" as "+find+" of \""+term+"\" without a description.\n"
-    txt+="Shall I keep this?\n"
-    return txt
+def ChooseParent_Child(term,description):
+    return "\""+term+"\" with description:\n"+description+"\n"
+
+def termNoCategoryFound(term,ontology,type):
+    return "In the \""+ontology+"\" for the \""+term+"\" no \""+type+"\" was found." 
 
 
-def termNoCategoryFound(term,ontology,find):
-    txt="The ontology \""+ontology+"\" has no "+find+" for \""+term+"\".\n\n"
-    return txt
-
-
-def termFoundDescription(term,description,ontology):
-    txt="The Ontology \""+ontology+"\" has the following description for \""+term+"\":\n"
-    txt+=description+"\n"
-    txt+="Shall I keep this ontology with a description\n"
-    txt+="If the answer is negative then this Ontology will be discarded and another Ontology will be searched.\n"
-    return txt
-
-def seen5(term,find):
-    txt="You have seen 5 "+ find +" of \""+term+"\"\n Do you want to see more?\n"
-    return txt
 #  -----------------------------------------------------------------------------------------------------------------
 #                                        Onto Clean
 #  -----------------------------------------------------------------------------------------------------------------

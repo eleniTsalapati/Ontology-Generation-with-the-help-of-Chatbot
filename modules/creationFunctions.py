@@ -75,96 +75,40 @@ def addInheritance(noun,parent,data,ui):
 
     return True
 
-def createNoun(noun,parent,data,ui,moreGeneralized=True):
-
+def createNoun(noun,parent,ui,moreGeneralized=True):
+    ui.moreGeneralized=moreGeneralized
     # check if the word is in data base
-    for word in data[0].keys():
+    for word in ui.data[0].keys():
         if noun.lower()==word.lower():
             ui.rememberOneTime("The word \""+noun+"\" is already in the dataBase\n")
-            return False
+            ui.taskNouns-=1
+            ui.checkTask()
+            return 
+    # so check for the inheritance
+    # keepParent=[]
+    # keepRelation=[]
+    # if parent!=None:
+    #     for theParent in parent:
+    #         result=checkInheritance(noun,theParent,ui)
+    #         if result==0:
+    #             keepParent.append(theParent)
+    #         elif result==1:
+    #             relation=theParent.title()+"_ComponentOf_"+noun.title()
+    #             keepRelation.append((relation,theParent,noun))
+    #         elif result==2:
+    #             relation=noun.title()+"_ComponentOf_"+theParent.title()
+    #             keepRelation.append((relation,noun,theParent))
+    #         elif result==3:
+    #             relation=theParent.title()+"_ComposedOf_"+noun.title()
+    #             keepRelation.append((relation,theParent,noun))                
+    #         elif result==4:
+    #             relation=noun.title()+"_ComposedOf_"+theParent.title()
+    #             keepRelation.append((relation,noun,theParent))
 
+    ui.search()
 
-    found=False
-    while(found==False):
-        ui.makeTables(data)
-        ui.changeMessage("What should I do for \""+noun+"\"")
-        answer=ui.hearDefinition()
-        if answer=="Do not Keep the class":
-            return False
-
-        # so check for the inheritance
-        keepParent=[]
-        keepRelation=[]
-        if parent!=None:
-            for theParent in parent:
-                result=checkInheritance(noun,theParent,ui)
-                if result==0:
-                    keepParent.append(theParent)
-                elif result==1:
-                    relation=theParent.title()+"_ComponentOf_"+noun.title()
-                    keepRelation.append((relation,theParent,noun))
-                elif result==2:
-                    relation=noun.title()+"_ComponentOf_"+theParent.title()
-                    keepRelation.append((relation,noun,theParent))
-                elif result==3:
-                    relation=theParent.title()+"_ComposedOf_"+noun.title()
-                    keepRelation.append((relation,theParent,noun))                
-                elif result==4:
-                    relation=noun.title()+"_ComposedOf_"+theParent.title()
-                    keepRelation.append((relation,noun,theParent))
-
-        # The user wants to find the definition
-        if answer=="Search Definition":
-            try:
-            # search the definition
-                found=search.searchForTerm(data,noun,parent,ui,moreGeneralized)            
-                if found==False:
-                    ui.rememberOneTime("Please choose again\n")
-            except Exception as err:
-                ui.error(f"There was an error with the search, with error:{err}")
-        elif answer=="Give Definition":
-            found=True
-            ui.changeMessage(talk.YourDefinition(noun))
-            answerUI=ui.hear()
-            definition=hear.GetDefinition(answerUI)
-            definedBy="You"
-            # create the object
-            data[0][noun]=[manager.CreateObject(data[2],noun,ui),noun,[],0,0]
-            # add definition
-            manager.Explanation(data[2],data[0][noun][0],definition,definedBy,ui)
-
-        elif answer=="Keep without Definition":
-            found=True
-            definition=""
-            definedBy=""
-            # create the object
-            data[0][noun]=[manager.CreateObject(data[2],noun,ui),noun,[],0,0]
-            # add definition
-            manager.Explanation(data[2],data[0][noun][0],definition,definedBy,ui)
-
-        # add parents
-        for theParent in keepParent:        
-            manager.addParent(data[2],data[0][noun][0],data[0][theParent][0],ui)
-            data[0][noun][2].append(theParent)
-    
-        # add relations
-        for relation,object1,object2 in keepRelation:
-            createRelation(data,ui,object1,relation,object2)
-    return True
 
 def createRelation(data,ui,obj1,relation,obj2):
-    
-    # one object was not kept
-    if obj1 not in data[0].keys() or obj2 not in data[0].keys():
-        return
-
-    relation=obj1+"_"+relation.title()+"_"+obj2.title()
-
-    ui.makeTables(data)
-    answer=utility.questionWithYesOrNo(ui,talk.keepProperty(relation))
-    if answer==0:
-        return
-
     # mark as used
     data[0][obj1][3]=1
     data[0][obj2][3]=1
@@ -172,6 +116,9 @@ def createRelation(data,ui,obj1,relation,obj2):
     if relation not in data[1].keys():
         # create the relationship
         data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,obj2]
+        ui.AddToTableRelationship(obj1,relation,obj2)
     else:
         manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0],ui)
         data[1][relation][1].append(obj1)
+        ui.AddToTableRelationship(data[1][relation][0],relation,data[1][relation][1][-1])
+

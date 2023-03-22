@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try2.owl"
+         xmlns="file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try2.owl#">
+
+<owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try2.owl"/>
+
+<owl:ObjectProperty rdf:about="#Eats">
+  <rdfs:domain rdf:resource="#Cat"/>
+  <rdfs:range rdf:resource="#Fish"/>
+</owl:ObjectProperty>
+
+<owl:AnnotationProperty rdf:about="#description"/>
+
+<owl:Class rdf:about="#Cat">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cat</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#Fish">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fish</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+
+</rdf:RDF>
