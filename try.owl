@@ -8,44 +8,5 @@
 
 <owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try.owl"/>
 
-<owl:AnnotationProperty rdf:about="#description"/>
-
-<owl:Class rdf:about="#Horse">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FOODON_03411229"/>
-  <rdfs:subClassOf rdf:resource="#equine_Animal"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Horse</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="http://purl.obolibrary.org/obo/FOODON_03411229">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FOODON_03414849"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon:Horse</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon</rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#equine_Animal">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FOODON_03414849"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">equine_Animal</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="http://purl.obolibrary.org/obo/FOODON_03414849">
-  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon:equine_Animal</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">*Equus* is a genus of mammals in the family Equidae, which includes horses, asses, and zebras. Within Equidae, Equus is the only recognized extant genus, comprising seven living species. The term equine refers to any member of this genus, including horses.</description>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon</rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#mule">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FOODON_03412093"/>
-  <rdfs:subClassOf rdf:resource="#Horse"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mule</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="http://purl.obolibrary.org/obo/FOODON_03412093">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/FOODON_03411229"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon:mule</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A mule is the offspring of a male donkey and a female horse. Horses and donkeys are different species, with different numbers of chromosomes. Of the two F1 hybrids between these two species, a mule is easier to obtain than a hinny (the offspring of a male horse and a female donkey). All male mules and most female mules are infertile.</description>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foodon</rdfs:isDefinedBy>
-</owl:Class>
-
 
 </rdf:RDF>

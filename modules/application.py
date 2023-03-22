@@ -1,11 +1,7 @@
 import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
-import modules.chatbotHears as hear
-import modules.utility as utility
 from modules.mainFunction import *
-import modules.log as log
 import gi,os
-from modules.shared_data import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk

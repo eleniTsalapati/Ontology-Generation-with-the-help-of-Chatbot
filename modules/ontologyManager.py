@@ -108,5 +108,6 @@ def addParent(ontology,theClass,parent,ui):
                 theClass.is_a=[parent]
             else:
                 theClass.is_a.append(parent)
+        
     except Exception as err:
         ui.error(f"There was an error with {theClass.label[0]} and {parent.label[0]} with error:{err}")
