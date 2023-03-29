@@ -61,7 +61,7 @@ pip install --upgrade pip
 pip install --upgrade nltk
 pip install owlready2
 pip install requests
-pip install tk
+pip install PyGTK
 ```
 
 It is neccasary to dowload the data set from NLTK. You can do it with the following command:
@@ -108,7 +108,7 @@ To uninstall the Libraries just use the following commands:
 pip uninstall nltk
 pip uninstall owlready2
 pip uninstall requests
-pip uninstall tk
+pip uninstall PyGTK
 ```
 
 ## Uninstall Libraries with anaconda:
