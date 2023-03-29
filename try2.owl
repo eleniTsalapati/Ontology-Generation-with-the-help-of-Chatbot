@@ -11,39 +11,59 @@
 <owl:ObjectProperty rdf:about="#Eats">
   <rdfs:domain rdf:resource="#Cat"/>
   <rdfs:range rdf:resource="#Fish"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eats</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Eats_1">
+  <rdfs:domain rdf:resource="#Cat"/>
+  <rdfs:range rdf:resource="#Dog"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Eats_2">
+  <rdfs:domain rdf:resource="#Cat"/>
+  <rdfs:range rdf:resource="#Bird"/>
+  <rdfs:domain rdf:resource="#Dog"/>
 </owl:ObjectProperty>
 
 <owl:AnnotationProperty rdf:about="#description"/>
 
 <owl:Class rdf:about="#Cat">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/NCIT_C14191"/>
-  <rdfs:subClassOf rdf:resource="#felidae"/>
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cat</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
 <owl:Class rdf:about="#Fish">
-  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:subClassOf rdf:resource="#Cat"/>
+  <rdfs:subClassOf rdf:resource="#Dsadasas"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fish</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
-<owl:Class rdf:about="http://purl.obolibrary.org/obo/NCIT_C14191">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/NCIT_C14321"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit:Cat</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The domesticated feline mammal, Felis catus, which is kept as a house pet.</description>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
+<owl:Class rdf:about="#Dog">
+  <rdfs:subClassOf rdf:resource="#Fish"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dog</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
-<owl:Class rdf:about="#felidae">
-  <rdfs:subClassOf rdf:resource="http://purl.obolibrary.org/obo/NCIT_C14321"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">felidae</rdfs:label>
+<owl:Class rdf:about="#Bird">
+  <rdfs:subClassOf rdf:resource="#Fish"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bird</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
-<owl:Class rdf:about="http://purl.obolibrary.org/obo/NCIT_C14321">
+<owl:Class rdf:about="#Dsadasas">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit:felidae</rdfs:label>
-  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Taxonomic family which includes domestic and wild cats such as lions and tigers.</description>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ncit</rdfs:isDefinedBy>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dsadasas</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#Dasf">
+  <rdfs:subClassOf rdf:resource="#Dsadasas"/>
+  <rdfs:subClassOf rdf:resource="#Dog"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dasf</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
 </owl:Class>
 
 

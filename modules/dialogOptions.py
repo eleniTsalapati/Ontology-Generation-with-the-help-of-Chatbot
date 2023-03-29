@@ -71,3 +71,46 @@ class CheckDialog(Gtk.Dialog):
         Gtk.Dialog.run(self)
         self.destroy()
         return self.selected_options
+    
+class SaveDialog(Gtk.Dialog):
+
+    def __init__(self, parent,autosave=""):
+        Gtk.Dialog.__init__(self, autosave+"Save Changes?", parent, 0,
+                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                             Gtk.STOCK_SAVE, Gtk.ResponseType.YES))
+
+        self.set_default_size(150, 100)
+
+        label = Gtk.Label("Do you want to save changes?")
+        box = self.get_content_area()
+        box.add(label)
+        self.show_all()
+
+class TextDialog(Gtk.Dialog):
+
+    def __init__(self, parent,header):
+        Gtk.Dialog.__init__(self, header, parent, 0,
+                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                             Gtk.STOCK_OK, Gtk.ResponseType.OK))
+
+        self.set_default_size(200, 200)
+
+        # Create a text view widget and add it to the dialog
+        self.textview = Gtk.TextView()
+        self.textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+        box = self.get_content_area()
+        box.add(self.textview)
+
+        self.show_all()
+
+    def get_text(self):
+        buffer = self.textview.get_buffer()
+        text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
+        return text
+    
+    def run(self):
+        response=Gtk.Dialog.run(self)
+        self.destroy()
+        if response == Gtk.ResponseType.OK:
+            return self.get_text()
+        return "Cancel"

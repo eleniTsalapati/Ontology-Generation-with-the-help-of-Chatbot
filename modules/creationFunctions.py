@@ -69,7 +69,6 @@ def addInheritance(noun,parent,ui):
         manager.addParent(ui.data[2],ui.data[0][noun][0],ui.data[0][theParent][0],ui)
         ui.data[0][noun][2].append(theParent)
         ui.AddToTableParent(noun,theParent)
-        ui.data[0][noun][2].append(theParent)
 
     # add relations
     for relation,object1,object2 in keepRelation:
@@ -99,12 +98,34 @@ def createRelation(data,ui,obj1,relation,obj2):
     data[0][obj1][3]=1
     data[0][obj2][3]=1
 
-    if relation not in data[1].keys():
+    flag=True
+    key=relation
+    if key not in data[1].keys():
         # create the relationship
-        data[1][relation]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,obj2]
-        ui.AddToTableRelationship(obj1,relation,obj2)
-    else:
-        manager.AddConnection(data[2],data[1][relation][0],data[0][obj1][0],ui)
-        data[1][relation][1].append(obj1)
-        ui.AddToTableRelationship(data[1][relation][0],relation,data[1][relation][1][-1])
+        data[1][key]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,obj2]
+        ui.AddToTableRelationship(key)
+        flag=False
+    elif obj2 != data[1][key][3]:
+        last=0
+        theList=list(data[1].keys())
+        flag2=True
+        for i in range(len(theList)):
+            if key in theList[i]:
+                last=i
+            if obj2==data[1][theList[i]][3]:
+                key=theList[i]
+                flag2=False
+                break
+        if flag2:
+            newKey=key+"_"+str(1)
+            if key!=theList[last]:
+                number=int(theList[i].split("_")[1])
+                newKey=key+"_"+str(number+1)
+            data[1][newKey]=[manager.ConnectObjects(data[2],newKey,data[0][obj1][0],data[0][obj2][0],ui),[obj1],newKey,obj2]
+            ui.AddToTableRelationship(newKey)
+            flag=False
+    if flag==True:
+        manager.AddConnection(data[2],data[1][key][0],data[0][obj1][0],ui)
+        data[1][key][1].append(obj1)
+        ui.AddToTableRelationship(key)
 

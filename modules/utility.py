@@ -30,17 +30,23 @@ def deleteData(ui,terms,relationships_others,ask=False):
         if i in temp:
             owlready2.destroy_entity(data[0][i][0])
             del data[0][i]
-            for j in temp:
-                if j in data[1].keys():
-                    flag=False
-                    for item in data[1][j][1]:
-                        if item==i:
-                            flag=True
-                    if data[1][j][2]==i:
+            for j in list(data[1].keys()):
+                flag=False
+                for item in data[1][j][1]:
+                    if item==i:
                         flag=True
-                    if flag==True:
-                        owlready2.destroy_entity(data[1][j][0])
-                        del data[1][j]
+                        break
+                if data[1][j][3]==i:
+                    flag=True
+                if data[1][j][2]==i:
+                    flag=True
+                if flag==True:
+                    owlready2.destroy_entity(data[1][j][0])
+                    ui.RemoveRelationship(j)
+                    del data[1][j]
+            for j in list(data[0].keys()):
+                if i in data[0][j][2]: 
+                    data[0][j][2].remove(i)
             ui.RemoveTerm(i)
 
     options=relationships_others
