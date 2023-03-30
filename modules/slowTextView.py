@@ -1,7 +1,6 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GLib
-import os
 import modules.log as log
 
 class SlowTextView(Gtk.TextView):
@@ -20,8 +19,8 @@ class SlowTextView(Gtk.TextView):
     
     def add_text(self,text,add_delay=100):
         if self.remember!="ChatBot:\n\t":
-            self.add_text_Remember(self.remember,add_delay)
-        self.add_text_Normal(text,add_delay)
+            self.add_text_Remember(self.remember,50)
+        self.add_text_Normal(text,50)
         self.remember="ChatBot:\n\t"
     
     # add text to the previous text slowly

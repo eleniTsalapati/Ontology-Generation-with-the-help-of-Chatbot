@@ -43,36 +43,6 @@ def Help():
     txt+="Important. The term has to be shown in the field down, so the button can be pressed."
     return txt
 
-def WhatToSpecialize():
-    txt="Which classes from the ontology do you want to specialize?\n"
-    txt+="In essence, you will add a(n) (inheritance) child to this class.\n"
-    txt+="For example if we have animal-horse(-mule) and we want to add mule to horse then give the horse.\n\n"
-    txt+="Give it as it is in the ontology\n\n"
-    txt+="You can also select the class form the table down bellow.\n"
-    return txt
-
-def WhatIsTheSpecialization(parent):
-    txt="Which classes do you want to give as specialization (inheritance child) of "+parent+" (inheritance parent)?\n"
-    txt+="For example, if we have animal-horse(-mule) and we want to add mule to horse then give the mule.\n\n"
-    txt+="The classes can be either be from the ontology or not.\n\n"
-    txt+="You can also select the class form the table down bellow.\n"
-    return txt
-
-def WhatIsTheGeneralization():
-    txt="Which classes do you want to give as generalization(inheritance parent)?\n"
-    txt+="For example, if we have (animal-)horse-mule and we want to add animal to horse then give the animal\n\n"
-    txt+="The classes can be either be from the ontology or not.\n\n"
-    txt+="You can also select the class form the table down bellow.\n"
-    return txt
-    
-def WhatToGeneralize(parent):
-    txt="Which classes do you want to give to be generalized(inheritance child) from \""+parent+"\" (inheritance parent)?\n"
-    txt+="In essence, with which classes the generalized class "+parent+" you gave is linked to?\n"
-    txt+="For example if we have (animal-)horse-mule and we want to add animal to horse then give the horse\n\n"
-    txt+="The classes can be either be from the ontology or not.\n\n"
-    txt+="You can also select the class form the table down bellow.\n"
-    return txt
-
 def CouldNotUnderstand():
     txt="\n\nSorry but I could not understand your answer.\n\n"
     return txt
@@ -108,6 +78,39 @@ def ChooseParent_Child(term,description):
 
 def termNoCategoryFound(term,ontology,type):
     return "In the \""+ontology+"\" for the \""+term+"\" no \""+type+"\" was found." 
+
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        Header
+#  -----------------------------------------------------------------------------------------------------------------
+
+def InheritanceHeader(term):
+    return "Which from the following is true for \""+term+"\"."
+
+def ExternalOntologyHeader(term):
+    return "Which external ontology do you want to keep for \""+term+"\"."
+
+def ChildParentExternalHeader(term,find):
+    return "Which term do you want to keep as "+find+" for \""+term+"\"."
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        Narrow
+#  -----------------------------------------------------------------------------------------------------------------
+
+def whatToNarrow(term):
+    return "With what terms should \""+term+"\" be narrowed? Select from the table or add your own term and then press enter."
+
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        Broaden
+#  -----------------------------------------------------------------------------------------------------------------
+
+def whatToBroaden(term):
+    return "With what terms should \""+term+"\" be broaden? Select from the table or add your own term and then press enter."
+
+#  -----------------------------------------------------------------------------------------------------------------
+#                                        Destroy
+#  -----------------------------------------------------------------------------------------------------------------
+
+def whatToDestroy(term):
+    return "Do you want to Destroy \""+term+"\"?"
 
 
 #  -----------------------------------------------------------------------------------------------------------------

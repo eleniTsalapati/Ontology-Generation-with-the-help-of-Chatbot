@@ -7,11 +7,15 @@
             <attribute name="action">app.open_file</attribute>
         </item>
         <item>
-            <attribute name="label">Save File</attribute>
-            <attribute name="action">app.save_file</attribute>
+            <attribute name="label">Create File</attribute>
+            <attribute name="action">app.create_file</attribute>
         </item>
     </section>
     <section>
+        <item>
+            <attribute name="label">Save</attribute>
+            <attribute name="action">app.save</attribute>
+        </item>
         <item>
             <attribute name="label">Help</attribute>
             <attribute name="action">app.help</attribute>

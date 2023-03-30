@@ -1,11 +1,7 @@
 import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
-import modules.chatbotHears as hear
-import modules.utility as utility
 from modules.mainFunction import *
-import modules.log as log
 import gi,os
-from modules.shared_data import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GLib, Gio, Gtk
@@ -47,13 +43,18 @@ class C4OApplication(Gtk.Application):
         action.connect("activate", self.open_file)
         self.add_action(action)
 
-        action = Gio.SimpleAction.new("save_file", None)
-        action.connect("activate", self.save_file)
+        action = Gio.SimpleAction.new("create_file", None)
+        action.connect("activate", self.create_file)
         self.add_action(action)
 
         action = Gio.SimpleAction.new("help", None)
         action.connect("activate", self.help)
         self.add_action(action)
+
+        action = Gio.SimpleAction.new("save", None)
+        action.connect("activate", self.save_ontology)
+        self.add_action(action)
+        
 
     def do_activate(self):
         # We only allow a single window and raise any existing ones
@@ -95,7 +96,7 @@ class C4OApplication(Gtk.Application):
             print("Cancel clicked")
             dialog.destroy()
 
-    def save_file(self,action,param):
+    def create_file(self,action,param):
         dialog=Gtk.FileChooserDialog("Please choose a file",self.window,
                                      Gtk.FileChooserAction.SAVE,(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,Gtk.STOCK_SAVE,Gtk.ResponseType.OK))
         dialog.set_do_overwrite_confirmation(True)
@@ -135,15 +136,18 @@ class C4OApplication(Gtk.Application):
         # add text to the about dialog
         about_dialog.set_program_name("C4O")
         about_dialog.set_version("0.1")
-        about_dialog.set_authors(["Lionis Emmanouil Georgios(Akis)","Tsalapati Eleni","Koubarakis Manolis"])
+        about_dialog.set_authors(["Lionis Emmanouil Georgios(Akis)","Tsalapati Eleni","Sergios - Anestis Kefalidis","Koubarakis Manolis"])
         # set no icon for the about dialog
         about_dialog.set_logo_icon_name(None)
         about_dialog.set_comments("A simple ontology editor that uses communication with a chatbot to help the user create ontologies.")
         about_dialog.present()
 
     def on_quit(self, action, param):
-        self.window.textview.closeLog()
+        self.window.SaveDialog()
         self.quit()
+
+    def save_ontology(self,action,param):
+        manager.SaveOntology(self.window.data[2],self.window.file_path,self.window)
 
     def fileOpened(self,path):
         # opening the path
