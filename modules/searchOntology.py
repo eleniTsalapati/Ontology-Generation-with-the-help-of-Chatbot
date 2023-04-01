@@ -1,4 +1,3 @@
-from tkinter.messagebox import YES
 import requests
 import modules.ontologyManager as manager
 import modules.chatbotTalks as talk
@@ -26,12 +25,7 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
         # we want to keep word
         label=utility.convertStringToLowerTittle(word["label"])
         options.append(talk.ChooseParent_Child(label,description))
-    dialog=None
-    if find=="children":
-        dialog=CheckDialog(ui,options,text,term)
-    else:
-        dialog=CheckDialog(ui,options,text,term)
-    selectedTerms = dialog.run()
+    selectedTerms=CheckDialog(ui,options,talk.ChildParentExternalHeader(term,find)).run()
     if selectedTerms==[]:
         ui.addTextChatBot("No "+find+" was selected")
     else:
@@ -41,6 +35,7 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
         ui.addTextUser(text)
         for selected in selectedTerms:
             label=selected.split("\"")[1]
+            temp=label.replace("_"," ").lower()
             # crete object
             # create local
             external=ontology+":"+label
@@ -48,8 +43,11 @@ def acceptSearch(term,ontology,obo_id,find,data,ui):
             ui.AddToTableTerm(label)
 
             # create external
+            for word in dataBase['_embedded']['terms']:
+                if word["label"]==temp:
+                    break
             data[0][external]=[manager.CreateObject(data[2],external,ui),external,[],0]
-            data[0][external][0].iri=word["iri"]
+            data[0][external][0].iri=word["iri"]    
             manager.addParent(data[2],data[0][label][0],data[0][external][0],ui)
             ui.AddToTableTerm(external)
             
@@ -161,13 +159,13 @@ def searchForTerm(data,term,parent,ui,moreGeneralized):
                 description=current["description"][0]
             options.append(talk.FoundOntology(current["ontology_name"],description))
             ontologies[current["ontology_name"]]=current
-    dialog = RadioDialog(ui,options,term)
-    selected_option = dialog.run()
-    if selected_option==None:
+    options.append("None")
+    selected_option = RadioDialog(ui,options,talk.ExternalOntologyHeader(term)).run()
+    if selected_option==None or selected_option=="None":
         ui.addTextChatBot("No External Ontology was selected")
+        return True
     else:
         selectedOntology=selected_option.split("\"")[1]
         ui.addTextUser(selectedOntology)
         handleOntology(data,term,parent,ontologies[selectedOntology],ui,moreGeneralized)
-        ui.taskNouns-=1
-        ui.checkTask()
+        return False

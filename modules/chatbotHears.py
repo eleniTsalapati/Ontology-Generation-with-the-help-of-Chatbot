@@ -1,4 +1,3 @@
-from pickle import NONE
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
@@ -170,28 +169,36 @@ def GetNouns(answer,ui):
 
     return nouns
 
-def FindNounsInDataBase(answer,data,ui):
+def FindNounsInDataBase(answer,ui):
     insideDataBase=[]
     notInside=[]
 
     tokens = word_tokenize(answer.lower())
     tagged=pos_tag(tokens)
     
-    keys=data[0].keys()
+    keys=ui.data[0].keys()
 
-    for word in tagged:
+    keep=""
+    for i in range(len(tagged)):
+        word=tagged[i]
         if word[0]=="None":
             continue
-        print(word)
         for key in keys:
-            if word[0].lower() == key.lower():
+            if keep.lower()+word[0].lower() == key.lower():
                 if ui!=None:
                     ui.rememberOneTime("In the ontology I found the \""+key+"\"\n")
-                returnValue,_=lemmatization(key,ui)
-                insideDataBase.append(returnValue)
+                if keep!="":
+                    insideDataBase.append(keep+word[0].title())
+                else:
+                    returnValue=lemmatization(key,ui)
+                    insideDataBase.append(returnValue)
+                keep=""
                 break
         else:
+            # To Do Fix
+            # if i+1<=len(tagged) and tagged[i+1]==(":",":"):
+            #     keep=word[0]+":"
             if 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
-                returnValue,_=lemmatization(word[0],ui)
+                returnValue=lemmatization(word[0],ui)
                 notInside.append(returnValue)
     return (insideDataBase,notInside)

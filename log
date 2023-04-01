@@ -2,26 +2,28 @@ ChatBot:
 	Greetings new user! This is the the ChatBot for Ontologies.
 	To continue select a folder to create a new ontology or select an existing ontology to edit.
 User:
-	Openfile://C:\Users\akisl\OneDrive\Έγγραφα\GitHub\Chatbot-for-Ontology-Generation\try.owl
+	Openfile:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try2.owl
 ChatBot:
-	Openning the file "file://C:\Users\akisl\OneDrive\Έγγραφα\GitHub\Chatbot-for-Ontology-Generation\try.owl". Wait for a moment...
+	Openning the file "file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/try2.owl". Wait for a moment...
 ChatBot:
 	Your Ontology has been saved. Now you can choose 1 from 4 options.
 	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.
+User:
+	Narrow:Dog
 ChatBot:
-	To give a COMPETENCY QUESTION you have to put your answer in the area bellow and then press the button.
-	If you have a lot of nouns, then you need to have underscore "_" in between the nouns. 
-	For example: Mitigation_Action and NOT Mitigation action
+	In the ontology I found the "Dog"
+Lemmatize the "Dog" to "Dog"
 
-	Please be careful with the grammar(the articles), syntax of the answer as it will affect it.
-	Recognize: A cat eats fishes, Cats eat the fish
-	Not Recognize: Cat eat fish
+ChatBot:
+	With what terms should "Dog" be narrowed? Select from the table or add your own term and then press enter.
+User:
+	Dasf
+ChatBot:
+	In the ontology I found the "Dasf"
+Lemmatize the "Dasf" to "Dasf"
 
-	To NARROW a term, double click the term from the left table which you want to be narrowed and then click the button.
-	Important. The term has to be shown in the field down, so the button can be pressed.
-
-	To BROADEN a term, double click the term from the left table which you want to be broaden and then click the button.
-	Important. The term has to be shown in the field down, so the button can be pressed.
-
-	To DELETE a term, double click the term from the left table which you want to be deleted and then click the button.
-	Important. The term has to be shown in the field down, so the button can be pressed.
+ChatBot:
+	Which from the following is true for "Dasf".
+ChatBot:
+	Your Ontology has been saved. Now you can choose 1 from 4 options.
+	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.

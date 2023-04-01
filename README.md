@@ -61,7 +61,7 @@ pip install --upgrade pip
 pip install --upgrade nltk
 pip install owlready2
 pip install requests
-pip install tk
+pip install PyGTK
 ```
 
 It is neccasary to dowload the data set from NLTK. You can do it with the following command:
@@ -70,10 +70,10 @@ python ./commands/nltk_data.py
 ```
 
 ## Install Libraries with anaconda:
-First you have to dowload the chatBot_ontology_creation_env.yaml and open anaconda prompt. 
+First you have to dowload the chatBot_ontology_creation_env.yml and open anaconda prompt. 
 Then run in the prompt the following command to create the enviroment with the installed libraries:
 ```
-conda env create -f path\chatBot_ontology_creation_env.yaml
+conda env create -f path\chatBot_ontology_creation_env.yml
 ```
 
 Then you have to activate the enviroment by typing `conda activate chatBot_ontology_creation_env`.
@@ -108,7 +108,7 @@ To uninstall the Libraries just use the following commands:
 pip uninstall nltk
 pip uninstall owlready2
 pip uninstall requests
-pip uninstall tk
+pip uninstall PyGTK
 ```
 
 ## Uninstall Libraries with anaconda:
