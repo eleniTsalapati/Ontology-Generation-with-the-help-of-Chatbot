@@ -15,11 +15,9 @@ def checkInheritance(word,parent,ui):
         # check if the inheritance is correct
         options.append(talk.ontoCheck(parent,word))
         # check IDENTITY
-        options.append(talk.identityComponentOf(parent,word))
-        options.append(talk.identityComponentOf(word,parent))
+        options.append(talk.hasPart(parent,word))
+        options.append(talk.hasPart(word,parent))
         # check UNITY
-        options.append(talk.unityComposedOf(parent,word))
-        options.append(talk.unityComposedOf(word,parent))
         # None of the above
         options.append("None of the above")
 
@@ -31,16 +29,12 @@ def checkInheritance(word,parent,ui):
             # there is a parent and there is wrong with the inheritance
             if selected_option==talk.ontoCheck(parent,word):        
                 return 0
-            elif selected_option==talk.identityComponentOf(parent,word):
+            elif selected_option==talk.hasPart(parent,word):
                 return 1
-            elif selected_option==talk.identityComponentOf(word,parent):
+            elif selected_option==talk.hasPart(word,parent):
                 return 2
-            elif selected_option==talk.unityComposedOf(parent,word):
-                return 3
-            elif selected_option==talk.unityComposedOf(word,parent):
-                return 4
             else:    
-                return 5
+                return 3
 
 def addInheritance(noun,parent,ui):
     # so check for the inheritance
@@ -52,16 +46,10 @@ def addInheritance(noun,parent,ui):
             if result==0:
                 keepParent.append(theParent)
             elif result==1:
-                relation=theParent.title()+"_ComponentOf_"+noun.title()
+                relation="HasPart"
                 keepRelation.append((relation,theParent,noun))
             elif result==2:
-                relation=noun.title()+"_ComponentOf_"+theParent.title()
-                keepRelation.append((relation,noun,theParent))
-            elif result==3:
-                relation=theParent.title()+"_ComposedOf_"+noun.title()
-                keepRelation.append((relation,theParent,noun))                
-            elif result==4:
-                relation=noun.title()+"_ComposedOf_"+theParent.title()
+                relation="HasPart"
                 keepRelation.append((relation,noun,theParent))
     
     # add parents
@@ -98,34 +86,16 @@ def createRelation(data,ui,obj1,relation,obj2):
     data[0][obj1][3]=1
     data[0][obj2][3]=1
 
-    flag=True
     key=relation
     if key not in data[1].keys():
         # create the relationship
-        data[1][key]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,obj2]
+        data[1][key]=[manager.ConnectObjects(data[2],relation,data[0][obj1][0],data[0][obj2][0],ui),[obj1],relation,[obj2]]
         ui.AddToTableRelationship(key)
-        flag=False
-    elif obj2 != data[1][key][3]:
-        last=0
-        theList=list(data[1].keys())
-        flag2=True
-        for i in range(len(theList)):
-            if key in theList[i]:
-                last=i
-            if obj2==data[1][theList[i]][3]:
-                key=theList[i]
-                flag2=False
-                break
-        if flag2:
-            newKey=key+"_"+str(1)
-            if key!=theList[last]:
-                number=int(theList[i].split("_")[1])
-                newKey=key+"_"+str(number+1)
-            data[1][newKey]=[manager.ConnectObjects(data[2],newKey,data[0][obj1][0],data[0][obj2][0],ui),[obj1],newKey,obj2]
-            ui.AddToTableRelationship(newKey)
-            flag=False
-    if flag==True:
-        manager.AddConnection(data[2],data[1][key][0],data[0][obj1][0],ui)
-        data[1][key][1].append(obj1)
+    else:
+        manager.AddConnection(data[2],data[1][key][0],data[0][obj1][0],data[0][obj2][0],ui)
+        if obj1 not in data[1][key][1]:
+            data[1][key][1].append(obj1)
+        if obj2 not in data[1][key][3]:
+            data[1][key][3].append(obj2)
         ui.AddToTableRelationship(key)
 

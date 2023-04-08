@@ -122,12 +122,8 @@ def ontoCheck(parent,child):
     txt+="For example: Is every \"" + child + "\" also \""+parent+"\".\n"
     return txt
 
-def identityComponentOf(first,second):
-    txt="Is the \""+first+"\" component of \"" + second +"\"?\n"
-    txt+="For example: Is every \"" + first + "\" component of \""+second+"\".\n"
+def hasPart(first,second):
+    txt="Has the \""+first+"\" a part of \"" + second +"\"?\n"
+    txt+="For example: Is every \"" + first + "\" a part of \""+second+"\".\n"
     return txt
 
-def unityComposedOf(first,second):
-    txt="Is the \""+first+"\" composed of \"" + second +"\"?\n"
-    txt+="For example: Is every \"" + first + "\" composed of \""+second+"\".\n"
-    return txt

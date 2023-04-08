@@ -541,7 +541,6 @@ class C4OWindow(Gtk.ApplicationWindow):
             self.AddToTableTerm(i)
         
     def RemoveRelationship(self,relationship):
-        print(relationship)
         self.storeRelationship.remove(self.storeRelationshipRows[relationship])
         self.storeRelationshipRows.pop(relationship)
 
@@ -552,7 +551,6 @@ class C4OWindow(Gtk.ApplicationWindow):
             dialog=SaveDialog(self)
         response = dialog.run()
         if response == Gtk.ResponseType.YES and self.data!=[{},{}]:
-            print(self.data)
             manager.SaveOntology(self.data[2],self.file_path,self)
         dialog.destroy()
 

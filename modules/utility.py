@@ -62,12 +62,12 @@ def deleteData(ui,terms,relationships_others,ask=False):
     for j in options:
         j=j.split("\"")[1]
         relation=j.split("_")
-        if len(relation)!=3:
-            continue
-        if relation[1] in data[1].keys():
-            owlready2.destroy_entity(data[1][relation[1]][0])
-            del data[1][relation[1]]
-            ui.RemoveRelationship(relation[1])
+        for i in relation:
+            if i in data[1].keys():
+                owlready2.destroy_entity(data[1][i][0])
+                del data[1][i]
+                ui.RemoveRelationship(i)
+                break
         else:
             ui.rememberOneTime("No \""+j+"\" was found.")
     

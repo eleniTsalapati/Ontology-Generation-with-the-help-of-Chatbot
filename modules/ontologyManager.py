@@ -57,28 +57,13 @@ def addData(ontology,data,ui):
                 data[0][obj2][3]=1
                 key=name
                 if key not in data[1].keys():
-                    data[1][key]=[relation,[obj1],name,obj2]
+                    data[1][key]=[relation,[obj1],name,[obj2]]
                     ui.AddToTableRelationship(key)
-                elif obj2 != data[1][key][3]:
-                    last=0
-                    theList=list(data[1].keys())
-                    flag2=True
-                    for i in range(len(theList)):
-                        if key in theList[i]:
-                            last=i
-                        if obj2==data[1][theList[i]][3]:
-                            key=theList[i]
-                            flag2=False
-                            break
-                    if flag2:
-                        newKey=key+"_"+str(1)
-                        if key!=theList[last]:
-                            number=int(theList[i].split("_")[1])
-                            newKey=key+"_"+str(number+1)
-                    data[1][newKey]=[relation,[obj1],newKey,obj2]
-                    ui.AddToTableRelationship(newKey)
                 else:
-                    data[1][key][1].append(obj1)
+                    if obj1 not in data[1][key][1]:
+                        data[1][key][1].append(obj1)
+                    if obj2 not in data[1][key][3]:
+                        data[1][key][3].append(obj2)
                     ui.AddToTableRelationship(key)
 
 
@@ -102,10 +87,13 @@ def ConnectObjects(ontology,connection,object1,object2,ui):
         ui.error(f"There was an error with {connection}, {object1.label[0]} and {object2.label} with error:{err}")
     
 
-def AddConnection(ontology,connection,object1,ui):
+def AddConnection(ontology,connection,object1,object2,ui):
     try:
         with ontology:
-            connection.domain.append(object1)
+            if object1 not in connection.domain:
+                connection.domain.append(object1)
+            if object2 not in connection.range:
+                connection.range.append(object2)
     except Exception as err:
         ui.error(f"There was an error with {connection} with error:{err}")
 
