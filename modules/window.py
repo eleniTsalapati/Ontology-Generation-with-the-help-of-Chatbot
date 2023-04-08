@@ -13,6 +13,7 @@ import modules.ontologyManager as manager
 class C4OWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         self.whichTask=""
+        self.secondCompetencyQuestion=[]
         
         super().__init__(*args, **kwargs)
         self.connect("delete-event", self.quitFunction)
@@ -235,6 +236,7 @@ class C4OWindow(Gtk.ApplicationWindow):
     def Initialize(self):
         self.autoSaveOn=False
         self.data=[{},{}]
+        self.secondCompetencyQuestion=[]
         self.inside=[]
         self.outside=[]
         self.rememberParentToAdd={}
@@ -405,8 +407,11 @@ class C4OWindow(Gtk.ApplicationWindow):
                     relation=theRelationship[1]
                     term2=theRelationship[2]
                     creationFunctions.createRelation(self.data,self,term1,relation,term2)
-                self.addTextUser(text)            
-            self.Menu()
+                self.addTextUser(text)   
+            if len(self.secondCompetencyQuestion)!=0:
+                Sentence(self.secondCompetencyQuestion.pop(),self)
+            else:
+                self.Menu()
         else:
             self.input_field.set_sensitive(True)
             self.noun=list(self.nouns.keys())[len(self.nouns.keys())-self.taskNouns]
@@ -441,6 +446,7 @@ class C4OWindow(Gtk.ApplicationWindow):
                 self.AddToTableTerm(self.noun)
                 # add definition
                 manager.Explanation(self.data[2],self.data[0][self.noun][0],answer,self.definedBy,self)
+                self.secondCompetencyQuestion.append(answer)
             else:
                 keep=False
         elif answer=="Keep Without Definition":

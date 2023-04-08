@@ -15,6 +15,11 @@
   <rdfs:range rdf:resource="#Pizza"/>
 </owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#Be">
+  <rdfs:domain rdf:resource="#Horse"/>
+  <rdfs:range rdf:resource="#Animal"/>
+</owl:ObjectProperty>
+
 <owl:AnnotationProperty rdf:about="#description"/>
 
 <owl:Class rdf:about="#Cat">
@@ -38,6 +43,19 @@
 <owl:Class rdf:about="#Pizza">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pizza</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#Horse">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Horse</rdfs:label>
+  <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">a horse is an animal</description>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#Animal">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Animal</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 

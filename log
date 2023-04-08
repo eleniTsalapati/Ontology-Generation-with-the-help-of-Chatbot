@@ -9,21 +9,41 @@ ChatBot:
 	Your Ontology has been saved. Now you can choose 1 from 4 options.
 	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.
 User:
-	Narrow:People
+	horse
 ChatBot:
-	In the ontology I found the "People"
-Lemmatize the "People" to "People"
+	Lemmatize the "horse" to "horse"
 
 ChatBot:
-	With what terms should "People" be narrowed? Select from the table or add your own term and then press enter.
+	What should I do with the definition of "Horse"? Select one option.
+
 User:
-	Pizza
+	Give Definition
 ChatBot:
-	In the ontology I found the "Pizza"
-Lemmatize the "Pizza" to "Pizza"
+	What should be the definition of  "Horse"? Put your answer in the text field and press enter.
+
+User:
+	a horse is an animal
+ChatBot:
+	Lemmatize the "horse" to "horse"
+Lemmatize the "animal" to "animal"
+The word "Horse" is already in the dataBase
 
 ChatBot:
-	Which from the following is true for "Pizza".
+	What should I do with the definition of "Animal"? Select one option.
+
+User:
+	Keep Without Definition
+ChatBot:
+	I will keep the "Animal" without any definition.
+ChatBot:
+	Lemmatize the "is" to "Be"
+
+ChatBot:
+	Choose the relationships you want to keep
+User:
+	Selected:
+Horse_Be_Animal
+
 ChatBot:
 	Your Ontology has been saved. Now you can choose 1 from 4 options.
 	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.

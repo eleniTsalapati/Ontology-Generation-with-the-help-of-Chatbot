@@ -88,29 +88,32 @@ class SaveDialog(Gtk.Dialog):
 
 class TextDialog(Gtk.Dialog):
 
-    def __init__(self, parent,header):
+    def __init__(self, parent, header):
         Gtk.Dialog.__init__(self, header, parent, 0,
                             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                              Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
-        self.set_default_size(200, 200)
+        self.set_default_size(200, 100)
 
-        # Create a text view widget and add it to the dialog
-        self.textview = Gtk.TextView()
-        self.textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+        # Create an entry widget and add it to the dialog
+        self.entry = Gtk.Entry()
+        self.entry.set_text("")
+        self.entry.connect("activate", self.on_entry_activate)
         box = self.get_content_area()
-        box.add(self.textview)
+        box.add(self.entry)
 
         self.show_all()
 
     def get_text(self):
-        buffer = self.textview.get_buffer()
-        text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), True)
-        return text
-    
+        return self.entry.get_text()
+
+    def on_entry_activate(self, widget):
+        self.response(Gtk.ResponseType.OK)
+
     def run(self):
-        response=Gtk.Dialog.run(self)
-        self.destroy()
+        response = Gtk.Dialog.run(self)
+        text=""
         if response == Gtk.ResponseType.OK:
-            return self.get_text()
-        return "Cancel"
+            text= self.get_text()
+        self.destroy()
+        return text
