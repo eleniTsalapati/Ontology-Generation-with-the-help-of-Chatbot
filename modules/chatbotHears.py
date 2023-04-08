@@ -1,4 +1,3 @@
-from pickle import NONE
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
@@ -9,12 +8,11 @@ def lemmatization(word,ui):
     if len(word.split("_"))==1:
         theLementation=lemmatizer.lemmatize(word)
         if theLementation!= []:
-            ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n\n")
-            return (theLementation.title(),True)    
+            ui.rememberOneTime("Lemmatize the \""+word+"\" to \""+theLementation+"\"\n")
+            return theLementation.title() 
     else:
         splitted=word.split("_")
         txt=""
-        flag=False
         for tmp in splitted:
             theLementation=lemmatizer.lemmatize(tmp)
             if theLementation!= []:
@@ -23,15 +21,13 @@ def lemmatization(word,ui):
                 else:
                     txt=txt+"_"+theLementation.title()
                 ui.rememberOneTime("Lemmatize the \""+tmp+"\" to \""+theLementation+"\"\n")
-                flag=True
             else:
                 if txt=="":
                     txt=tmp.title()
                 else:
                     txt=txt+"_"+tmp.title()    
-        txt+="\n"    
-        return(txt,flag)
-    return(word.title(),False)
+        return txt
+    return word.title()
 
 def WhatOntologyToAnswer(answer,ui):
     # tokenize and take tags of the words
@@ -44,7 +40,6 @@ def WhatOntologyToAnswer(answer,ui):
     previous=None
     theWord=""
     relation=""
-    flagLem=False
     for word in tagged:
 
         # be sure that the VBN is correct tag due to some errors
@@ -62,7 +57,7 @@ def WhatOntologyToAnswer(answer,ui):
         elif 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
 
             # Singularize or lemmatize the word to be singular
-            x,flagLem=lemmatization(word[0],ui)
+            x=lemmatization(word[0],ui)
             word=(x,word[1])
 
             # add it to the word
@@ -108,9 +103,6 @@ def WhatOntologyToAnswer(answer,ui):
             flagPOS=True
         else :
             flagPOS=False
-    
-    if flagLem==True:
-        ui.rememberOneTime("\n")
 
     return (nouns,relationships)
 
@@ -177,28 +169,36 @@ def GetNouns(answer,ui):
 
     return nouns
 
-def FindNounsInDataBase(answer,data,ui):
+def FindNounsInDataBase(answer,ui):
     insideDataBase=[]
     notInside=[]
 
     tokens = word_tokenize(answer.lower())
     tagged=pos_tag(tokens)
     
-    keys=data[0].keys()
+    keys=ui.data[0].keys()
 
-    for word in tagged:
+    keep=""
+    for i in range(len(tagged)):
+        word=tagged[i]
         if word[0]=="None":
             continue
-        print(word)
         for key in keys:
-            if word[0].lower() == key.lower():
+            if keep.lower()+word[0].lower() == key.lower():
                 if ui!=None:
                     ui.rememberOneTime("In the ontology I found the \""+key+"\"\n")
-                returnValue,_=lemmatization(key,ui)
-                insideDataBase.append(returnValue)
+                if keep!="":
+                    insideDataBase.append(keep+word[0].title())
+                else:
+                    returnValue=lemmatization(key,ui)
+                    insideDataBase.append(returnValue)
+                keep=""
                 break
         else:
+            # To Do Fix
+            # if i+1<=len(tagged) and tagged[i+1]==(":",":"):
+            #     keep=word[0]+":"
             if 'NN' == word[1] or 'NNS' == word[1] or 'NNP' == word[1] or 'NNPS' == word[1]:
-                returnValue,_=lemmatization(word[0],ui)
+                returnValue=lemmatization(word[0],ui)
                 notInside.append(returnValue)
     return (insideDataBase,notInside)

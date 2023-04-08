@@ -11,12 +11,13 @@ def checkHttp(file):
         if file[i]!=http[i]:
             return False
     return True
-def LoadOntology(file,ui):
+def LoadOntology(file,errorFunction):
     try:
         ontology = get_ontology(file).load()
         return ontology
     except Exception as err:
-        ui.error(f"There was an error with {file} with error:{err}")
+        errorFunction(f"There was an error with {file} with error:{err}")
+        return None
 
 def SaveOntology(ontology,file,ui):
     try:
@@ -34,7 +35,7 @@ def findLabel(object):
         label=str(object).split(".")[1]
     return label
 
-def addData(ontology,data):
+def addData(ontology,data,ui):
     for object in list(ontology.classes()):
         name=findLabel(object)
         keepParent=[]
@@ -44,7 +45,7 @@ def addData(ontology,data):
                 continue
             keepParent.append(theParent)
         data[0][name]=[object,name,keepParent,0,0]
-
+        ui.AddToTableTerm(name)
     for relation in list(ontology.object_properties()):
         for range in list(relation.range):
             for domain in list(relation.domain):
@@ -54,10 +55,32 @@ def addData(ontology,data):
 
                 data[0][obj1][3]=1
                 data[0][obj2][3]=1
-                if name not in data[1].keys():
-                    data[1][name]=[relation,[obj1],name,obj2]
+                key=name
+                if key not in data[1].keys():
+                    data[1][key]=[relation,[obj1],name,obj2]
+                    ui.AddToTableRelationship(key)
+                elif obj2 != data[1][key][3]:
+                    last=0
+                    theList=list(data[1].keys())
+                    flag2=True
+                    for i in range(len(theList)):
+                        if key in theList[i]:
+                            last=i
+                        if obj2==data[1][theList[i]][3]:
+                            key=theList[i]
+                            flag2=False
+                            break
+                    if flag2:
+                        newKey=key+"_"+str(1)
+                        if key!=theList[last]:
+                            number=int(theList[i].split("_")[1])
+                            newKey=key+"_"+str(number+1)
+                    data[1][newKey]=[relation,[obj1],newKey,obj2]
+                    ui.AddToTableRelationship(newKey)
                 else:
-                    data[1][name][1].append(obj1)
+                    data[1][key][1].append(obj1)
+                    ui.AddToTableRelationship(key)
+
 
 
 def CreateObject(ontology,word,ui):
@@ -104,5 +127,6 @@ def addParent(ontology,theClass,parent,ui):
                 theClass.is_a=[parent]
             else:
                 theClass.is_a.append(parent)
+        
     except Exception as err:
         ui.error(f"There was an error with {theClass.label[0]} and {parent.label[0]} with error:{err}")
