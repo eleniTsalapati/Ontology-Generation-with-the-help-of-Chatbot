@@ -47,24 +47,32 @@ def addData(ontology,data,ui):
         data[0][name]=[object,name,keepParent,0,0]
         ui.AddToTableTerm(name)
     for relation in list(ontology.object_properties()):
-        for range in list(relation.range):
-            for domain in list(relation.domain):
-                obj1=findLabel(domain)
-                obj2=findLabel(range)
-                name=findLabel(relation)
+        obj1=[]
+        obj2=[]
 
-                data[0][obj1][3]=1
-                data[0][obj2][3]=1
-                key=name
-                if key not in data[1].keys():
-                    data[1][key]=[relation,[obj1],name,[obj2]]
-                    ui.AddToTableRelationship(key)
-                else:
-                    if obj1 not in data[1][key][1]:
-                        data[1][key][1].append(obj1)
-                    if obj2 not in data[1][key][3]:
-                        data[1][key][3].append(obj2)
-                    ui.AddToTableRelationship(key)
+        try:
+            for domain in relation.domain[0].get_Classes():
+                label=findLabel(domain)
+                data[0][label][3]=1
+                obj1.append(label)
+        except:
+            label=findLabel(relation.domain[0])
+            data[0][label][3]=1
+            obj1.append(label)
+        key=findLabel(relation)
+
+        try:
+            for range in relation.range[0].get_Classes():
+                label=findLabel(range)
+                data[0][label][3]=1
+                obj2.append(label)
+        except:
+            label=findLabel(relation.range[0])
+            data[0][label][3]=1
+            obj2.append(label)
+
+        data[1][key]=[relation,obj1,key,obj2]
+        ui.AddToTableRelationship(key)
 
 
 
@@ -90,10 +98,18 @@ def ConnectObjects(ontology,connection,object1,object2,ui):
 def AddConnection(ontology,connection,object1,object2,ui):
     try:
         with ontology:
-            if object1 not in connection.domain:
-                connection.domain.append(object1)
-            if object2 not in connection.range:
-                connection.range.append(object2)
+            try:
+                if object1 not in connection.domain[0].get_Classes():
+                    connection.domain= connection.domain[0] | object1
+            except:
+                if object1 not in connection.domain:
+                    connection.domain= connection.domain[0] | object1
+            try:
+                if object2 not in connection.range[0].get_Classes():
+                    connection.range= connection.range[0] | object2
+            except:
+                if object2 not in connection.range:
+                    connection.range= connection.range[0] | object2
     except Exception as err:
         ui.error(f"There was an error with {connection} with error:{err}")
 
@@ -118,3 +134,36 @@ def addParent(ontology,theClass,parent,ui):
         
     except Exception as err:
         ui.error(f"There was an error with {theClass.label[0]} and {parent.label[0]} with error:{err}")
+
+def RemoveDomain(ontology,relationship,domain,ui):
+    try:
+        with ontology:
+            object=[]
+            for i in relationship.domain[0].get_Classes():
+                if i == domain:
+                    continue
+                object.append(i)
+            for i,value in enumerate(object):
+                if i ==0:
+                    relationship.domain=value
+                else:
+                    relationship.domain= relationship.domain[0] | value
+    except Exception as err:
+        ui.error(f"There was an error with {relationship} with error:{err}")
+
+def RemoveRange(ontology,relationship,range,ui):
+    try:
+        with ontology:
+            object=[]
+            for i in relationship.range[0].get_Classes():
+                if i == range:
+                    continue
+                object.append(i)
+            for i,value in enumerate(object):
+                if i ==0:
+                    relationship.range=value
+                else:
+                    relationship.range= relationship.range[0] | value
+    except Exception as err:
+        ui.error(f"There was an error with {relationship} with error:{err}")
+

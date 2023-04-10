@@ -8,41 +8,29 @@
 
 <owl:Ontology rdf:about="file:///media/akis/Ubuntu-Windows2/Uni/Chatbot-for-Ontology-Generation/TEMP.owl"/>
 
-<owl:ObjectProperty rdf:about="#Eat">
-  <rdfs:domain rdf:resource="#Cat"/>
-  <rdfs:range rdf:resource="#Fish"/>
-  <rdfs:domain rdf:resource="#People"/>
-  <rdfs:range rdf:resource="#Pizza"/>
-</owl:ObjectProperty>
-
 <owl:ObjectProperty rdf:about="#Be">
-  <rdfs:domain rdf:resource="#Horse"/>
-  <rdfs:range rdf:resource="#Animal"/>
+  <rdfs:domain rdf:resource="#Person"/>
+  <rdfs:range>
+    <owl:Class>
+      <owl:unionOf rdf:parseType="Collection">
+        <rdf:Description rdf:about="#Pizza"/>
+        <rdf:Description rdf:about="#Horse"/>
+      </owl:unionOf>
+    </owl:Class>
+  </rdfs:range>
 </owl:ObjectProperty>
 
 <owl:AnnotationProperty rdf:about="#description"/>
 
-<owl:Class rdf:about="#Cat">
+<owl:Class rdf:about="#Person">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cat</rdfs:label>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Person</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
 <owl:Class rdf:about="#Fish">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fish</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#People">
-  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">People</rdfs:label>
-  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
-</owl:Class>
-
-<owl:Class rdf:about="#Pizza">
-  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pizza</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 
@@ -53,9 +41,15 @@
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">You</rdfs:isDefinedBy>
 </owl:Class>
 
-<owl:Class rdf:about="#Animal">
+<owl:Class rdf:about="#Pizza">
   <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Animal</rdfs:label>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pizza</rdfs:label>
+  <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
+</owl:Class>
+
+<owl:Class rdf:about="#People">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">People</rdfs:label>
   <rdfs:isDefinedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:isDefinedBy>
 </owl:Class>
 

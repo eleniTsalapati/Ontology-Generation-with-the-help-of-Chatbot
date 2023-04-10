@@ -9,41 +9,54 @@ ChatBot:
 	Your Ontology has been saved. Now you can choose 1 from 4 options.
 	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.
 User:
-	horse
+	Destroy:Pizza, Horse
 ChatBot:
-	Lemmatize the "horse" to "horse"
+	In the ontology I found the "Pizza"
+Lemmatize the "Pizza" to "Pizza"
+In the ontology I found the "Horse"
+Lemmatize the "Horse" to "Horse"
 
 ChatBot:
-	What should I do with the definition of "Horse"? Select one option.
-
+	Are you sure you want to delete this items?
 User:
-	Give Definition
-ChatBot:
-	What should be the definition of  "Horse"? Put your answer in the text field and press enter.
-
+	Do you want to Destroy "Pizza"?
 User:
-	a horse is an animal
+	Do you want to Destroy "Horse"?
 ChatBot:
-	Lemmatize the "horse" to "horse"
-Lemmatize the "animal" to "animal"
-The word "Horse" is already in the dataBase
-
+	No more terms in range. Deleting the whole relationship.
 ChatBot:
-	What should I do with the definition of "Animal"? Select one option.
-
+	Your Ontology has been saved. Now you can choose 1 from 4 options.
+	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.
 User:
-	Keep Without Definition
+	a person is a people
 ChatBot:
-	I will keep the "Animal" without any definition.
-ChatBot:
-	Lemmatize the "is" to "Be"
+	Lemmatize the "person" to "person"
+Lemmatize the "people" to "people"
+The word "Person" is already in the dataBase
+The word "People" is already in the dataBase
+Lemmatize the "is" to "Be"
 
 ChatBot:
 	Choose the relationships you want to keep
 User:
 	Selected:
-Horse_Be_Animal
+Person_Be_People
 
+ChatBot:
+	Your Ontology has been saved. Now you can choose 1 from 4 options.
+	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.
+User:
+	Destroy:Person
+ChatBot:
+	In the ontology I found the "Person"
+Lemmatize the "Person" to "Person"
+
+ChatBot:
+	Are you sure you want to delete this items?
+User:
+	Do you want to Destroy "Person"?
+ChatBot:
+	No more terms in domain. Deleting the whole relationship.
 ChatBot:
 	Your Ontology has been saved. Now you can choose 1 from 4 options.
 	You can give: Competency Question, Narrow a term, Broaden a term, Delete a term.

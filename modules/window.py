@@ -525,14 +525,14 @@ class C4OWindow(Gtk.ApplicationWindow):
     def AddToTableRelationship(self,relation):
         obj1=""
         for i in self.data[1][relation][1]:
-            obj1+=i+" "
+            obj1+=i+" or "
         if obj1!="":
-            obj1=obj1[:-1]
+            obj1=obj1[:-4]
         obj2=""
         for i in self.data[1][relation][3]:
-            obj2+=i+" "
+            obj2+=i+" or "
         if obj2!="":
-            obj2=obj2[:-1]
+            obj2=obj2[:-4]
 
         if relation not in self.storeRelationshipRows.keys(): 
             self.storeRelationshipRows[relation]=self.storeRelationship.append(None,[obj1,self.data[1][relation][2],obj2])
@@ -586,3 +586,4 @@ class C4OWindow(Gtk.ApplicationWindow):
         Gtk.Dialog.run(dialog)
         dialog.destroy()
     
+                            
