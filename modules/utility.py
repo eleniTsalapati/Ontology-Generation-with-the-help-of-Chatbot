@@ -91,7 +91,7 @@ def deleteData(ui,terms,relationships_others,ask=False):
         options=[]
         for i in relationships_others:
             options.append(talk.whatToDestroy(i))
-        options=CheckDialog(ui,options,"Are you sure you want to delete this items?").run()
+        options=CheckDialog(ui,options,"What do you want to delete from this relationship?").run()
         for i in options:
             ui.addTextUser(i)
 
