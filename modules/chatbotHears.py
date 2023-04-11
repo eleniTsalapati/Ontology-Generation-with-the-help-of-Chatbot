@@ -1,9 +1,10 @@
 from nltk import word_tokenize,pos_tag
 from nltk.sentiment import SentimentIntensityAnalyzer
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer,PorterStemmer
 
 sia = SentimentIntensityAnalyzer()
 lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
 def lemmatization(word,ui):
     if len(word.split("_"))==1:
         theLementation=lemmatizer.lemmatize(word)

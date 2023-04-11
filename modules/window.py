@@ -386,11 +386,12 @@ class C4OWindow(Gtk.ApplicationWindow):
                 
                 term1=self.relationships[relation][0]
                 term2=self.relationships[relation][1]
-                theLementation=hear.lemmatizer.lemmatize(relation.lower(),'v')
-                if theLementation!= []:
-                    theLementation=theLementation.title()
-                    self.rememberOneTime("Lemmatize the \""+relation+"\" to \""+theLementation+"\"\n")
-                    relation=theLementation
+
+                key=hear.stemmer.stem(relation.lower())
+                if key!= []:
+                    key =key.title()
+                    self.rememberOneTime("Stemmed the \""+relation+"\" to \""+key+"\"\n")
+                    relation=key
                 combination=term1+"_"+relation+"_"+term2.title()
                 # one object was not kept
                 if term1 not in self.data[0].keys() or term2 not in self.data[0].keys():
