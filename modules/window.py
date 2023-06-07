@@ -9,7 +9,7 @@ import modules.creationFunctions as creationFunctions
 from modules.dialogOptions import CheckDialog,SaveDialog,TextDialog
 import modules.chatbotTalks as talk
 import modules.ontologyManager as manager
-
+from sys import platform
 class C4OWindow(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         self.whichTask=""
@@ -29,7 +29,7 @@ class C4OWindow(Gtk.ApplicationWindow):
         #
         self.hb = Gtk.HeaderBar()
         self.hb.set_show_close_button(True)
-        self.hb.props.title = self.file_name+" - C4O"
+        self.hb.props.title = self.file_name+" - Ontology Genertion with Chatbot"
         self.set_titlebar(self.hb)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -85,7 +85,12 @@ class C4OWindow(Gtk.ApplicationWindow):
 
         trash=Gtk.Button()
         # add the image bin.png to the button and resize it to the size of the button
-        image = Gtk.Image.new_from_file("modules/trash.png")
+        theImage=None
+        if platform == "win32":
+            theImage='modules/trash.png'
+        else:
+            theImage='modules/trash.png'
+        image = Gtk.Image.new_from_file(theImage)
         image.set_pixel_size(20)
         trash.add(image)
         trash.connect("clicked",self.MenuFunction,"Destroy Entity")

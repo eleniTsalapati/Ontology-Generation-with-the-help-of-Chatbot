@@ -13,7 +13,7 @@ class C4OApplication(Gtk.Application):
         
         super().__init__(
             *args,
-            application_id="org.example.myapp",
+            application_id="org.ontology_generation_with_chatbot.myapp",
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
             **kwargs
         )
@@ -134,12 +134,12 @@ class C4OApplication(Gtk.Application):
     def on_about(self, action, param):
         about_dialog = Gtk.AboutDialog(transient_for=self.window)
         # add text to the about dialog
-        about_dialog.set_program_name("C4O")
+        about_dialog.set_program_name("Ontology Generation with Chatbot")
         about_dialog.set_version("0.1")
         about_dialog.set_authors(["Lionis Emmanouil Georgios(Akis)","Tsalapati Eleni","Sergios - Anestis Kefalidis","Koubarakis Manolis"])
         # set no icon for the about dialog
         about_dialog.set_logo_icon_name(None)
-        about_dialog.set_comments("A simple ontology editor that uses communication with a chatbot to help the user create ontologies.")
+        about_dialog.set_comments("A simple ontology editor that uses communication with a chatbot in order to help the user create ontologies.")
         about_dialog.present()
 
     def on_quit(self, action, param):

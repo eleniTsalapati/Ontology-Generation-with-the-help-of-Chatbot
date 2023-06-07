@@ -73,10 +73,10 @@ python ./commands/nltk_data.py
 First you have to dowload the chatBot_ontology_creation_env.yml and open anaconda prompt. 
 Then run in the prompt the following command to create the enviroment with the installed libraries:
 ```
-conda env create -f path\chatBot_ontology_creation_env.yml
+conda env create -f path/conda_enviroment.yml
 ```
 
-Then you have to activate the enviroment by typing `conda activate chatBot_ontology_creation_env`.
+Then you have to activate the enviroment by typing `conda activate C20`.
 
 Then you have to cd to the github file (Chatbot-for-Ontology-Generation) that you have downloaded by `cd path\folder`.
 
