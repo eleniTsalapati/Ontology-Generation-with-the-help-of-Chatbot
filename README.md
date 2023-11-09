@@ -1,5 +1,8 @@
 # Chatbot for Ontology Generation
 
+This project was part of the BSc thesis of the student Akis Lionis under the supervision of Eleni Tsalapati at the University of Athens.
+A paper is on the way..
+
 ## Summary of the Project
 The purpose of this project is to use a ChatBot to create a new ontology by either taking already existing classes from external ontologies or creating new classes and linking them according to OntoClean rules and inheritance rules.
 
